@@ -5,6 +5,7 @@ import utilz.LoadSave;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,8 +44,10 @@ public class Player extends  Entity{
     private int healthBarYStart=(int)(14*Game.SCALE);
 
     private int maxHealth = 100;
-    private int currentHealth = maxHealth;
+    private int currentHealth = 40;
     private int healthWidth= healthBarWith;
+    //attackBox
+    private Rectangle2D.Float attackBox;
 
 
 
@@ -52,9 +55,17 @@ public class Player extends  Entity{
         super(x, y,width,height);
         loadAnimations();
         initHitbox(x,y,(int)(20*Game.SCALE),(int)(27*Game.SCALE));
+        initAttackBox();
     }
+
+    private void initAttackBox() {
+        attackBox=new Rectangle2D.Float(x,y,(int)(20*Game.SCALE),(int)(20*Game.SCALE));
+    }
+
     public void update(){
         updateHealthBar();
+        updateAttackBox();
+        
         updatePos();
         updateAnimationTick();
         setAnimation();
@@ -62,20 +73,39 @@ public class Player extends  Entity{
 
     }
 
+    private void updateAttackBox() {
+        if(right){
+            attackBox.x= hitbox.x+hitbox.width+(int)(Game.SCALE*10);
+
+        }else if(left) {
+            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 10);
+        }
+
+        attackBox.y= hitbox.y+(int)(Game.SCALE*10);
+    }
+
+
     private void updateHealthBar() {
         healthWidth=(int)((currentHealth/(float)maxHealth)*healthBarWith);
     }
 
     public void render(Graphics g, int lvlOffset){
         g.drawImage(animations[playerAction][aniIndex],(int)(hitbox.x-xDrawOffset)-lvlOffset,(int)(hitbox.y-yDrawOffset),width,height,null);
-       drawUI(g);
+        drawAttackHitbox(g,lvlOffset);
+        drawUI(g);
       //drawHitbox(g,lvlOffset);
+
+    }
+
+    private void drawAttackHitbox(Graphics g, int lvlOffsetX) {
+        g.setColor(Color.red);
+        g.drawRect((int)attackBox.x-lvlOffsetX,(int)attackBox.y,(int)attackBox.width,(int)attackBox.height);
     }
 
     private void drawUI(Graphics g) {
         g.drawImage(statusBarImg,statusBarX,statusBarY,statusBarWidth,statusBarHeight,null);
         g.setColor(Color.red);
-        g.fillRect(healthBarXStart+statusBarX,healthBarYStart+statusBarHeight,healthWidth,healthBarHeigth);
+        g.fillRect(healthBarXStart+statusBarX,healthBarYStart+statusBarY,healthWidth,healthBarHeigth);
 
     }
 
@@ -145,6 +175,16 @@ moving = true;
         }else{
              hitbox.x = GetEntityXPosNextToWall(hitbox,xSpeed);
          }
+    }
+    public void changeHealth(int value){
+        currentHealth +=value;
+        if(currentHealth<=0){
+            currentHealth = 0;
+            //gameOver();
+        }else if(currentHealth>=maxHealth){
+            currentHealth=maxHealth;
+        }
+
     }
 
     public void updateGame(){
