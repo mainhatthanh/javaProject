@@ -23,15 +23,28 @@ public class Player extends  Entity{
     private int[][] lvlData;
     private float xDrawOffset=21* Game.SCALE;
     private  float yDrawOffset= 4*Game.SCALE;
+    //jumping / gravity
     private float airSpeed = 0f;
     private float gravity = 0.04f*Game.SCALE;
     private float jumpSpeed=-2.25f*Game.SCALE;
     private  float fallSpeedAfterCollision = 0.5f*Game.SCALE;
     private boolean inAir = false;
+    //Status BarUI
+    private BufferedImage statusBarImg;
 
+    private int statusBarWidth=(int)(192*Game.SCALE);
+    private int statusBarHeight =(int)(58*Game.SCALE);
+    private int statusBarX =(int)(10*Game.SCALE);
+    private int statusBarY =(int)(10*Game.SCALE);
 
+    private int healthBarWith=(int)(150*Game.SCALE);
+    private int healthBarHeigth=(int)(4*Game.SCALE);
+    private int healthBarXStart=(int)(34*Game.SCALE);
+    private int healthBarYStart=(int)(14*Game.SCALE);
 
-
+    private int maxHealth = 100;
+    private int currentHealth = maxHealth;
+    private int healthWidth= healthBarWith;
 
 
 
@@ -41,20 +54,30 @@ public class Player extends  Entity{
         initHitbox(x,y,(int)(20*Game.SCALE),(int)(27*Game.SCALE));
     }
     public void update(){
+        updateHealthBar();
         updatePos();
         updateAnimationTick();
         setAnimation();
+        
 
     }
+
+    private void updateHealthBar() {
+        healthWidth=(int)((currentHealth/(float)maxHealth)*healthBarWith);
+    }
+
     public void render(Graphics g, int lvlOffset){
         g.drawImage(animations[playerAction][aniIndex],(int)(hitbox.x-xDrawOffset)-lvlOffset,(int)(hitbox.y-yDrawOffset),width,height,null);
-
+       drawUI(g);
       //drawHitbox(g,lvlOffset);
     }
 
+    private void drawUI(Graphics g) {
+        g.drawImage(statusBarImg,statusBarX,statusBarY,statusBarWidth,statusBarHeight,null);
+        g.setColor(Color.red);
+        g.fillRect(healthBarXStart+statusBarX,healthBarYStart+statusBarHeight,healthWidth,healthBarHeigth);
 
-
-
+    }
 
 
     private void updatePos() {
@@ -220,6 +243,8 @@ public void resetDirBooleans(){
             for (int j = 0; j < animations.length; j++)
                 for (int i = 0; i < animations[j].length; i++)
                     animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
+
+            statusBarImg = LoadSave.GetSpriteAtlas(LoadSave.STATUS_BAR);
 
         }
         public void loadLvlData(int[][]lvlData){
