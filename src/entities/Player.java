@@ -49,6 +49,9 @@ public class Player extends  Entity{
     //attackBox
     private Rectangle2D.Float attackBox;
 
+    private int flipX = 0;
+    private int flipW = 1;
+
 
 
     public Player(float x, float y,int width,int height) {
@@ -90,7 +93,7 @@ public class Player extends  Entity{
     }
 
     public void render(Graphics g, int lvlOffset){
-        g.drawImage(animations[playerAction][aniIndex],(int)(hitbox.x-xDrawOffset)-lvlOffset,(int)(hitbox.y-yDrawOffset),width,height,null);
+        g.drawImage(animations[playerAction][aniIndex],(int)(hitbox.x-xDrawOffset)-lvlOffset+flipX,(int)(hitbox.y-yDrawOffset),width*flipW,height,null);
         drawAttackHitbox(g,lvlOffset);
         drawUI(g);
       //drawHitbox(g,lvlOffset);
@@ -120,12 +123,18 @@ public class Player extends  Entity{
 
         float xSpeed=0;
 
-if(left)
-    xSpeed-=playerSpeed;
+if(left) {
+    xSpeed -= playerSpeed;
+    flipX = width;
+    flipW = -1;
+}
 
- if(right)
-    xSpeed+=playerSpeed;
+ if(right) {
+     xSpeed += playerSpeed;
+     flipX = 0;
+     flipW = 1;
 
+ }
  if(!inAir)
      if(!IsEntityOnFloor(hitbox,lvlData))
          inAir=true;
@@ -208,7 +217,7 @@ moving = true;
                 playerAction = FALLING;
         }
         if(attacking)
-            playerAction=ATTACK_1;
+            playerAction=ATTACK;
         if(startAni!=playerAction)
             resetAniTick();
 
@@ -279,7 +288,7 @@ public void resetDirBooleans(){
 
             BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
 
-            animations = new BufferedImage[9][6];
+            animations = new BufferedImage[7][8];
             for (int j = 0; j < animations.length; j++)
                 for (int i = 0; i < animations[j].length; i++)
                     animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
