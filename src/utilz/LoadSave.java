@@ -22,24 +22,26 @@ public class LoadSave {
     public static final String PAUSE_BACKGROUND ="pause_menu.png";
     public static final String SOUND_BUTTON ="sound_button.png";
     public static final String URM_BUTTON ="urm_buttons.png";
-    public static final String VOLUME_BUTTON ="volume_buttons.png";
+    public static final String VOLUME_BUTTONS ="volume_buttons.png";
     public static final String MENU_BACKGROUND_IMG ="background_menu.png";
     public static final String PLAYING_BACKGROUND_IMG ="playing_bg_img.png";
     public static final String BIG_CLOUDS ="big_clouds.png";
     public static final String SMALL_CLOUDS ="small_clouds.png";
     public static final String CRABBY_SPRITE ="crabby_sprite.png";
     public static final String STATUS_BAR ="health_power_bar.png";
+    public static final String  COMPLETED_IMG ="completed_sprite.png";
 
-    public static BufferedImage GetSpriteAtlas(String fileName){
-        BufferedImage  img = null ;
-        InputStream is = LoadSave.class.getResourceAsStream("/" + fileName) ;
+
+    public static BufferedImage GetSpriteAtlas(String fileName) {
+        BufferedImage img = null;
+        InputStream is = LoadSave.class.getResourceAsStream("/" + fileName);
         try {
-           img = ImageIO.read(is);
+            img = ImageIO.read(is);
 
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            try{
+        } finally {
+            try {
                 is.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -47,31 +49,34 @@ public class LoadSave {
         }
         return img;
     }
-    public  static ArrayList<Crabby> GetCrabs(){
+
+    public static ArrayList<Crabby> GetCrabs() {
         BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
         ArrayList<Crabby> list = new ArrayList<>();
-        for(int j=0;j<img.getHeight();j++)
-            for(int i=0;i<img.getWidth();i++){
-                Color color = new Color(img.getRGB(i,j));
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
                 int value = color.getGreen();
-                if(value==CRABBY)
-                    list.add(new Crabby(i*Game.TILES_SIZE,j*Game.TILES_SIZE));
+                if (value == CRABBY)
+                    list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
             }
         return list;
+
     }
 
-    public static int[][] GetLevelData(){
-        BufferedImage img =GetSpriteAtlas(LEVEL_ONE_DATA);
+    public static int[][] GetLevelData() {
+        BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
         int[][] lvlData = new int[img.getHeight()][img.getWidth()];
 
-        for(int j=0;j<img.getHeight();j++)
-            for(int i=0;i<img.getWidth();i++){
-                Color color = new Color(img.getRGB(i,j));
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
                 int value = color.getRed();
-                if(value>=48)
-                    value=0;
-                lvlData[j][i]=  value;
+                if (value >= 48)
+                    value = 0;
+                lvlData[j][i] = value;
             }
-        return  lvlData;
+        return lvlData;
+
     }
 }

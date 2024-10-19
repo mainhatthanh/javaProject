@@ -5,8 +5,8 @@ import utilz.LoadSave;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static utilz.Constants.PauseButoons.SOUND_SIZE;
-import static utilz.Constants.PauseButoons.SOUND_SIZE_DEFAULT;
+import static utilz.Constants.UI.PauseButtons.SOUND_SIZE_DEFAULT;
+
 
 public class SoundButton extends PauseButton{
     private BufferedImage[][] soundImgs;

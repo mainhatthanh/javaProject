@@ -46,7 +46,7 @@ public abstract  class Enemy extends  Entity {
         }
         else{
             inAir = false;
-            hitbox.y = GetEntitYPosUnderRoofforAboveFloor(hitbox, fallSpeed);
+            hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, fallSpeed);
             tileY=(int)(hitbox.y/Game.TILES_SIZE);
         }
     }
@@ -148,7 +148,7 @@ public abstract  class Enemy extends  Entity {
         }
             else{
                 inAir = false;
-                hitbox.y = GetEntitYPosUnderRoofforAboveFloor(hitbox, fallSpeed);
+                hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, fallSpeed);
             }
         }else{
                  switch (enemyState){

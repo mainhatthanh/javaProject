@@ -1,6 +1,6 @@
 package entities;
 
-import gameState.Playing;
+
 import main.Game;
 import utilz.LoadSave;
 
@@ -10,7 +10,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-
+import gamestates.Playing;
 import static utilz.Constants.Directions.*;
 import static utilz.Constants.Directions.DOWN;
 import static utilz.Constants.PlayerConstants.*;
@@ -163,7 +163,7 @@ if(inAir) {
         airSpeed += gravity;
         updateXPos(xSpeed);
     } else {
-        hitbox.y = GetEntitYPosUnderRoofforAboveFloor(hitbox, airSpeed);
+        hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed);
 
         if(airSpeed>0)
             resetInAir();

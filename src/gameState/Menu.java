@@ -44,10 +44,7 @@ public class Menu extends State implements  Statemethods {
 
     }
 
-    @Override
-    public void test() {
 
-    }
 
     @Override
     public void draw(Graphics g) {
