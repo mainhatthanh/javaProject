@@ -1,20 +1,11 @@
 package entities;
-
-
+import gameState.Playing;
 import main.Game;
 import utilz.LoadSave;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import gamestates.Playing;
-
 import static utilz.Constants.ANI_SPEED;
-import static utilz.Constants.Directions.*;
-import static utilz.Constants.Directions.DOWN;
 import static utilz.Constants.GRAVITY;
 import static utilz.Constants.PlayerConstants.*;
 import  static  utilz.HelpMethods.*;

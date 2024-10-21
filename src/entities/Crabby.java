@@ -4,10 +4,10 @@ import main.Game;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-import static utilz.Constants.Directions.LEFT;
+
 import static utilz.Constants.Directions.RIGHT;
 import static utilz.Constants.EnemyConstants.*;
-import static utilz.HelpMethods.*;
+
 
 public class Crabby extends Enemy{
 

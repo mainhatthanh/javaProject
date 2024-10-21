@@ -1,6 +1,8 @@
 package entities;
 
 
+
+import gameState.Playing;
 import levels.Level;
 import utilz.LoadSave;
 
@@ -12,11 +14,11 @@ import java.util.ArrayList;
 import static utilz.Constants.EnemyConstants.*;
 
 public class EnemyManager {
-   private gamestates.Playing playing;
+   private Playing playing;
    private BufferedImage[][] crabbyArr;
    private ArrayList<Crabby> crabbies = new ArrayList<>();
 
-  public EnemyManager(gamestates.Playing playing){
+  public EnemyManager(Playing playing){
       this.playing=playing;
       loadEnemyImgs();
 

@@ -6,7 +6,8 @@ import java.awt.image.BufferedImage;
 
 
 import gameState.Gamestate;
-import gamestates.Playing;
+
+import gameState.Playing;
 import main.Game;
 import utilz.Constants;
 import utilz.LoadSave;

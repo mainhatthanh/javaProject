@@ -6,7 +6,8 @@ import java.awt.event.KeyEvent;
 
 
 import gameState.Gamestate;
-import gamestates.Playing;
+
+import gameState.Playing;
 import main.Game;
 import main.GameWindow;
 

@@ -7,7 +7,8 @@ import java.awt.image.BufferedImage;
 
 import gameState.Gamestate;
 
-import gamestates.Playing;
+
+import gameState.Playing;
 import main.Game;
 import utilz.LoadSave;
 import static utilz.Constants.UI.URMButtons.*;
@@ -42,7 +43,7 @@ public class LevelCompletedOverlay {
     }
 
     public void draw(Graphics g) {
-        // Added after youtube upload
+
         g.setColor(new Color(0, 0, 0, 200));
         g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
 
