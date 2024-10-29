@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import static utilz.Constants.EnemyConstants.CRABBY;
 
 public class LoadSave {
-    public static final String PLAYER_ATLAS ="player_sprites.png";
+    public static final String PLAYER_ATLAS ="players_sprites.png";
     public static final String LEVEL_ATLAS ="outside_sprites.png";
  ;
     public static final String MENU_BUTTONS ="button_atlas.png";
@@ -25,10 +25,10 @@ public class LoadSave {
     public static final String SOUND_BUTTON ="sound_button.png";
     public static final String URM_BUTTON ="urm_buttons.png";
     public static final String VOLUME_BUTTONS ="volume_buttons.png";
-    public static final String MENU_BACKGROUND_IMG ="background_menu.png";
-    public static final String PLAYING_BACKGROUND_IMG ="playing_bg_img.png";
-    public static final String BIG_CLOUDS ="big_clouds.png";
-    public static final String SMALL_CLOUDS ="small_clouds.png";
+    public static final String MENU_BACKGROUND_IMG ="wukong.jpg";
+    public static final String PLAYING_BACKGROUND_IMG ="forest_background.png";
+    //public static final String BIG_CLOUDS ="big_clouds.png";
+    //public static final String SMALL_CLOUDS ="small_clouds.png";
     public static final String CRABBY_SPRITE ="crabby_sprite.png";
     public static final String STATUS_BAR ="health_power_bar.png";
     public static final String  COMPLETED_IMG ="completed_sprite.png";
