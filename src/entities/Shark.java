@@ -9,51 +9,52 @@ import static utilz.Constants.Directions.RIGHT;
 import static utilz.Constants.EnemyConstants.*;
 
 
-public class Crabby extends Enemy{
+public class Shark extends Enemy {
 
 
     private int attackBoxOffsetX;
 
-    public Crabby(float x, float y) {
+    public Shark(float x, float y) {
 
-        super(x, y, CRABBY_WIDTH, CRABBY_HEIGHT, CRABBY);
-        initHitbox(22,19);
-        initAttackBox();
-    }
-    private void initAttackBox(){
-        attackBox=new Rectangle2D.Float(x,y,(int)(82*Game.SCALE),(int)(19*Game.SCALE));
-        attackBoxOffsetX = (int)(Game.SCALE*30);
+        super(x, y, SHARK_WIDTH, SHARK_HEIGHT, SHARK);
+        initHitbox(18, 22);
+        initAttackBox(20,20,20);
+
     }
 
+    private void initAttackBox() {
+        attackBox = new Rectangle2D.Float(x, y, (int) (20 * Game.SCALE), (int) (20 * Game.SCALE));
+        attackBoxOffsetX = (int) (Game.SCALE * 20);
+    }
 
 
-    public void update(int[][] lvlData,Player player){
-        updateBehaviour(lvlData,player);
+    public void update(int[][] lvlData, Player player) {
+        updateBehaviour(lvlData, player);
         updateAnimationTick();
-        updateAttackBox();
+        updateAttackBoxFlip();
 
     }
 
     protected void updateAttackBox() {
-        attackBox.x= hitbox.x-attackBoxOffsetX;
-        attackBox.y=hitbox.y;
+        attackBox.x = hitbox.x - attackBoxOffsetX;
+        attackBox.y = hitbox.y;
     }
 
-    private void updateBehaviour(int[][] lvlData,Player player) {
-        if (firstUpdate){
-         firstUpdateCheck(lvlData);
+    private void updateBehaviour(int[][] lvlData, Player player) {
+        if (firstUpdate) {
+            firstUpdateCheck(lvlData);
 
         }
-        if(inAir) {
-           updateInAir(lvlData);
-        }else{
-            switch (state){
-                case IDLE :
+        if (inAir) {
+            updateInAir(lvlData);
+        } else {
+            switch (state) {
+                case IDLE:
                     newState(RUNNING);
                     break;
 
                 case RUNNING:
-                    if(canSeePlayer(lvlData,player)) {
+                    if (canSeePlayer(lvlData, player)) {
                         turnTowardsPlayer(player);
                         if (isPlayerCloseAttack(player))
                             newState(ATTACK);
@@ -61,22 +62,18 @@ public class Crabby extends Enemy{
                     move(lvlData);
                     break;
                 case ATTACK:
-                    if(aniIndex==0)
+                    if (aniIndex == 0)
                         attackChecked = false;
 
-                    if(aniIndex==3&&!attackChecked)
-                        checkEnmyHit(attackBox,player);
+                    if (aniIndex == 3 && !attackChecked)
+                        checkEnmyHit(attackBox, player);
                     break;
                 case HIT:
                     break;
             }
 
         }
-
     }
-
-
-
     public void drawAttackBox(Graphics g,int xLvlOffset){
         g.setColor(Color.red);
         g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
@@ -89,11 +86,13 @@ public class Crabby extends Enemy{
             return  0;
     }
     public int flipY(){
-          if(walkDir==RIGHT)
-              return -1;
-          else{
-              return 1;
-          }
+        if(walkDir==RIGHT)
+            return -1;
+        else{
+            return 1;
+        }
     }
 
 }
+
+

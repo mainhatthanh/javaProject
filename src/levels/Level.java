@@ -1,6 +1,8 @@
 package levels;
 
 import entities.Crabby;
+import entities.Minotaur;
+import entities.Shark;
 import main.Game;
 
 import java.awt.*;
@@ -16,6 +18,8 @@ public class Level {
     private int maxLvlOffsetX;
     private int[][] lvlData;
     private ArrayList<Crabby> crabs;
+    private ArrayList<Shark> sharks;
+    private ArrayList<Minotaur> minotaurs;
     private Point playerSpawn;
 
 
@@ -36,7 +40,12 @@ public class Level {
 
     private void createEnemies() {
      crabs = GetCrabs(img);
+     sharks=GetSharks(img);
+     minotaurs=GetMinotaurs(img);
+
     }
+
+
 
     private void createLevelData() {
              lvlData=GetLevelData(img);
@@ -63,6 +72,8 @@ public int getLvlOffset(){
     public ArrayList<Crabby> getCrabs() {
         return crabs;
     }
+    public ArrayList<Shark> getSharks(){return  sharks;}
+    public ArrayList<Minotaur> getMinotaurs(){return  minotaurs;}
   public Point getPlayerSpawn(){
      return playerSpawn;
   }

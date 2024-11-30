@@ -20,14 +20,29 @@ public abstract  class Enemy extends  Entity {
     protected float attackDistance = Game.TILES_SIZE;
     protected boolean active = true;
     protected boolean attackChecked;
+    protected int attackBoxOffsetX;
+
 
 
     public Enemy(float x, float y, int width, int height,int enemyState) {
         super(x, y, width, height);
-        this.state=enemyState;
+        this.enemyType=enemyState;
         maxHealth=GetMaxHealth(enemyType);
         currentHealth = maxHealth;
         walkSpeed=Game.SCALE*0.35f;
+    }
+
+    protected void updateAttackBox() {
+        attackBox.x = hitbox.x - attackBoxOffsetX;
+        attackBox.y = hitbox.y;
+    }
+    protected void updateAttackBoxFlip() {
+        if (walkDir == RIGHT)
+            attackBox.x = hitbox.x + hitbox.width;
+        else
+            attackBox.x = hitbox.x - attackBoxOffsetX;
+
+        attackBox.y = hitbox.y;
     }
 
     protected void firstUpdateCheck(int[][] lvlData){
@@ -35,6 +50,11 @@ public abstract  class Enemy extends  Entity {
             inAir = true;
         firstUpdate = false;
     }
+    protected void initAttackBox(int w, int h, int attackBoxOffsetX) {
+        attackBox = new Rectangle2D.Float(x, y, (int) (w * Game.SCALE), (int) (h * Game.SCALE));
+        this.attackBoxOffsetX = (int) (Game.SCALE * attackBoxOffsetX);
+    }
+
 
     protected void updateInAir(int[][] lvlData){
         if (CanMoveHere(hitbox.x, hitbox.y+airSpeed, hitbox.width, hitbox.height, lvlData)) {
@@ -47,6 +67,8 @@ public abstract  class Enemy extends  Entity {
             tileY=(int)(hitbox.y/Game.TILES_SIZE);
         }
     }
+
+
     protected void move(int[][] lvlData){
         float xSpeed = 0;
         if(walkDir==LEFT)

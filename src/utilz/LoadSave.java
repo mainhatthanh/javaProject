@@ -1,23 +1,22 @@
 package utilz;
 
-import entities.Crabby;
-import main.Game;
+
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 
-import static utilz.Constants.EnemyConstants.CRABBY;
+
+
 
 public class LoadSave {
-    public static final String PLAYER_ATLAS ="players_sprites.png";
-    public static final String LEVEL_ATLAS ="outside_sprites.png";
+    public static final String PLAYER_ATLAS ="wukongxxx.png";
+    public static final String LEVEL_ATLAS ="kj .png";
  ;
     public static final String MENU_BUTTONS ="button_atlas.png";
     public static final String MENU_BACKGROUND ="menu_background.png";
@@ -25,7 +24,7 @@ public class LoadSave {
     public static final String SOUND_BUTTON ="sound_button.png";
     public static final String URM_BUTTON ="urm_buttons.png";
     public static final String VOLUME_BUTTONS ="volume_buttons.png";
-    public static final String MENU_BACKGROUND_IMG ="wukong.jpg";
+    public static final String MENU_BACKGROUND_IMG ="baner.png";
     public static final String PLAYING_BACKGROUND_IMG ="forest_background.png";
     //public static final String BIG_CLOUDS ="big_clouds.png";
     //public static final String SMALL_CLOUDS ="small_clouds.png";
@@ -34,6 +33,8 @@ public class LoadSave {
     public static final String  COMPLETED_IMG ="completed_sprite.png";
     public static final String  DEATH_SCREEN ="death_screen.png";
     public static final String  OPTIONS_MENU ="options_background.png";
+    public static final String SHARK_ATLAS = "shark_atlas.png";
+    public static final String MINOTAUR_ATLAS = "NightBorne.png";
 
 
     public static BufferedImage GetSpriteAtlas(String fileName) {

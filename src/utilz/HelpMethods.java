@@ -6,9 +6,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import entities.Crabby;
+import entities.Minotaur;
+import entities.Shark;
 import main.Game;
 
-import static utilz.Constants.EnemyConstants.CRABBY;
+import static utilz.Constants.EnemyConstants.*;
 
 public class HelpMethods {
 
@@ -76,14 +78,7 @@ public class HelpMethods {
 
     }
 
-    /**
-     * We just check the bottomleft of the enemy here +/- the xSpeed. We never check
-     * bottom right in case the enemy is going to the right. It would be more
-     * correct checking the bottomleft for left direction and bottomright for the
-     * right direction. But it wont have big effect in the game. The enemy will
-     * simply change direction sooner when there is an edge on the right side of the
-     * enemy, when its going right.
-     */
+
     public static boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvlData) {
         if(xSpeed>0)
             return IsSolid(hitbox.x + hitbox.width, hitbox.y + hitbox.height + 1, lvlData);
@@ -139,6 +134,32 @@ public class HelpMethods {
         return list;
 
     }
+    public static ArrayList<Shark> GetSharks(BufferedImage img) {
+        ArrayList<Shark> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == SHARK)
+                    list.add(new Shark(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+
+    }
+
+    public static ArrayList<Minotaur> GetMinotaurs(BufferedImage img) {
+        ArrayList<Minotaur> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == MINOTAUR)
+                    list.add(new Minotaur(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+
+    }
+
     public static Point GetPlayerSpawn(BufferedImage img){
         for (int j = 0; j < img.getHeight(); j++)
             for (int i = 0; i < img.getWidth(); i++) {
