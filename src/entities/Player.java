@@ -18,7 +18,7 @@ public class Player extends  Entity{
 
     private int[][] lvlData;
     private float xDrawOffset=38* Game.SCALE;
-    private  float yDrawOffset= 20*Game.SCALE;
+    private  float yDrawOffset= 10*Game.SCALE;
     //jumping / gravity
 
 
@@ -128,9 +128,9 @@ public class Player extends  Entity{
 
     public void render(Graphics g, int xlvlOffset,int yLvlOffset){
         g.drawImage(animations[state][aniIndex],(int)((hitbox.x-xDrawOffset)-xlvlOffset+flipX),(int)(hitbox.y-yDrawOffset)-yLvlOffset,(int)(width*flipW*1.5),(int)(height*1.5),null);
-        drawAttackHitbox(g,xlvlOffset);
+        //drawAttackHitbox(g,xlvlOffset);
         drawUI(g);
-      drawHitbox(g,xlvlOffset);
+      //drawHitbox(g,xlvlOffset);
 
     }
 

@@ -41,21 +41,21 @@ public class Constants {
         public static final int CRABBY_WIDTH = (int) (CRABBY_WIDTH_DEFAULT * Game.SCALE);
         public static final int CRABBY_HEIGHT = (int) (CRABBY_HEIGHT_DEFAULT * Game.SCALE);
         public static final int CRABBY_DRAWOFFSET_X = (int) (26 * Game.SCALE);
-        public static final int CRABBY_DRAWOFFSET_Y = (int) (9 * Game.SCALE);
+        public static final int CRABBY_DRAWOFFSET_Y = (int) (1 * Game.SCALE);
 
         public static final int MINOTAUR_WIDTH_DEFAULT = 80;
         public static final int MINOTAUR_HEIGHT_DEFAULT = 80;
         public static final int MINOTAUR_WIDTH = (int) (MINOTAUR_WIDTH_DEFAULT * Game.SCALE);
         public static final int MINOTAUR_HEIGHT = (int) (MINOTAUR_HEIGHT_DEFAULT * Game.SCALE);
         public static final int MINOTAUR_DRAWOFFSET_X = (int) (-50 * Game.SCALE);
-        public static final int MINOTAUR_DRAWOFFSET_Y = (int) (85* Game.SCALE);
+        public static final int MINOTAUR_DRAWOFFSET_Y = (int) (22* Game.SCALE);
 
         public static final int SHARK_WIDTH_DEFAULT = 34;
         public static final int SHARK_HEIGHT_DEFAULT = 30;
         public static final int SHARK_WIDTH = (int) (SHARK_WIDTH_DEFAULT * Game.SCALE);
         public static final int SHARK_HEIGHT = (int) (SHARK_HEIGHT_DEFAULT * Game.SCALE);
         public static final int SHARK_DRAWOFFSET_X = (int) (8 * Game.SCALE);
-        public static final int SHARK_DRAWOFFSET_Y = (int) (55 * Game.SCALE);
+        public static final int SHARK_DRAWOFFSET_Y = (int) (-5 * Game.SCALE);
 
         public static int GetSpriteAmount(int enemy_type, int enemy_state) {
             switch (enemy_state) {

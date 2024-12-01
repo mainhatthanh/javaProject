@@ -18,14 +18,11 @@ public class Minotaur extends Enemy {
 
         super(x, y, MINOTAUR_WIDTH, MINOTAUR_HEIGHT, MINOTAUR);
         initHitbox(30, 30);
-        initAttackBox(20,30,20);
+        initAttackBox(20,20,20);
 
     }
 
-    private void initAttackBox() {
-        attackBox = new Rectangle2D.Float(x, y, (int) (20 * Game.SCALE), (int) (20 * Game.SCALE));
-        attackBoxOffsetX = (int) (Game.SCALE * 20);
-    }
+
 
 
     public void update(int[][] lvlData, Player player) {

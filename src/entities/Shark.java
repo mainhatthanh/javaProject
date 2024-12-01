@@ -22,10 +22,7 @@ public class Shark extends Enemy {
 
     }
 
-    private void initAttackBox() {
-        attackBox = new Rectangle2D.Float(x, y, (int) (20 * Game.SCALE), (int) (20 * Game.SCALE));
-        attackBoxOffsetX = (int) (Game.SCALE * 20);
-    }
+
 
 
     public void update(int[][] lvlData, Player player) {
