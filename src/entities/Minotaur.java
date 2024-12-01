@@ -18,7 +18,7 @@ public class Minotaur extends Enemy {
 
         super(x, y, MINOTAUR_WIDTH, MINOTAUR_HEIGHT, MINOTAUR);
         initHitbox(30, 30);
-        initAttackBox(20,20,20);
+        initAttackBox(20,30,20);
 
     }
 

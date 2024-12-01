@@ -63,7 +63,7 @@ public class EnemyManager {
             }
 
 
-      if(!isAnyActiveCrabby&&!isAnyActiveShark){
+      if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur){
           playing.setLevelCompleted(true);
 
       }
@@ -80,14 +80,16 @@ public class EnemyManager {
       for(Crabby c:crabbies) {
           if(c.isActive())
           g.drawImage(crabbyArr[c.getState()][c.getAniIndex()], (int) c.getHitBox().x - xLvloffset - CRABBY_DRAWOFFSET_X + c.flipX(), (int) c.getHitBox().y-yLvloffset - CRABBY_DRAWOFFSET_Y, CRABBY_WIDTH * c.flipY(), CRABBY_HEIGHT, null);
-     // c.drawAttackBox(g,xLvloffset);
+     c.drawAttackBox(g,xLvloffset);
+     c.drawHitbox(g,xLvloffset);
       }
   }
     private void drawSharks(Graphics g,int xLvloffset) {
         for(Shark sh:sharks) {
             if(sh.isActive())
                 g.drawImage(sharkArr[sh.getState()][sh.getAniIndex()], (int) sh.getHitBox().x - xLvloffset - SHARK_DRAWOFFSET_X+ sh.flipX(), (int) sh.getHitBox().y - SHARK_DRAWOFFSET_Y, SHARK_WIDTH * sh.flipY(), SHARK_HEIGHT, null);
-             //sh.drawAttackBox(g,xLvloffset);
+             sh.drawAttackBox(g,xLvloffset);
+             sh.drawHitbox(g,xLvloffset);
         }
     }
     private void drawMinotaurs(Graphics g,int xLvloffset) {
