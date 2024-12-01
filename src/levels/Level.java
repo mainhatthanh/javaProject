@@ -77,4 +77,7 @@ public int getLvlOffset(){
   public Point getPlayerSpawn(){
      return playerSpawn;
   }
+    public int getMapHeight() {
+        return lvlData.length; // Số hàng trong mảng 2D là chiều cao của bản đồ (theo số tile)
+    }
 }

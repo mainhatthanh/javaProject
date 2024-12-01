@@ -30,12 +30,19 @@ public class Playing extends State implements Statemethods {
     private boolean paused = false;
 
     private int xLvlOffset;
-    private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
-    private int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
+    private int yLvlOffset;
+
+
+    private int leftBorder = (int) (0.3 * Game.GAME_WIDTH);
+    private int rightBorder = (int) (0.7 * Game.GAME_WIDTH);
+
+    private int topBorder = (int) (0.25 * Game.GAME_HEIGHT);
+    private int bottomBorder = (int) (0.75 * Game.GAME_HEIGHT);
 
     private int maxLvlOffsetX;
+    private int maxLvlOffsetY;
 
-    private BufferedImage backgroundImg, bigCloud, smallCloud;
+    private BufferedImage backgroundImg,groundImg, bigCloud, smallCloud;
     private int[] smallCloudsPos;
     private Random rnd = new Random();
 
@@ -69,7 +76,14 @@ public class Playing extends State implements Statemethods {
     }
 
     private void caclcLvlOffset() {
+
         maxLvlOffsetX = levelManager.getCurrentLevel().getLvlOffset();
+        int mapHeightInPixels = levelManager.getCurrentLevel().getMapHeight() * Game.TILES_SIZE;
+        maxLvlOffsetY = mapHeightInPixels - Game.GAME_HEIGHT;
+
+        // Đảm bảo không có giá trị âm
+        if (maxLvlOffsetY < 0) maxLvlOffsetY = 0;
+        if (maxLvlOffsetX < 0) maxLvlOffsetX = 0;
     }
 
     private void initClasses() {
@@ -83,6 +97,14 @@ public class Playing extends State implements Statemethods {
         pauseOverlay = new PauseOverlay(this);
         gameOverOverlay = new GameOverOverlay(this);
         levelCompletedOverlay = new LevelCompletedOverlay(this);
+        // Căn chỉnh camera theo vị trí nhân vật
+        caclcLvlOffset(); // Tính maxLvlOffsetX và maxLvlOffsetY trước
+
+        int playerX = (int) player.getHitBox().x;
+        int playerY = (int) player.getHitBox().y;
+
+        xLvlOffset = Math.max(0, Math.min(maxLvlOffsetX, playerX - Game.GAME_WIDTH / 2));
+        yLvlOffset = Math.max(0, Math.min(maxLvlOffsetY, playerY - Game.GAME_HEIGHT / 2));
     }
 
     @Override
@@ -101,6 +123,7 @@ public class Playing extends State implements Statemethods {
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             checkCloseToBorder();
+            checkCloseToBorderVertical();
         }
 
     }
@@ -120,15 +143,29 @@ public class Playing extends State implements Statemethods {
             xLvlOffset = 0;
     }
 
+    private void checkCloseToBorderVertical() {
+        int playerY = (int) player.getHitBox().y;
+        int diff = playerY - yLvlOffset;
+
+        if (diff > bottomBorder)
+            yLvlOffset += diff - bottomBorder;
+        else if (diff < topBorder)
+            yLvlOffset += diff - topBorder;
+
+        if (yLvlOffset > maxLvlOffsetY)
+            yLvlOffset = maxLvlOffsetY;
+        else if (yLvlOffset < 0)
+            yLvlOffset = 0;
+    }
+
     @Override
     public void draw(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+        g.drawImage(groundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
 
-        //drawClouds(g);
-
-        levelManager.draw(g, xLvlOffset);
-        player.render(g, xLvlOffset);
-        enemyManager.draw(g, xLvlOffset);
+        levelManager.draw(g, xLvlOffset, yLvlOffset);
+        player.render(g, xLvlOffset, yLvlOffset);
+        enemyManager.draw(g, xLvlOffset, yLvlOffset);
 
         if (paused) {
             g.setColor(new Color(0, 0, 0, 150));
