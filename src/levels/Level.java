@@ -4,6 +4,9 @@ import entities.Crabby;
 import entities.Minotaur;
 import entities.Shark;
 import main.Game;
+import objects.GameContainer;
+import objects.Potion;
+import utilz.HelpMethods;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,6 +21,8 @@ public class Level {
     private int maxLvlOffsetX;
     private int[][] lvlData;
     private ArrayList<Crabby> crabs;
+    private ArrayList<GameContainer> containers;
+    private ArrayList<Potion> potions;
     private ArrayList<Shark> sharks;
     private ArrayList<Minotaur> minotaurs;
     private Point playerSpawn;
@@ -30,13 +35,19 @@ public class Level {
     this.img=img;
      createLevelData();
      createEnemies();
+     createContainers();
+     createPotions();
      calcLvlOffsets();
      calcPlayerSpawn();
  }
 
     private void calcPlayerSpawn() {
-     playerSpawn=GetPlayerSpawn(img);
+     playerSpawn = GetPlayerSpawn(img);
     }
+
+    private void createContainers() { containers = HelpMethods.GetContainers(img); }
+
+    private void createPotions() { potions = HelpMethods.GetPotions(img); }
 
     private void createEnemies() {
      crabs = GetCrabs(img);
@@ -71,6 +82,12 @@ public int getLvlOffset(){
 
     public ArrayList<Crabby> getCrabs() {
         return crabs;
+    }
+    public ArrayList<GameContainer> getContainers() {
+        return containers;
+    }
+    public ArrayList<Potion> getPotions() {
+        return potions;
     }
     public ArrayList<Shark> getSharks(){return  sharks;}
     public ArrayList<Minotaur> getMinotaurs(){return  minotaurs;}

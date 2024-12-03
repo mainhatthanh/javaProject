@@ -35,6 +35,8 @@ public class LoadSave {
     public static final String  OPTIONS_MENU ="options_background.png";
     public static final String SHARK_ATLAS = "shark_atlas.png";
     public static final String MINOTAUR_ATLAS = "NightBorne.png";
+    public static final String POTIONS_ATLAS = "potions_sprites.png";
+    public static final String CONTAINER_ATLAS = "objects_sprites.png";
 
 
     public static BufferedImage GetSpriteAtlas(String fileName) {

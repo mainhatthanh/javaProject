@@ -9,8 +9,11 @@ import entities.Crabby;
 import entities.Minotaur;
 import entities.Shark;
 import main.Game;
+import objects.GameContainer;
+import objects.Potion;
 
 import static utilz.Constants.EnemyConstants.*;
+import static utilz.Constants.ObjectsConstants.*;
 
 public class HelpMethods {
 
@@ -134,6 +137,33 @@ public class HelpMethods {
         return list;
 
     }
+
+    public static ArrayList<Potion> GetPotions(BufferedImage img) {
+        ArrayList<Potion> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == RED_POTION || value == BLUE_POTION)
+                    list.add(new Potion(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+
+    public static ArrayList<GameContainer> GetContainers(BufferedImage img) {
+        ArrayList<GameContainer> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == BOX || value == BARREL)
+                    list.add(new GameContainer(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+
     public static ArrayList<Shark> GetSharks(BufferedImage img) {
         ArrayList<Shark> list = new ArrayList<>();
         for (int j = 0; j < img.getHeight(); j++)
