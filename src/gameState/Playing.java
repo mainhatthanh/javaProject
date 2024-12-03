@@ -36,8 +36,8 @@ public class Playing extends State implements Statemethods {
     private int yLvlOffset;
 
 
-    private int leftBorder = (int) (0.3 * Game.GAME_WIDTH);
-    private int rightBorder = (int) (0.7 * Game.GAME_WIDTH);
+    private int leftBorder = (int) (0.5 * Game.GAME_WIDTH);
+    private int rightBorder = (int) (0.5 * Game.GAME_WIDTH);
 
     private int maxLvlOffsetX;
     private int maxLvlOffsetY;
@@ -104,6 +104,11 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void update() {
+        //Nếu nhân vật chạm đáy màn hình, nhân vật DEAD
+        if((int)(player.getHitBox().y+player.getHitBox().height+2) >= Game.GAME_HEIGHT){
+            gameOver = true;
+        }
+
         if (paused) {
             pauseOverlay.update();
         } else if (lvlCompleted) {
