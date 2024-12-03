@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import entities.Crabby;
 import entities.Minotaur;
 import entities.Shark;
+import entities.Toro;
 import main.Game;
 
 import static utilz.Constants.EnemyConstants.*;
@@ -155,6 +156,19 @@ public class HelpMethods {
                 int value = color.getGreen();
                 if (value == MINOTAUR)
                     list.add(new Minotaur(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+
+    }
+    
+    public static ArrayList<Toro> GetToros(BufferedImage img) {
+        ArrayList<Toro> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == TORO)
+                    list.add(new Toro(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
             }
         return list;
 
