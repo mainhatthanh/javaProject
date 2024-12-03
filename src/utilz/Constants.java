@@ -59,6 +59,7 @@ public class Constants {
         public static final int CRABBY = 0;
         public static final int MINOTAUR = 1;
         public static final int SHARK = 2;
+        public static final int TORO = 3;
 
         public static final int IDLE = 0;
         public static final int RUNNING = 1;
@@ -79,6 +80,13 @@ public class Constants {
         public static final int MINOTAUR_HEIGHT = (int) (MINOTAUR_HEIGHT_DEFAULT * Game.SCALE);
         public static final int MINOTAUR_DRAWOFFSET_X = (int) (-50 * Game.SCALE);
         public static final int MINOTAUR_DRAWOFFSET_Y = (int) (22* Game.SCALE);
+        
+        public static final int TORO_WIDTH_DEFAULT = 96;
+        public static final int TORO_HEIGHT_DEFAULT = 96;
+        public static final int TORO_WIDTH = (int) (TORO_WIDTH_DEFAULT * Game.SCALE);
+        public static final int TORO_HEIGHT = (int) (TORO_HEIGHT_DEFAULT * Game.SCALE);
+        public static final int TORO_DRAWOFFSET_X = (int) (32 * Game.SCALE);
+        public static final int TORO_DRAWOFFSET_Y = (int) (32* Game.SCALE);
 
         public static final int SHARK_WIDTH_DEFAULT = 34;
         public static final int SHARK_HEIGHT_DEFAULT = 30;
@@ -141,6 +149,8 @@ public class Constants {
                     return 40;
                 case SHARK:
                     return 30;
+                case TORO:
+                	return 30;
                 default:
                     return 0;
             }

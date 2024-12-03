@@ -3,6 +3,7 @@ package levels;
 import entities.Crabby;
 import entities.Minotaur;
 import entities.Shark;
+import entities.Toro;
 import main.Game;
 import objects.GameContainer;
 import objects.Potion;
@@ -25,6 +26,8 @@ public class Level {
     private ArrayList<Potion> potions;
     private ArrayList<Shark> sharks;
     private ArrayList<Minotaur> minotaurs;
+    private ArrayList<Toro> toros;
+
     private Point playerSpawn;
 
 
@@ -53,6 +56,7 @@ public class Level {
      crabs = GetCrabs(img);
      sharks=GetSharks(img);
      minotaurs=GetMinotaurs(img);
+     toros = GetToros(img);
 
     }
 
@@ -90,7 +94,14 @@ public int getLvlOffset(){
         return potions;
     }
     public ArrayList<Shark> getSharks(){return  sharks;}
-    public ArrayList<Minotaur> getMinotaurs(){return  minotaurs;}
+    public ArrayList<Minotaur> getMinotaurs(){
+    	return  minotaurs;
+    }
+    
+    public ArrayList<Toro> getToros(){
+    	return toros;
+    }
+    
   public Point getPlayerSpawn(){
      return playerSpawn;
   }

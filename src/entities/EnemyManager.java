@@ -19,15 +19,20 @@ public class EnemyManager {
    private BufferedImage[][] crabbyArr;
    private BufferedImage[][] sharkArr;
    private BufferedImage[][] minotaurArr;
+   private BufferedImage[][] toroArr;
+
    private ArrayList<Crabby> crabbies = new ArrayList<>();
    private ArrayList<Shark> sharks = new ArrayList<>();
    private ArrayList<Minotaur> minotaurs = new ArrayList<>();
+   private ArrayList<Toro> toros = new ArrayList<>();
+
 
   public EnemyManager(Playing playing){
       this.playing=playing;
       loadEnemyImgsCrabby();
       loadEnemyImgsShark();
       loadEnemyImgsMinotaur();
+      loadEnemyImgsToro();
 
 
   }
@@ -36,6 +41,7 @@ public class EnemyManager {
       crabbies=level.getCrabs();
       sharks=level.getSharks();
       minotaurs=level.getMinotaurs();
+      toros = level.getToros();
 
     }
 
@@ -43,6 +49,8 @@ public class EnemyManager {
       boolean isAnyActiveCrabby = false;
       boolean isAnyActiveShark = false;
       boolean isAnyActiveMinotaur = false;
+      boolean isAnyActiveToro = false;
+
 
         for(Shark sh:sharks)
             if(sh.isActive()) {
@@ -61,9 +69,15 @@ public class EnemyManager {
                 mino.update(lvlData, player);
                 isAnyActiveMinotaur = true;
             }
+        
+        for(Toro t:	toros)
+            if(t.isActive()) {
+                t.update(lvlData, player);
+                isAnyActiveToro = true;
+            }
 
 
-      if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur){
+      if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur&&!isAnyActiveToro){
           playing.setLevelCompleted(true);
 
       }
@@ -74,30 +88,40 @@ public class EnemyManager {
       drawCrabs(g,xLvlOffset,yLvlOffset);
       drawSharks(g,xLvlOffset,yLvlOffset);
       drawMinotaurs(g,xLvlOffset,yLvlOffset);
+      drawToros(g, xLvlOffset , yLvlOffset);
   }
 
-    private void drawCrabs(Graphics g,int xLvloffset,int yLvloffset) {
+    private void drawToros(Graphics g, int xLvlOffset, int yLvlOffset) {
+    	for(Toro t: toros) {
+            if(t.isActive())
+            g.drawImage(toroArr[t.getState()][t.getAniIndex()], (int)(t.getHitBox().x -xLvlOffset - TORO_DRAWOFFSET_X + t.flipX()), (int)(t.getHitBox().y-yLvlOffset - TORO_DRAWOFFSET_Y), TORO_WIDTH * t.flipW(), TORO_HEIGHT, null);
+            t.drawAttackHitbox(g,xLvlOffset);
+            t.drawHitbox(g,xLvlOffset);
+        }
+}
+
+	private void drawCrabs(Graphics g,int xLvloffset,int yLvloffset) {
       for(Crabby c:crabbies) {
           if(c.isActive())
           g.drawImage(crabbyArr[c.getState()][c.getAniIndex()], (int) c.getHitBox().x - xLvloffset - CRABBY_DRAWOFFSET_X + c.flipX(), (int) c.getHitBox().y-yLvloffset - CRABBY_DRAWOFFSET_Y, CRABBY_WIDTH * c.flipY(), CRABBY_HEIGHT, null);
-     //c.drawAttackBox(g,xLvloffset);
-     //c.drawHitbox(g,xLvloffset);
+          c.drawAttackBox(g,xLvloffset);
+          c.drawHitbox(g,xLvloffset);
       }
   }
     private void drawSharks(Graphics g,int xLvloffset,int yLvloffset) {
         for(Shark sh:sharks) {
             if(sh.isActive())
                 g.drawImage(sharkArr[sh.getState()][sh.getAniIndex()], (int) sh.getHitBox().x - xLvloffset - SHARK_DRAWOFFSET_X+ sh.flipX(), (int) sh.getHitBox().y-yLvloffset - SHARK_DRAWOFFSET_Y, SHARK_WIDTH * sh.flipY(), SHARK_HEIGHT, null);
-             //sh.drawAttackBox(g,xLvloffset);
-             //sh.drawHitbox(g,xLvloffset);
+             sh.drawAttackBox(g,xLvloffset);
+             sh.drawHitbox(g,xLvloffset);
         }
     }
     private void drawMinotaurs(Graphics g,int xLvloffset,int yLvloffset) {
         for(Minotaur mino:minotaurs) {
             if(mino.isActive())
                 g.drawImage(minotaurArr[mino.getState()][mino.getAniIndex()], (int) mino.getHitBox().x- xLvloffset  - MINOTAUR_DRAWOFFSET_X+mino.flipX(), (int) mino.getHitBox().y-yLvloffset - MINOTAUR_DRAWOFFSET_Y, MINOTAUR_WIDTH*mino.flipY() , MINOTAUR_HEIGHT, null);
-            //mino.drawHitbox(g,xLvloffset);
-            //mino.drawAttackBox(g,xLvloffset);
+            mino.drawHitbox(g,xLvloffset);
+            mino.drawAttackBox(g,xLvloffset);
         }
     }
 
@@ -124,6 +148,14 @@ public class EnemyManager {
               if(mino.getCurrentHealth()>0)
                   if(attackBox.intersects(mino.getHitBox())){
                       mino.hurt(10);
+                      return;
+                  }
+      
+      for(Toro t: toros)
+          if(t.isActive())
+              if(t.getCurrentHealth()>0)
+                  if(attackBox.intersects(t.getHitBox())){
+                      t.hurt(10);
                       return;
                   }
 
@@ -153,6 +185,15 @@ public class EnemyManager {
             for(int i=0;i<minotaurArr[j].length;i++)
                 minotaurArr[j][i]=temp.getSubimage(i*MINOTAUR_WIDTH_DEFAULT,j*MINOTAUR_HEIGHT_DEFAULT,MINOTAUR_WIDTH_DEFAULT,MINOTAUR_HEIGHT_DEFAULT);
     }
+    
+
+    private void loadEnemyImgsToro() {
+        toroArr = new BufferedImage[5][9];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.TORO_ATLAS);
+        for(int j=0;j<toroArr.length;j++)
+            for(int i=0;i<toroArr[j].length;i++)
+            	toroArr[j][i]=temp.getSubimage(i*TORO_WIDTH_DEFAULT,j*TORO_HEIGHT_DEFAULT,TORO_WIDTH_DEFAULT,TORO_HEIGHT_DEFAULT);
+    }
 
 
     public void resetAllEnemies(){
@@ -162,5 +203,7 @@ public class EnemyManager {
           sh.resetEnemy();
       for(Minotaur mino:minotaurs)
           mino.resetEnemy();
+      for(Toro t : toros)
+    	  t.resetEnemy();
     }
 }

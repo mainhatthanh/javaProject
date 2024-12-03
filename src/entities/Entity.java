@@ -29,7 +29,7 @@ public abstract class Entity {
 
     protected void drawAttackHitbox(Graphics g, int lvlOffsetX) {
         g.setColor(Color.red);
-        g.drawRect((int)attackBox.x-lvlOffsetX,(int)attackBox.y,(int)attackBox.width,(int)attackBox.height);
+        g.drawRect((int)attackBox.x - lvlOffsetX,(int)attackBox.y,(int)attackBox.width,(int)attackBox.height);
     }
 
     protected void drawHitbox(Graphics g,int xLvlOffset){
