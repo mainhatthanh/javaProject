@@ -23,7 +23,7 @@ public class Player extends Entity {
     private float yDrawOffset = 10 * Game.SCALE;
     // jumping / gravity
 
-    private float jumpSpeed = -2.30f * Game.SCALE;
+    private float jumpSpeed = -2.35f * Game.SCALE;
     private float fallSpeedAfterCollision = 0.5f * Game.SCALE;
 
     // Status BarUI
