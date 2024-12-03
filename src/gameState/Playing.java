@@ -39,9 +39,6 @@ public class Playing extends State implements Statemethods {
     private int leftBorder = (int) (0.3 * Game.GAME_WIDTH);
     private int rightBorder = (int) (0.7 * Game.GAME_WIDTH);
 
-    private int topBorder = (int) (0.25 * Game.GAME_HEIGHT);
-    private int bottomBorder = (int) (0.75 * Game.GAME_HEIGHT);
-
     private int maxLvlOffsetX;
     private int maxLvlOffsetY;
 
@@ -80,13 +77,9 @@ public class Playing extends State implements Statemethods {
     }
 
     private void caclcLvlOffset() {
-
         maxLvlOffsetX = levelManager.getCurrentLevel().getLvlOffset();
-        int mapHeightInPixels = levelManager.getCurrentLevel().getMapHeight() * Game.TILES_SIZE;
-        maxLvlOffsetY = mapHeightInPixels - Game.GAME_HEIGHT;
 
         // Đảm bảo không có giá trị âm
-        if (maxLvlOffsetY < 0) maxLvlOffsetY = 0;
         if (maxLvlOffsetX < 0) maxLvlOffsetX = 0;
     }
 
@@ -106,10 +99,7 @@ public class Playing extends State implements Statemethods {
         caclcLvlOffset(); // Tính maxLvlOffsetX và maxLvlOffsetY trước
 
         int playerX = (int) player.getHitBox().x;
-        int playerY = (int) player.getHitBox().y;
-
         xLvlOffset = Math.max(0, Math.min(maxLvlOffsetX, playerX - Game.GAME_WIDTH / 2));
-        yLvlOffset = Math.max(0, Math.min(maxLvlOffsetY, playerY - Game.GAME_HEIGHT / 2));
     }
 
     @Override
@@ -129,7 +119,6 @@ public class Playing extends State implements Statemethods {
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             objectManager.update();
             checkCloseToBorder();
-            checkCloseToBorderVertical();
         }
 
     }
@@ -149,29 +138,14 @@ public class Playing extends State implements Statemethods {
             xLvlOffset = 0;
     }
 
-    private void checkCloseToBorderVertical() {
-        int playerY = (int) player.getHitBox().y;
-        int diff = playerY - yLvlOffset;
-
-        if (diff > bottomBorder)
-            yLvlOffset += diff - bottomBorder;
-        else if (diff < topBorder)
-            yLvlOffset += diff - topBorder;
-
-        if (yLvlOffset > maxLvlOffsetY)
-            yLvlOffset = maxLvlOffsetY;
-        else if (yLvlOffset < 0)
-            yLvlOffset = 0;
-    }
-
     @Override
     public void draw(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
         g.drawImage(groundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
 
-        levelManager.draw(g, xLvlOffset, yLvlOffset);
-        player.render(g, xLvlOffset, yLvlOffset);
-        enemyManager.draw(g, xLvlOffset, yLvlOffset);
+        levelManager.draw(g, xLvlOffset);
+        player.render(g, xLvlOffset);
+        enemyManager.draw(g, xLvlOffset);
         objectManager.draw(g, xLvlOffset);
 
         if (paused) {
