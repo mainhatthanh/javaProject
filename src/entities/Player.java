@@ -128,8 +128,8 @@ public class Player extends Entity {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
         drawUI(g);
-        drawAttackHitbox(g, xlvlOffset);
-        drawHitbox(g, xlvlOffset);
+        // drawAttackHitbox(g, xlvlOffset);
+        // drawHitbox(g, xlvlOffset);
 
     }
 
