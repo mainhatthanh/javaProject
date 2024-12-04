@@ -121,7 +121,7 @@ public class EnemyManager {
             if(mino.isActive())
                 g.drawImage(minotaurArr[mino.getState()][mino.getAniIndex()], (int) mino.getHitBox().x- xLvloffset  - MINOTAUR_DRAWOFFSET_X+mino.flipX(), (int) mino.getHitBox().y-yLvloffset - MINOTAUR_DRAWOFFSET_Y, MINOTAUR_WIDTH*mino.flipY() , MINOTAUR_HEIGHT, null);
             mino.drawHitbox(g,xLvloffset);
-            mino.drawAttackBox(g,xLvloffset);
+            migitno.drawAttackBox(g,xLvloffset);
         }
     }
 
