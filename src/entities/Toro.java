@@ -29,7 +29,7 @@ public class Toro extends Enemy {
 
 	public Toro(float x, float y) {
 		super(x, y, TORO_WIDTH, TORO_HEIGHT, TORO);
-		initHitbox(20, 30);
+		initHitbox(20, 20);
 		initAttackBox();
 	}
 	
