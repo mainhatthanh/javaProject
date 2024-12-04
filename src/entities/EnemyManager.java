@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
+import entities.Player;
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.EnemyConstants.MINOTAUR_DRAWOFFSET_Y;
 

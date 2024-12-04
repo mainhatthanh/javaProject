@@ -34,12 +34,21 @@ public class Player extends Entity {
     private int statusBarX = (int) (10 * Game.SCALE);
     private int statusBarY = (int) (10 * Game.SCALE);
 
-    private int healthBarWith = (int) (150 * Game.SCALE);
+    // Health
+    private int healthBarWith = (int) ((152) * Game.SCALE);
     private int healthBarHeigth = (int) (4 * Game.SCALE);
     private int healthBarXStart = (int) (34 * Game.SCALE);
     private int healthBarYStart = (int) (14 * Game.SCALE);
 
+    // Stamina
+    private int staminaBarWidth = (int) (103 * Game.SCALE);
+    private int staminaBarHeight = (int) (3 * Game.SCALE);
+    private int staminaBarXStart = (int) ((34 + 10) * Game.SCALE);
+    private int staminaBarYStart = (int) ((14 + 25 - 5) * Game.SCALE);
+
     private int healthWidth = healthBarWith;
+
+    private int staminaWidth = staminaBarWidth;
     // attackBox
 
     private int flipX = 0;
@@ -54,6 +63,8 @@ public class Player extends Entity {
         this.state = IDLE;
         this.maxHealth = 100;
         this.currentHealth = maxHealth;
+        this.maxStamina = 100;
+        this.currentStamina = maxStamina;
         this.walkSpeed = Game.SCALE * 1.0f;
         loadAnimations();
         initHitbox(15, 27);
@@ -68,7 +79,7 @@ public class Player extends Entity {
     }
 
     private void initAttackBox() {
-        attackBox = new Rectangle2D.Float(hitbox.x+hitbox.width, y, (int) (20 * Game.SCALE), (int) (20 * Game.SCALE));
+        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y, (int) (20 * Game.SCALE), (int) (20 * Game.SCALE));
     }
 
     public void update() {
@@ -90,6 +101,8 @@ public class Player extends Entity {
 
             return;
         }
+        // cập nhật stamina
+        updateStaminaBar();
 
         updateAttackBox();
 
@@ -124,6 +137,11 @@ public class Player extends Entity {
         healthWidth = (int) ((currentHealth / (float) maxHealth) * healthBarWith);
     }
 
+    private void updateStaminaBar() {
+        // hàm cập nhật stamina
+        staminaWidth = (int) ((currentStamina / (float) maxStamina) * staminaBarWidth);
+    }
+
     public void render(Graphics g, int xlvlOffset) {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
@@ -137,7 +155,8 @@ public class Player extends Entity {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
         g.setColor(Color.red);
         g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeigth);
-
+        g.setColor(Color.yellow);
+        g.fillRect(staminaBarXStart + statusBarX, staminaBarYStart + statusBarY, staminaWidth, staminaBarHeight);
     }
 
     private void updatePos() {
@@ -218,6 +237,16 @@ public class Player extends Entity {
             currentHealth = maxHealth;
         }
 
+    }
+
+    public void changeStamina(int value) {
+        // thay đổi stamina
+        currentStamina += value;
+        if (currentStamina <= 0) {
+            currentStamina = 0;
+        } else if (currentStamina >= maxStamina) {
+            currentStamina = maxStamina;
+        }
     }
 
     public void updateGame() {
@@ -328,10 +357,30 @@ public class Player extends Entity {
         moving = false;
         state = IDLE;
         currentHealth = maxHealth;
-
+        currentStamina = maxStamina;
+        flipX = 0;
+        flipW = 1;
         hitbox.x = x;
         hitbox.y = y;
         if (!IsEntityOnFloor(hitbox, lvlData))
             inAir = true;
     }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }   
+
+    public void setCurrentStamina(int x){
+        this.currentStamina = x;
+    }
+
+    public int getMaxStamina(){
+        return maxStamina;
+    }
+
+    public int getCurrentStamina(){
+        return currentStamina;
+    }
+
+    
 }
