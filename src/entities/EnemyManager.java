@@ -54,24 +54,28 @@ public class EnemyManager {
 
         for(Shark sh:sharks)
             if(sh.isActive()) {
+                sh.updateHealthBar();
                 sh.update(lvlData, player);
                 isAnyActiveCrabby = true;
             }
 
       for(Crabby c:crabbies)
           if(c.isActive()) {
+                c.updateHealthBar();
               c.update(lvlData, player);
               isAnyActiveShark = true;
           }
 
         for(Minotaur mino:minotaurs)
             if(mino.isActive()) {
+                mino.updateHealthBar();
                 mino.update(lvlData, player);
                 isAnyActiveMinotaur = true;
             }
         
         for(Toro t:	toros)
             if(t.isActive()) {
+                t.updateHealthBar();
                 t.update(lvlData, player);
                 isAnyActiveToro = true;
             }
@@ -93,8 +97,10 @@ public class EnemyManager {
 
     private void drawToros(Graphics g, int xLvlOffset) {
     	for(Toro t: toros) {
-            if(t.isActive())
-            g.drawImage(toroArr[t.getState()][t.getAniIndex()], (int)(t.getHitBox().x -xLvlOffset - TORO_DRAWOFFSET_X + t.flipX()), (int)(t.getHitBox().y - TORO_DRAWOFFSET_Y), TORO_WIDTH * t.flipW(), TORO_HEIGHT, null);
+            if(t.isActive()){
+                g.drawImage(toroArr[t.getState()][t.getAniIndex()], (int)(t.getHitBox().x -xLvlOffset - TORO_DRAWOFFSET_X + t.flipX()), (int)(t.getHitBox().y - TORO_DRAWOFFSET_Y), TORO_WIDTH * t.flipW(), TORO_HEIGHT, null);
+                t.drawHealthBar(g, xLvlOffset);
+            }
             // t.drawAttackHitbox(g,xLvlOffset);
             // t.drawHitbox(g,xLvlOffset);
         }
@@ -102,24 +108,30 @@ public class EnemyManager {
 
 	private void drawCrabs(Graphics g,int xLvloffset) {
       for(Crabby c:crabbies) {
-          if(c.isActive())
-          g.drawImage(crabbyArr[c.getState()][c.getAniIndex()], (int) c.getHitBox().x - xLvloffset - CRABBY_DRAWOFFSET_X + c.flipX(), (int) c.getHitBox().y- CRABBY_DRAWOFFSET_Y, CRABBY_WIDTH * c.flipY(), CRABBY_HEIGHT, null);
+          if(c.isActive()){
+            g.drawImage(crabbyArr[c.getState()][c.getAniIndex()], (int) c.getHitBox().x - xLvloffset - CRABBY_DRAWOFFSET_X + c.flipX(), (int) c.getHitBox().y- CRABBY_DRAWOFFSET_Y, CRABBY_WIDTH * c.flipY(), CRABBY_HEIGHT, null);
+            c.drawHealthBar(g, xLvloffset);
+          }
         //   c.drawAttackBox(g,xLvloffset);
         //   c.drawHitbox(g,xLvloffset);
       }
   }
     private void drawSharks(Graphics g,int xLvloffset) {
         for(Shark sh:sharks) {
-            if(sh.isActive())
+            if(sh.isActive()){
                 g.drawImage(sharkArr[sh.getState()][sh.getAniIndex()], (int) sh.getHitBox().x - xLvloffset - SHARK_DRAWOFFSET_X+ sh.flipX(), (int) sh.getHitBox().y- SHARK_DRAWOFFSET_Y, SHARK_WIDTH * sh.flipY(), SHARK_HEIGHT, null);
+                sh.drawHealthBar(g, xLvloffset);
+            }
             //  sh.drawAttackBox(g,xLvloffset);
             //  sh.drawHitbox(g,xLvloffset);
         }
     }
     private void drawMinotaurs(Graphics g,int xLvloffset) {
         for(Minotaur mino:minotaurs) {
-            if(mino.isActive())
+            if(mino.isActive()){
                 g.drawImage(minotaurArr[mino.getState()][mino.getAniIndex()], (int) mino.getHitBox().x- xLvloffset  - MINOTAUR_DRAWOFFSET_X+mino.flipX(), (int) mino.getHitBox().y- MINOTAUR_DRAWOFFSET_Y, MINOTAUR_WIDTH*mino.flipY() , MINOTAUR_HEIGHT, null);
+                mino.drawHealthBar(g, xLvloffset);
+            }
             // mino.drawHitbox(g,xLvloffset);
             // mino.drawAttackBox(g,xLvloffset);
         }
