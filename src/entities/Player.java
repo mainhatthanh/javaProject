@@ -57,7 +57,7 @@ public class Player extends  Entity{
         this.currentHealth=maxHealth;
         this.walkSpeed=Game.SCALE*1.0f;
         loadAnimations();
-        initHitbox(15,27);
+        initHitbox(20,20);
         initAttackBox();
     }
     public void setSpawn(Point spawn){
@@ -68,7 +68,7 @@ public class Player extends  Entity{
     }
 
     private void initAttackBox() {
-        attackBox=new Rectangle2D.Float(x,y,(int)(20*Game.SCALE),(int)(20*Game.SCALE));
+        attackBox=new Rectangle2D.Float(x,y,(int)(40*Game.SCALE),(int)(20*Game.SCALE));
     }
 
     public void update(){
@@ -112,13 +112,14 @@ public class Player extends  Entity{
 
     private void updateAttackBox() {
         if(right){
-            attackBox.x= hitbox.x+ hitbox.width+(int)(Game.SCALE*10);
+            attackBox.x= hitbox.x;
 
         }else if(left) {
-            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 10);
+            attackBox.x = hitbox.x- (int) (Game.SCALE * 20);
         }
 
-        attackBox.y= hitbox.y+(int)(Game.SCALE*10);
+//        attackBox.y= hitbox.y+(int)(Game.SCALE*10);
+        attackBox.y= hitbox.y;
     }
 
 
@@ -130,7 +131,7 @@ public class Player extends  Entity{
         g.drawImage(animations[state][aniIndex],(int)((hitbox.x-xDrawOffset)-xlvlOffset+flipX),(int)(hitbox.y-yDrawOffset)-yLvlOffset,(int)(width*flipW*1.5),(int)(height*1.5),null);
         drawAttackHitbox(g,xlvlOffset);
         drawUI(g);
-      drawHitbox(g,xlvlOffset);
+        drawHitbox(g,xlvlOffset);
 
     }
 
@@ -146,6 +147,7 @@ public class Player extends  Entity{
 
     private void updatePos() {
         moving = false;
+        
         if(jump)
             jump();
         if(!inAir)
@@ -155,16 +157,17 @@ public class Player extends  Entity{
         float xSpeed=0;
 
 if(left) {
-    xSpeed -= walkSpeed;
-    flipX = (int)(width*1.5);
-    flipW = -1;
+
+		xSpeed -= walkSpeed;
+		 flipX = (int)(width*1.5);
+		 flipW = -1;
 }
 
  if(right) {
-     xSpeed += walkSpeed;
+
+	 xSpeed += walkSpeed;
      flipX = 0;
      flipW = 1;
-
  }
  if(!inAir)
      if(!IsEntityOnFloor(hitbox,lvlData))

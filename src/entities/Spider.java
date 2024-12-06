@@ -3,29 +3,27 @@ import main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
-
-import static utilz.Constants.Directions.RIGHT;
+import static utilz.Constants.Directions.*;
 import static utilz.Constants.EnemyConstants.*;
 
 
-public class Crabby extends Enemy{
+public class Spider extends Enemy{
 
 
     private int attackBoxOffsetX;
 
-    public Crabby(float x, float y) {
+    public Spider(float x, float y) {
 
-        super(x, y, CRABBY_WIDTH, CRABBY_HEIGHT, CRABBY);
-        initHitbox(22,19);
+        super(x, y, SPIDER_WIDTH, SPIDER_HEIGHT, SPIDER);
+        initHitbox(30,9);
         initAttackBox();
     }
     private void initAttackBox(){
-        attackBox=new Rectangle2D.Float(x,y,(int)(82*Game.SCALE),(int)(19*Game.SCALE));
-        attackBoxOffsetX = (int)(Game.SCALE*30);
+        attackBox=new Rectangle2D.Float(x,y,(int)(70*Game.SCALE),(int)(9*Game.SCALE));
+        attackBoxOffsetX = (int)(Game.SCALE*20);
     }
-
-
 
     
     public void update(int[][] lvlData,Player player){
@@ -65,8 +63,9 @@ public class Crabby extends Enemy{
                     if(aniIndex==0)
                         attackChecked = false;
 
-                    if(aniIndex==3&&!attackChecked)
+                    if(aniIndex==3&&!attackChecked) {
                         checkEnmyHit(attackBox,player);
+                    }
                     break;
                 case HIT:
                     break;
@@ -77,17 +76,16 @@ public class Crabby extends Enemy{
     }
 
 
-
-    public void drawAttackBox(Graphics g,int xLvlOffset){
+	public void drawAttackBox(Graphics g,int xLvlOffset){
         g.setColor(Color.red);
         g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
 
     }
     public int flipX(){
         if(walkDir==RIGHT)
-            return width;
+            return width  + 60;
         else
-            return  0;
+            return  -30;
     }
     public int flipY(){
           if(walkDir==RIGHT)

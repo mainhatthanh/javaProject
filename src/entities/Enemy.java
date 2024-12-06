@@ -85,9 +85,9 @@ public abstract  class Enemy extends  Entity {
     }
 
     protected void turnTowardsPlayer(Player player){
-        if(player.hitbox.x>hitbox.x)
+        if(player.hitbox.x > hitbox.x)
             walkDir = RIGHT;
-        else
+        else 
             walkDir=LEFT;
     }
 

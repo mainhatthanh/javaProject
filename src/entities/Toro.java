@@ -29,14 +29,14 @@ public class Toro extends Enemy {
 
 	public Toro(float x, float y) {
 		super(x, y, TORO_WIDTH, TORO_HEIGHT, TORO);
-		initHitbox(20, 30);
+		initHitbox(30, 30);
 		initAttackBox();
 	}
 	
 	//khai bao attackbox
 	private void initAttackBox() {
-		attackBox = new Rectangle2D.Float(x , y, (int)(Game.SCALE * 60),(int)(Game.SCALE * 30));
-		attackBoxOffsetX = (int)(Game.SCALE *20);
+		attackBox = new Rectangle2D.Float(x , y, (int)(Game.SCALE * 50),(int)(Game.SCALE * 30));
+		attackBoxOffsetX = (int)(Game.SCALE *10);
 		
 	}
 
@@ -66,18 +66,18 @@ public class Toro extends Enemy {
 				if(canSeePlayer(lvlData, player)) {
 					turnTowardsPlayer(player);
 				if(isPlayerCloseAttack(player))
-					newState(HIT);
+					newState(ATTACK);
 				}
 				move(lvlData);
 				break;
 			case ATTACK:
-				break;
-			case HIT:
 				if(aniIndex ==0)
 					attackChecked = false;
 				
 				if(aniIndex == 3  && !attackChecked)
 					checkEnmyHit(attackBox, player);
+				break;
+			case HIT:
 				break;
 			}
 		}
@@ -91,7 +91,7 @@ public class Toro extends Enemy {
 			return width;
 	}
 	
-	public int flipW() {
+	public int flipY() {
 		if(walkDir == RIGHT)
 			return 1;
 		else

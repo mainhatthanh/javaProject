@@ -12,19 +12,39 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import static utilz.Constants.EnemyConstants.*;
-import static utilz.Constants.EnemyConstants.MINOTAUR_DRAWOFFSET_Y;
+
 
 public class EnemyManager {
    private Playing playing;
    private BufferedImage[][] crabbyArr;
    private BufferedImage[][] sharkArr;
    private BufferedImage[][] minotaurArr;
+   private BufferedImage[][] moneye1Arr;
+   private BufferedImage[][] monster2Arr;
+   private BufferedImage[][] spiderArr;
+
    private BufferedImage[][] toroArr;
+   private BufferedImage[][] boss1Arr;
+   private BufferedImage[][] boss2Arr;
+   private BufferedImage[][] boss3Arr;
+   private BufferedImage[][] boss4Arr;
+   private BufferedImage[][] boss5Arr;
+
+   
 
    private ArrayList<Crabby> crabbies = new ArrayList<>();
    private ArrayList<Shark> sharks = new ArrayList<>();
    private ArrayList<Minotaur> minotaurs = new ArrayList<>();
    private ArrayList<Toro> toros = new ArrayList<>();
+   private ArrayList<Boss1> boss1 = new ArrayList<>();
+   private ArrayList<Monster_Eye1> moneyes = new ArrayList<>();
+   private ArrayList<Monster2> monster2s = new ArrayList<>();
+   private ArrayList<Spider> spiders = new ArrayList<>();
+   private ArrayList<Boss2> boss2 = new ArrayList<>();
+   private ArrayList<Boss3> boss3 = new ArrayList<>();
+   private ArrayList<Boss4> boss4 = new ArrayList<>();
+   private ArrayList<Boss5> boss5 = new ArrayList<>();
+
 
 
   public EnemyManager(Playing playing){
@@ -33,15 +53,32 @@ public class EnemyManager {
       loadEnemyImgsShark();
       loadEnemyImgsMinotaur();
       loadEnemyImgsToro();
+      loadEnemyImgsBoss1();
+      loadEnemyImgMoneye1();
+      loadEnemyImgMonster2();
+      loadEnemyImgSpider();
+      loadEnemyImgsBoss2();
+      loadEnemyImgsBoss3();
+      loadEnemyImgsBoss4();
+      loadEnemyImgsBoss5();
 
 
   }
 
-    public void loadEnemies(Level level) {
+	public void loadEnemies(Level level) {
       crabbies=level.getCrabs();
       sharks=level.getSharks();
       minotaurs=level.getMinotaurs();
       toros = level.getToros();
+      boss1 = level.getBoss1();
+      moneyes = level.getMonEye1();
+      monster2s = level.getMonster2();
+      spiders = level.getSpider();
+      boss2 = level.getBoss2();
+      boss3 = level.getBoss3();
+      boss4 = level.getBoss4();
+      boss5 = level.getBoss5();
+
 
     }
 
@@ -49,7 +86,18 @@ public class EnemyManager {
       boolean isAnyActiveCrabby = false;
       boolean isAnyActiveShark = false;
       boolean isAnyActiveMinotaur = false;
+      boolean isAnyActiveMonEye1 = false;
+      boolean isAnyActiveMonster2 = false;
+      boolean isAnyActiveSpider = false;
+
       boolean isAnyActiveToro = false;
+      boolean isAnyActiveBoss1 = false;
+      boolean isAnyActiveBoss2 = false;
+      boolean isAnyActiveBoss3 = false;
+      boolean isAnyActiveBoss4 = false;
+      boolean isAnyActiveBoss5 = false;
+
+      
 
 
         for(Shark sh:sharks)
@@ -75,26 +123,150 @@ public class EnemyManager {
                 t.update(lvlData, player);
                 isAnyActiveToro = true;
             }
+        
+        for(Boss1 b:	boss1)
+            if(b.isActive()) {
+                b.update(lvlData, player);
+                isAnyActiveBoss1 = true;
+            }
+        for(Boss2 b2:	boss2)
+            if(b2.isActive()) {
+                b2.update(lvlData, player);
+                isAnyActiveBoss2 = true;
+            }
+        
+        for(Boss3 b3:	boss3)
+            if(b3.isActive()) {
+                b3.update(lvlData, player);
+                isAnyActiveBoss3 = true;
+            }
+        
+        for(Boss4 b4:	boss4)
+            if(b4.isActive()) {
+                b4.update(lvlData, player);
+                isAnyActiveBoss4 = true;
+            }
+        
+        for(Boss5 b5:	boss5)
+            if(b5.isActive()) {
+                b5.update(lvlData, player);
+                isAnyActiveBoss5 = true;
+            }
+        
+        for(Monster_Eye1 me:	moneyes)
+            if(me.isActive()) {
+                me.update(lvlData, player);
+                isAnyActiveMonEye1 = true;
+            }
+        
+        for(Monster2 me2:	monster2s)
+            if(me2.isActive()) {
+                me2.update(lvlData, player);
+                isAnyActiveMonster2 = true;
+            }
+        
+        for(Spider spi:	spiders)
+            if(spi.isActive()) {
+            	spi.update(lvlData, player);
+                isAnyActiveSpider = true;
+            }
 
 
-      if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur&&!isAnyActiveToro){
+      if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur&&!isAnyActiveToro && !isAnyActiveBoss1 && !isAnyActiveBoss1 
+    		  &&!isAnyActiveMonster2 && !isAnyActiveSpider && !isAnyActiveBoss2 && !isAnyActiveBoss3
+    		  && !isAnyActiveBoss4 && !isAnyActiveBoss5){
           playing.setLevelCompleted(true);
 
       }
 
 
   }
-  public void draw(Graphics g,int xLvlOffset,int yLvlOffset){
+    public void draw(Graphics g,int xLvlOffset,int yLvlOffset){
       drawCrabs(g,xLvlOffset,yLvlOffset);
       drawSharks(g,xLvlOffset,yLvlOffset);
       drawMinotaurs(g,xLvlOffset,yLvlOffset);
       drawToros(g, xLvlOffset , yLvlOffset);
-  }
+      drawBoss1(g, xLvlOffset, yLvlOffset);
+      drawMonEye1(g, xLvlOffset, yLvlOffset);
+      drawMon2(g, xLvlOffset, yLvlOffset);
+      drawSpider(g, xLvlOffset, yLvlOffset);
+      drawBoss2(g, xLvlOffset, yLvlOffset);
+      drawBoss3(g, xLvlOffset, yLvlOffset);
+      drawBoss4(g, xLvlOffset, yLvlOffset);
+      drawBoss5(g, xLvlOffset, yLvlOffset);
 
-    private void drawToros(Graphics g, int xLvlOffset, int yLvlOffset) {
+      
+    }
+    
+    private void drawBoss5(Graphics g, int xLvlOffset, int yLvlOffset) {
+  		for(Boss5 b5: boss5) {
+            if(b5.isActive())
+                g.drawImage(boss5Arr[b5.getState()][b5.getAniIndex()], (int)(b5.getHitBox().x- xLvlOffset  - BOSS5_DRAWOFFSET_X+ b5.flipX()), (int)(b5.getHitBox().y-yLvlOffset- BOSS5_DRAWOFFSET_Y -50), (int)(BOSS5_WIDTH*b5.flipY()*1.5)  , (int)(BOSS5_HEIGHT*1.5), null);
+            b5.drawHitbox(g,xLvlOffset);
+            b5.drawAttackBox(g,xLvlOffset);
+        }
+	}
+    
+    private void drawBoss4(Graphics g, int xLvlOffset, int yLvlOffset) {
+  		for(Boss4 b4: boss4) {
+            if(b4.isActive())
+                g.drawImage(boss4Arr[b4.getState()][b4.getAniIndex()], (int)(b4.getHitBox().x- xLvlOffset  - BOSS4_DRAWOFFSET_X+ b4.flipX()), (int)(b4.getHitBox().y-yLvlOffset- BOSS4_DRAWOFFSET_Y -120), (int)(BOSS4_WIDTH*b4.flipY())  , (int)(BOSS4_HEIGHT), null);
+            b4.drawHitbox(g,xLvlOffset);
+            b4.drawAttackBox(g,xLvlOffset);
+        }
+	}
+    
+    private void drawBoss3(Graphics g, int xLvlOffset, int yLvlOffset) {
+  		for(Boss3 b3: boss3) {
+            if(b3.isActive())
+                g.drawImage(boss3Arr[b3.getState()][b3.getAniIndex()], (int)(b3.getHitBox().x- xLvlOffset  - BOSS3_DRAWOFFSET_X+ b3.flipX()), (int)(b3.getHitBox().y-yLvlOffset- BOSS3_DRAWOFFSET_Y -30), (int)(BOSS3_WIDTH*b3.flipY())  , (int)(BOSS3_HEIGHT), null);
+            b3.drawHitbox(g,xLvlOffset);
+            b3.drawAttackBox(g,xLvlOffset);
+        }
+	}
+    
+  	private void drawBoss2(Graphics g, int xLvlOffset, int yLvlOffset) {
+  		for(Boss2 b2: boss2) {
+            if(b2.isActive())
+                g.drawImage(boss2Arr[b2.getState()][b2.getAniIndex()], (int)(b2.getHitBox().x- xLvlOffset  - BOSS2_DRAWOFFSET_X+ b2.flipX()), (int)(b2.getHitBox().y-yLvlOffset- BOSS2_DRAWOFFSET_Y -60), (int)(BOSS2_WIDTH*b2.flipY())  , (int)(BOSS2_HEIGHT), null);
+            b2.drawHitbox(g,xLvlOffset);
+            b2.drawAttackBox(g,xLvlOffset);
+        }
+	}
+
+	private void drawSpider(Graphics g, int xLvlOffset, int yLvlOffset) {
+  		for(Spider spi: spiders) {
+          if(spi.isActive())
+          	g.drawImage(spiderArr[spi.getState()][spi.getAniIndex()], (int)(spi.getHitBox().x -xLvlOffset - SPIDER_DRAWOFFSET_X + spi.flipX()), (int)(spi.getHitBox().y - yLvlOffset - SPIDER_DRAWOFFSET_Y-90), (int)(SPIDER_WIDTH * spi.flipY()*3) , (int)(SPIDER_HEIGHT*3), null);
+          spi.drawAttackHitbox(g,xLvlOffset);
+          spi.drawHitbox(g,xLvlOffset);
+  	}
+  	}
+
+    private void drawMon2(Graphics g, int xLvlOffset, int yLvlOffset) {
+    	for(Monster2 me2: monster2s) {
+            if(me2.isActive())
+            	g.drawImage(monster2Arr[me2.getState()][me2.getAniIndex()], (int)(me2.getHitBox().x -xLvlOffset - MON2_DRAWOFFSET_X + me2.flipX()), (int)(me2.getHitBox().y - yLvlOffset - MON2_DRAWOFFSET_Y-20), (int)(MON2_WIDTH * me2.flipY()*1.5) , (int)(MON2_HEIGHT*1.5), null);
+            me2.drawAttackHitbox(g,xLvlOffset);
+            me2.drawHitbox(g,xLvlOffset);
+    	}	
+}
+
+
+
+	private void drawMonEye1(Graphics g, int xLvlOffset, int yLvlOffset) {
+    	for(Monster_Eye1 me: moneyes) {
+            if(me.isActive())
+            	g.drawImage(moneye1Arr[me.getState()][me.getAniIndex()], (int)(me.getHitBox().x -xLvlOffset - MONEYE1_DRAWOFFSET_X + me.flipX()), (int)(me.getHitBox().y - yLvlOffset - MONEYE1_DRAWOFFSET_Y), (int)(MONEYE1_WIDTH * me.flipY()) , (int)(MONEYE1_HEIGHT), null);
+            me.drawAttackHitbox(g,xLvlOffset);
+            me.drawHitbox(g,xLvlOffset);
+    	}
+    }
+
+	private void drawToros(Graphics g, int xLvlOffset, int yLvlOffset) {
     	for(Toro t: toros) {
             if(t.isActive())
-            g.drawImage(toroArr[t.getState()][t.getAniIndex()], (int)(t.getHitBox().x -xLvlOffset - TORO_DRAWOFFSET_X + t.flipX()), (int)(t.getHitBox().y-yLvlOffset - TORO_DRAWOFFSET_Y), TORO_WIDTH * t.flipW(), TORO_HEIGHT, null);
+            g.drawImage(toroArr[t.getState()][t.getAniIndex()], (int)(t.getHitBox().x -xLvlOffset - TORO_DRAWOFFSET_X + t.flipX()), (int)(t.getHitBox().y - yLvlOffset - TORO_DRAWOFFSET_Y - 30), (int)(TORO_WIDTH * t.flipY()*1.5) , (int)(TORO_HEIGHT*1.5), null);
             t.drawAttackHitbox(g,xLvlOffset);
             t.drawHitbox(g,xLvlOffset);
         }
@@ -124,16 +296,25 @@ public class EnemyManager {
             mino.drawAttackBox(g,xLvloffset);
         }
     }
+    
+    private void drawBoss1(Graphics g,int xLvloffset,int yLvloffset) {
+        for(Boss1 b: boss1) {
+            if(b.isActive())
+                g.drawImage(boss1Arr[b.getState()][b.getAniIndex()], (int)(b.getHitBox().x- xLvloffset  - BOSS1_DRAWOFFSET_X+ b.flipX()), (int)(b.getHitBox().y-yLvloffset- BOSS1_DRAWOFFSET_Y -60), (int)(BOSS1_WIDTH*b.flipY()*1.5)  , (int)(BOSS1_HEIGHT*1.5), null);
+            b.drawHitbox(g,xLvloffset);
+            b.drawAttackBox(g,xLvloffset);
+        }
+    }
 
 
   public void checkEnemyHit(Rectangle2D.Float attackBox){
       for(Crabby c: crabbies)
           if(c.isActive())
               if(c.getCurrentHealth()>0)
-          if(attackBox.intersects(c.getHitBox())){
-              c.hurt(10);
-              return;
-          }
+            	  if(attackBox.intersects(c.getHitBox())){
+		              c.hurt(10);
+		              return;
+            	  }
 
       for(Shark sh: sharks)
           if(sh.isActive())
@@ -158,9 +339,87 @@ public class EnemyManager {
                       t.hurt(10);
                       return;
                   }
-
+      
+      for(Boss1 b: boss1)
+          if(b.isActive())
+              if(b.getCurrentHealth()>0)
+                  if(attackBox.intersects(b.getHitBox())){
+                      b.hurt(10);
+                      return;
+                  }
+      
+      for(Boss2 b2: boss2)
+          if(b2.isActive())
+              if(b2.getCurrentHealth()>0)
+                  if(attackBox.intersects(b2.getHitBox())){
+                      b2.hurt(10);
+                      return;
+                  }
+      
+      for(Monster_Eye1 me: moneyes)
+          if(me.isActive())
+              if(me.getCurrentHealth()>0)
+                  if(attackBox.intersects(me.getHitBox())){
+                      me.hurt(10);
+                      return;
+                  }
+      
+      for(Boss3 b3: boss3)
+          if(b3.isActive())
+              if(b3.getCurrentHealth()>0)
+                  if(attackBox.intersects(b3.getHitBox())){
+                      b3.hurt(10);
+                      return;
+                  }
+      
+      for(Boss4 b4: boss4)
+          if(b4.isActive())
+              if(b4.getCurrentHealth()>0)
+                  if(attackBox.intersects(b4.getHitBox())){
+                      b4.hurt(10);
+                      return;
+                  }
+      
+      for(Boss5 b5: boss5)
+          if(b5.isActive())
+              if(b5.getCurrentHealth()>0)
+                  if(attackBox.intersects(b5.getHitBox())){
+                      b5.hurt(10);
+                      return;
+                  }
+      
+      for(Monster2 me2: monster2s)
+          if(me2.isActive())
+              if(me2.getCurrentHealth()>0)
+                  if(attackBox.intersects(me2.getHitBox())){
+                      me2.hurt(10);
+                      return;
+                  }
+      
+      for(Spider spi: spiders)
+          if(spi.isActive())
+              if(spi.getCurrentHealth()>0)
+                  if(attackBox.intersects(spi.getHitBox())){
+                      spi.hurt(10);
+                      return;
+                  }
   }
-
+  
+  	private void loadEnemyImgSpider() {
+  		spiderArr = new BufferedImage[5][9];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.SPIDER_ATLAS);
+        for(int j=0;j<spiderArr.length;j++)
+            for(int i=0;i<spiderArr[j].length;i++)
+            	spiderArr[j][i]=temp.getSubimage(i*SPIDER_WIDTH_DEFAULT,j*SPIDER_HEIGHT_DEFAULT,SPIDER_WIDTH_DEFAULT ,SPIDER_HEIGHT_DEFAULT);
+  	}
+  
+  	private void loadEnemyImgMonster2() {
+  	monster2Arr = new BufferedImage[5][8];
+      BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.MONSTER2_ATLAS);
+      for(int j=0;j<monster2Arr.length;j++)
+          for(int i=0;i<monster2Arr[j].length;i++)
+        	  monster2Arr[j][i]=temp.getSubimage(i*MON2_WIDTH_DEFAULT,j*MON2_HEIGHT_DEFAULT,MON2_WIDTH_DEFAULT,MON2_HEIGHT_DEFAULT);
+  	}
 
     private void loadEnemyImgsCrabby() {
       crabbyArr = new BufferedImage[5][9];
@@ -186,6 +445,14 @@ public class EnemyManager {
                 minotaurArr[j][i]=temp.getSubimage(i*MINOTAUR_WIDTH_DEFAULT,j*MINOTAUR_HEIGHT_DEFAULT,MINOTAUR_WIDTH_DEFAULT,MINOTAUR_HEIGHT_DEFAULT);
     }
     
+    private void loadEnemyImgMoneye1() {
+    	moneye1Arr = new BufferedImage[5][15];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.MONSTER_EYE1_ATLAS);
+        for(int j=0;j<moneye1Arr.length;j++)
+            for(int i=0;i<moneye1Arr[j].length;i++)
+            	moneye1Arr[j][i]=temp.getSubimage(i*MONEYE1_WIDTH_DEFAULT,j*MONEYE1_HEIGHT_DEFAULT,MONEYE1_WIDTH_DEFAULT,MONEYE1_HEIGHT_DEFAULT);
+    	}
+    
 
     private void loadEnemyImgsToro() {
         toroArr = new BufferedImage[5][9];
@@ -194,7 +461,46 @@ public class EnemyManager {
             for(int i=0;i<toroArr[j].length;i++)
             	toroArr[j][i]=temp.getSubimage(i*TORO_WIDTH_DEFAULT,j*TORO_HEIGHT_DEFAULT,TORO_WIDTH_DEFAULT,TORO_HEIGHT_DEFAULT);
     }
+    
+    private void loadEnemyImgsBoss1() {
+    	boss1Arr = new BufferedImage[5][7];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSS1_ATLAS);
+        for(int j=0;j<boss1Arr.length;j++)
+            for(int i=0;i<boss1Arr[j].length;i++)
+            	boss1Arr[j][i]=temp.getSubimage(i*BOSS1_WIDTH_DEFAULT,j*BOSS1_HEIGHT_DEFAULT,BOSS1_WIDTH_DEFAULT,BOSS1_HEIGHT_DEFAULT);
+    }
+    
+    private void loadEnemyImgsBoss2() {
+    	boss2Arr = new BufferedImage[5][7];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSS2_ATLAS);
+        for(int j=0;j<boss2Arr.length;j++)
+            for(int i=0;i<boss2Arr[j].length;i++)
+            	boss2Arr[j][i]=temp.getSubimage(i*BOSS2_WIDTH_DEFAULT,j*BOSS2_HEIGHT_DEFAULT,BOSS2_WIDTH_DEFAULT,BOSS2_HEIGHT_DEFAULT);
+    }
+    
+    private void loadEnemyImgsBoss3() {
+    	boss3Arr = new BufferedImage[5][7];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSS3_ATLAS);
+        for(int j=0;j<boss3Arr.length;j++)
+            for(int i=0;i<boss3Arr[j].length;i++)
+            	boss3Arr[j][i]=temp.getSubimage(i*BOSS3_WIDTH_DEFAULT,j*BOSS3_HEIGHT_DEFAULT,BOSS3_WIDTH_DEFAULT,BOSS3_HEIGHT_DEFAULT);
+    }
 
+    private void loadEnemyImgsBoss4() {
+    	boss4Arr = new BufferedImage[5][20];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSS4_ATLAS);
+        for(int j=0;j<boss4Arr.length;j++)
+            for(int i=0;i<boss4Arr[j].length;i++)
+            	boss4Arr[j][i]=temp.getSubimage(i*BOSS4_WIDTH_DEFAULT,j*BOSS4_HEIGHT_DEFAULT,BOSS4_WIDTH_DEFAULT,BOSS4_HEIGHT_DEFAULT);
+    }
+    
+    private void loadEnemyImgsBoss5() {
+    	boss5Arr = new BufferedImage[5][8];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSS5_ATLAS);
+        for(int j=0;j<boss5Arr.length;j++)
+            for(int i=0;i<boss5Arr[j].length;i++)
+            	boss5Arr[j][i]=temp.getSubimage(i*BOSS5_WIDTH_DEFAULT,j*BOSS5_HEIGHT_DEFAULT,BOSS5_WIDTH_DEFAULT,BOSS5_HEIGHT_DEFAULT);
+    }
 
     public void resetAllEnemies(){
       for(Crabby c:crabbies)
@@ -205,5 +511,21 @@ public class EnemyManager {
           mino.resetEnemy();
       for(Toro t : toros)
     	  t.resetEnemy();
+      for(Boss1 b: boss1)
+    	  b.resetEnemy();
+      for(Boss2 b2: boss2)
+    	  b2.resetEnemy();
+      for(Boss3 b3: boss3)
+    	  b3.resetEnemy();
+      for(Boss4 b4: boss4)
+    	  b4.resetEnemy();
+      for(Boss5 b5: boss5)
+    	  b5.resetEnemy();
+      for(Monster_Eye1 me : moneyes)
+    	  me.resetEnemy();
+      for(Monster2 me2 : monster2s)
+    	  me2.resetEnemy();
+      for(Spider spi : spiders)
+    	  spi.resetEnemy();
     }
 }

@@ -36,6 +36,19 @@ public class LoadSave {
     public static final String SHARK_ATLAS = "shark_atlas.png";
     public static final String MINOTAUR_ATLAS = "NightBorne.png";
     public static final String TORO_ATLAS = "Minotaur.png";
+    public static final String BOSS1_ATLAS = "boss1_atlas.png";
+    public static final String BOSS2_ATLAS = "boss2_atlas.png";
+    public static final String BOSS3_ATLAS = "boss3_atlas.png";
+    public static final String BOSS4_ATLAS = "boss4_atlas.png";
+    public static final String BOSS5_ATLAS = "boss5_atlas.png";
+
+
+    public static final String MONSTER_EYE1_ATLAS = "moneye1_atlas.png";
+    public static final String MONSTER2_ATLAS = "monster2_atlas.png";
+    public static final String SPIDER_ATLAS = "spider_atlas.png";
+
+
+
     public static final String POTIONS_ATLAS = "potions_sprites.png";
     public static final String CONTAINER_ATLAS = "objects_sprites.png";
 

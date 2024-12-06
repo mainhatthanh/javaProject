@@ -5,13 +5,23 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import entities.Boss1;
+import entities.Boss2;
+import entities.Boss3;
+import entities.Boss4;
+import entities.Boss5;
 import entities.Crabby;
+
 import entities.Minotaur;
+import entities.Monster2;
+import entities.Monster_Eye1;
 import entities.Shark;
+import entities.Spider;
 import entities.Toro;
 import main.Game;
 import objects.GameContainer;
 import objects.Potion;
+
 
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.ObjectsConstants.*;
@@ -111,6 +121,7 @@ public class HelpMethods {
             return IsAllTilesWalkable(firstXTile, secondXTile, yTile, lvlData);
 
     }
+    
     public static int[][] GetLevelData(BufferedImage img) {
         int[][] lvlData = new int[img.getHeight()][img.getWidth()];
 
@@ -201,9 +212,105 @@ public class HelpMethods {
                     list.add(new Toro(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
             }
         return list;
-
     }
 
+    public static ArrayList<Boss1> GetBoss1(BufferedImage img) {
+        ArrayList<Boss1> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == BOSS1)
+                    list.add(new Boss1(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
+    public static ArrayList<Boss4> GetBoss4(BufferedImage img) {
+        ArrayList<Boss4> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == BOSS4)
+                    list.add(new Boss4(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
+    public static ArrayList<Boss5> GetBoss5(BufferedImage img) {
+        ArrayList<Boss5> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == BOSS5)
+                    list.add(new Boss5(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
+    public static ArrayList<Monster_Eye1> GetMonEye1(BufferedImage img) {
+        ArrayList<Monster_Eye1> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == MONSTER_EYE1)
+                    list.add(new Monster_Eye1(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
+    public static ArrayList<Monster2> GetMonster2(BufferedImage img) {
+        ArrayList<Monster2> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == MONSTER2)
+                    list.add(new Monster2(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
+    
+    public static ArrayList<Spider> GetSpider(BufferedImage img) {
+        ArrayList<Spider> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == SPIDER)
+                    list.add(new Spider(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
+    public static ArrayList<Boss2> GetBoss2(BufferedImage img) {
+        ArrayList<Boss2> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == BOSS2)
+                    list.add(new Boss2(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
+    public static ArrayList<Boss3> GetBoss3(BufferedImage img) {
+        ArrayList<Boss3> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == BOSS3)
+                    list.add(new Boss3(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
     public static Point GetPlayerSpawn(BufferedImage img){
         for (int j = 0; j < img.getHeight(); j++)
             for (int i = 0; i < img.getWidth(); i++) {
