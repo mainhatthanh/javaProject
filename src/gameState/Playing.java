@@ -178,7 +178,7 @@ public class Playing extends State implements Statemethods {
         playerDying=false;
         player.resetAll();
         enemyManager.resetAllEnemies();
-
+        objectManager.resetAllObjects();
     }
 
     public void setGameOver(boolean gameOver) {
@@ -187,6 +187,18 @@ public class Playing extends State implements Statemethods {
 
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
         enemyManager.checkEnemyHit(attackBox);
+    }
+    
+    public void checkTrapTouched(Player p) {
+    	objectManager.checkTrapTouched(p);
+    }
+    
+    public void checkObjectHit(Rectangle2D.Float attackbox) {
+    	objectManager.checkObjectHit(attackbox);
+    }
+    
+    public void checkPotionTouched(Rectangle2D.Float hitbox) {
+    	objectManager.checkObjectTouched(hitbox);
     }
 
     @Override
@@ -326,4 +338,5 @@ public class Playing extends State implements Statemethods {
     public void setPlayerDying(boolean playerDying) {
         this.playerDying=playerDying;
     }
+	
 }

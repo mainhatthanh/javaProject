@@ -12,6 +12,8 @@ import entities.Toro;
 import main.Game;
 import objects.GameContainer;
 import objects.Potion;
+import objects.Trap1;
+import objects.Chest;
 
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.ObjectsConstants.*;
@@ -151,6 +153,33 @@ public class HelpMethods {
         return list;
 
     }
+    
+    public static ArrayList<Trap1> GetTrap1(BufferedImage img) {
+        ArrayList<Trap1> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == TRAP1)
+                    list.add(new Trap1(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+    
+    public static ArrayList<Chest> GetChests(BufferedImage img) {
+        ArrayList<Chest> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == CHEST)
+                    list.add(new Chest(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+
 
     public static ArrayList<GameContainer> GetContainers(BufferedImage img) {
         ArrayList<GameContainer> list = new ArrayList<>();

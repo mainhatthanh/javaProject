@@ -7,6 +7,8 @@ import entities.Toro;
 import main.Game;
 import objects.GameContainer;
 import objects.Potion;
+import objects.Trap1;
+import objects.Chest;
 import utilz.HelpMethods;
 
 import java.awt.*;
@@ -24,6 +26,8 @@ public class Level {
     private ArrayList<Crabby> crabs;
     private ArrayList<GameContainer> containers;
     private ArrayList<Potion> potions;
+    private ArrayList<Trap1> trap1;
+    private ArrayList<Chest> chests;
     private ArrayList<Shark> sharks;
     private ArrayList<Minotaur> minotaurs;
     private ArrayList<Toro> toros;
@@ -40,11 +44,23 @@ public class Level {
      createEnemies();
      createContainers();
      createPotions();
+     createTrap1();
+     createChest();
      calcLvlOffsets();
      calcPlayerSpawn();
  }
 
-    private void calcPlayerSpawn() {
+    private void createChest() {
+    	chests = HelpMethods.GetChests(img);
+	
+}
+
+	private void createTrap1() {
+    	trap1 = HelpMethods.GetTrap1(img);
+	
+}
+
+	private void calcPlayerSpawn() {
      playerSpawn = GetPlayerSpawn(img);
     }
 
@@ -87,11 +103,18 @@ public int getLvlOffset(){
     public ArrayList<Crabby> getCrabs() {
         return crabs;
     }
+    public ArrayList<Chest> getChests() {
+        return chests;
+    }
     public ArrayList<GameContainer> getContainers() {
         return containers;
     }
     public ArrayList<Potion> getPotions() {
         return potions;
+    }
+    
+    public ArrayList<Trap1> getTrap1() {
+        return trap1;
     }
     public ArrayList<Shark> getSharks(){return  sharks;}
     public ArrayList<Minotaur> getMinotaurs(){

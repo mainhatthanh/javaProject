@@ -94,12 +94,27 @@ public class Player extends Entity {
         updateAttackBox();
 
         updatePos();
+        if (moving) {
+        	checkPotionTouched();
+        	checkTrapTouched();
+        }
         if (attacking)
             checkAttack();
         updateAnimationTick();
         setAnimation();
 
     }
+    
+    private void checkTrapTouched() {
+		playing.checkTrapTouched(this);
+		
+	}
+
+	private void checkPotionTouched() {
+    	playing.checkPotionTouched(hitbox);
+    }
+    
+    
 
     private void checkAttack() {
         if (attackChecked || aniIndex != 1)
@@ -107,6 +122,7 @@ public class Player extends Entity {
         attackChecked = true;
         playing.checkEnemyHit(attackBox);
         playing.getGame().getAudioPlayer().playAttackSound();
+        playing.checkObjectHit(attackBox);
     }
 
     private void updateAttackBox() {
@@ -218,6 +234,19 @@ public class Player extends Entity {
             currentHealth = maxHealth;
         }
 
+    }
+    
+    public void kill(int value) {
+    	currentHealth = 0;
+    }
+    
+    private void gameOver() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void changeStamina(int value) {
+    	 
     }
 
     public void updateGame() {
@@ -334,4 +363,6 @@ public class Player extends Entity {
         if (!IsEntityOnFloor(hitbox, lvlData))
             inAir = true;
     }
+
+	
 }
