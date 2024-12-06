@@ -1,33 +1,33 @@
 package entities;
-import main.Game;
-
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
-
 
 import static utilz.Constants.Directions.RIGHT;
-import static utilz.Constants.EnemyConstants.*;
+import static utilz.Constants.EnemyConstants.ATTACK;
+import static utilz.Constants.EnemyConstants.BOSS2;
+import static utilz.Constants.EnemyConstants.BOSS2_HEIGHT;
+import static utilz.Constants.EnemyConstants.BOSS2_WIDTH;
+import static utilz.Constants.EnemyConstants.HIT;
+import static utilz.Constants.EnemyConstants.IDLE;
+import static utilz.Constants.EnemyConstants.RUNNING;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
 
-public class Crabby extends Enemy{
+import main.Game;
 
+public class Boss2 extends Enemy {
+	private int attackBoxOffsetX;
 
-    private int attackBoxOffsetX;
-
-    public Crabby(float x, float y) {
-
-        super(x, y, CRABBY_WIDTH, CRABBY_HEIGHT, CRABBY);
-        initHitbox(22,19);
+    public Boss2(float x, float y) {
+        super(x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2);
+        initHitbox(15,15);
         initAttackBox();
     }
     private void initAttackBox(){
-        attackBox=new Rectangle2D.Float(x,y,(int)(82*Game.SCALE),(int)(19*Game.SCALE));
-        attackBoxOffsetX = (int)(Game.SCALE*30);
+        attackBox=new Rectangle2D.Float(x,y,(int)(55*Game.SCALE),(int)(15*Game.SCALE));
+        attackBoxOffsetX = (int)(Game.SCALE*20);
     }
 
-
-
-    
     public void update(int[][] lvlData,Player player){
         updateBehaviour(lvlData,player);
         updateAnimationTick();
@@ -65,7 +65,7 @@ public class Crabby extends Enemy{
                     if(aniIndex==0)
                         attackChecked = false;
 
-                    if(aniIndex==3&&!attackChecked)
+                    if(aniIndex== 4 &&!attackChecked)
                         checkEnmyHit(attackBox,player);
                     break;
                 case HIT:
@@ -85,16 +85,15 @@ public class Crabby extends Enemy{
     }
     public int flipX(){
         if(walkDir==RIGHT)
-            return width;
+            return -30;
         else
-            return  0;
+            return  width + 30;
     }
     public int flipY(){
           if(walkDir==RIGHT)
-              return -1;
-          else{
               return 1;
+          else{
+              return -1;
           }
     }
-
 }

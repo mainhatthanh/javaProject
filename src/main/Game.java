@@ -131,6 +131,7 @@ public class Game implements Runnable {
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
                 System.out.println("FPS: " + frames + " | UPS: " + updates);
+                playing.restoreStaminaDefault(); //Hôì mana sau 1s
                 frames = 0;
                 updates = 0;
 
