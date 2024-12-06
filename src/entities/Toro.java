@@ -28,8 +28,9 @@ public class Toro extends Enemy {
 	private int attackBoxOffsetX;
 
 	public Toro(float x, float y) {
-		super(x, y, TORO_WIDTH, TORO_HEIGHT, TORO);
-		initHitbox(30, 30);
+		super(x , y, TORO_WIDTH, TORO_HEIGHT, TORO);
+		initHitbox(20, 20);
+
 		initAttackBox();
 	}
 	

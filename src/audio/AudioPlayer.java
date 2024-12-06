@@ -113,7 +113,7 @@ public class AudioPlayer {
     }
 
     public void playSong(int song){
-       stopSong();
+        stopSong();
 
         currentSongId = song;
         updateSongVolume();

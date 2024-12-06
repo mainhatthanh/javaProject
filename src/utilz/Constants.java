@@ -1,5 +1,7 @@
 package utilz;
 
+import java.awt.event.KeyEvent;
+
 import entities.Minotaur;
 import main.Game;
 
@@ -247,7 +249,7 @@ public class Constants {
                 case MINOTAUR:
                     return 60;
                 case SHARK:
-                    return 40;
+                    return 30;
                 case TORO: 
                 	return 100;
                 case BOSS1:
@@ -377,6 +379,40 @@ public class Constants {
                 case FALLING:
                 default:
                     return 1;
+            }
+        }
+
+        //Mana hao tốn
+        public static int GetStamina(int player_action){
+            switch(player_action){
+                case JUMP:
+                    return 10;
+                case ATTACK:
+                    return 5;
+                default: 
+                    return 0;
+            }
+        }
+
+        public static int GetAniFromKey(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_SPACE:
+                    return JUMP;
+                
+                case KeyEvent.VK_F:
+                    return ATTACK;
+                default: 
+                    return IDLE;
+            }
+        }
+
+        public static boolean NeedToCheckStamina(KeyEvent e){
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_SPACE:
+                case KeyEvent.VK_F:
+                    return true;
+                default: 
+                    return false;
             }
         }
     }
