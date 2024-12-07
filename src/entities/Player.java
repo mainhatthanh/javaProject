@@ -75,10 +75,9 @@ public class Player extends Entity {
         this.currentStamina = maxStamina;
         this.walkSpeed = Game.SCALE * 1.0f;
         loadAnimations();
-
         initHitbox(15, 27);
-
         initAttackBox();
+
     }
 
     public void setSpawn(Point spawn) {
