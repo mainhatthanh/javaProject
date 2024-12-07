@@ -136,9 +136,10 @@ public abstract class Enemy extends Entity {
 
     public void checkEnmyHit(Rectangle2D.Float attackBox, Player player) {
         if (attackBox.intersects(player.hitbox)) {
+        	player.changeHealth(-GetEnemyDmg(enemyType));
+            attackChecked = true;
         }
-        player.changeHealth(-GetEnemyDmg(enemyType));
-        attackChecked = true;
+        
     }
 
     protected void updateAnimationTick() {
@@ -179,7 +180,7 @@ public abstract class Enemy extends Entity {
 	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset),
 	                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE), enemyHealthWidth,
 	                enemyHealthBarHeight);
-	        g.setColor(Color.WHITE);
+	        g.setColor(Color.LIGHT_GRAY);
 	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset),
 	                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE),
 	                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
