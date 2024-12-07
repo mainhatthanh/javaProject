@@ -6,8 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.Random;
-
 import entities.EnemyManager;
 import entities.Player;
 
@@ -35,17 +33,13 @@ public class Playing extends State implements Statemethods {
     private boolean paused = false;
 
     private int xLvlOffset;
-    private int yLvlOffset;
 
     private int leftBorder = (int) (0.5 * Game.GAME_WIDTH);
     private int rightBorder = (int) (0.5 * Game.GAME_WIDTH);
 
     private int maxLvlOffsetX;
-    private int maxLvlOffsetY;
 
-    private BufferedImage backgroundImg, groundImg, bigCloud, smallCloud;
-    private int[] smallCloudsPos;
-    private Random rnd = new Random();
+    private BufferedImage backgroundImg, groundImg;
 
     private boolean gameOver;
     private boolean lvlCompleted = false;

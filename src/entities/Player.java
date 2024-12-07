@@ -57,9 +57,6 @@ public class Player extends Entity {
     private int expBarHeight = (int) (3*Game.SCALE);
     private int expBarYStart = (int) ((30) * Game.SCALE);
     private int expBarXStart = (int) (Game.GAME_WIDTH/2 - expBarWidth/2);
-
-    private int lastCurrentExp = currentExp;
-    private int lastMaxExp = maxExp;
     private int expWidth = 0;
     // Khi levelUp = true thì hiện cửa sổ tăng sức mạnh bản thân
     private boolean levelUp; 

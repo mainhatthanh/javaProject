@@ -2,7 +2,6 @@ package utilz;
 
 import java.awt.event.KeyEvent;
 
-import entities.Minotaur;
 import main.Game;
 
 public class Constants {

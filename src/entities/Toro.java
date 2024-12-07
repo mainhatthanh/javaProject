@@ -4,21 +4,10 @@ import static utilz.Constants.Directions.*;
 
 
 import static utilz.Constants.EnemyConstants.*;
-import static utilz.Constants.EnemyConstants.MINOTAUR;
-import static utilz.Constants.EnemyConstants.MINOTAUR_HEIGHT;
-import static utilz.Constants.EnemyConstants.MINOTAUR_WIDTH;
 import static utilz.Constants.EnemyConstants.HIT;
 import static utilz.Constants.EnemyConstants.IDLE;
 import static utilz.Constants.EnemyConstants.RUNNING;
 
-import static utilz.HelpMethods.CanMoveHere;
-import static utilz.HelpMethods.IsFloor;
-import static utilz.HelpMethods.GetEntityYPosUnderRoofOrAboveFloor;
-import static utilz.HelpMethods.IsEntityOnFloor;
-
-
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 
 import main.Game;

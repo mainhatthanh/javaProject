@@ -13,11 +13,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static utilz.Constants.EnemyConstants.CRABBY;
-import static utilz.Constants.EnemyConstants.GetExperience;
-import static utilz.Constants.EnemyConstants.MINOTAUR;
-import static utilz.Constants.EnemyConstants.SHARK;
-import static utilz.Constants.EnemyConstants.TORO;
 import static utilz.HelpMethods.*;
 
 public class Level {
