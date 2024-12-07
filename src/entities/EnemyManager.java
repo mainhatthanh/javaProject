@@ -115,14 +115,14 @@ public class EnemyManager {
             if(sh.isActive()) {
                 sh.updateHealthBar();
                 sh.update(lvlData, player);
-                isAnyActiveCrabby = true;
+                isAnyActiveShark = true;
             }
 
       for(Crabby c:crabbies)
           if(c.isActive()) {
                 c.updateHealthBar();
               c.update(lvlData, player);
-              isAnyActiveShark = true;
+              isAnyActiveCrabby = true;
           }
 
         for(Minotaur mino:minotaurs)
@@ -174,7 +174,7 @@ public class EnemyManager {
                 isAnyActiveMonEye1 = true;
             }
         
-        for(Monster2 me2:	monster2s)
+        for(Monster2 me2:monster2s)
             if(me2.isActive()) {
                 me2.update(lvlData, player);
                 isAnyActiveMonster2 = true;
@@ -187,7 +187,8 @@ public class EnemyManager {
             }
 
 
-      if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur&&!isAnyActiveToro &&isAnyActiveMonEye1&& !isAnyActiveBoss1 && !isAnyActiveBoss1
+
+      if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur&&!isAnyActiveToro &&!isAnyActiveMonEye1 && !isAnyActiveBoss1
     		  &&!isAnyActiveMonster2 && !isAnyActiveSpider && !isAnyActiveBoss2 && !isAnyActiveBoss3
     		  && !isAnyActiveBoss4 && !isAnyActiveBoss5){
           playing.setLevelCompleted(true);
