@@ -130,6 +130,21 @@ public class Constants {
 
         }
 
+        public static int GetExperience(int enemy_type){
+            switch (enemy_type) {
+                case CRABBY:
+                      return 10;
+                  case MINOTAUR:
+                      return 50;
+                  case SHARK:
+                      return 15;
+                  case TORO:
+                      return 35;
+                  default:
+                      return 0;
+              }
+        }
+
         public static int GetMaxHealth(int enemy_type) {
             switch (enemy_type) {
               case CRABBY:
@@ -242,9 +257,9 @@ public class Constants {
         public static int GetStamina(int player_action){
             switch(player_action){
                 case JUMP:
-                    return 10;
-                case ATTACK:
                     return 5;
+                case ATTACK:
+                    return 3;
                 default: 
                     return 0;
             }

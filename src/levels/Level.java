@@ -13,11 +13,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import static utilz.Constants.EnemyConstants.CRABBY;
+import static utilz.Constants.EnemyConstants.GetExperience;
+import static utilz.Constants.EnemyConstants.MINOTAUR;
+import static utilz.Constants.EnemyConstants.SHARK;
+import static utilz.Constants.EnemyConstants.TORO;
 import static utilz.HelpMethods.*;
 
 public class Level {
     private BufferedImage img;
-      private int lvlTilesWide;
+    private int lvlTilesWide;
     private int maxTilesOffset;
     private int maxLvlOffsetX;
     private int[][] lvlData;
@@ -30,81 +35,86 @@ public class Level {
 
     private Point playerSpawn;
 
-
-
-
-
- public Level(BufferedImage img){
-    this.img=img;
-     createLevelData();
-     createEnemies();
-     createContainers();
-     createPotions();
-     calcLvlOffsets();
-     calcPlayerSpawn();
- }
+    public Level(BufferedImage img) {
+        this.img = img;
+        createLevelData();
+        createEnemies();
+        createContainers();
+        createPotions();
+        calcLvlOffsets();
+        calcPlayerSpawn();
+    }
 
     private void calcPlayerSpawn() {
-     playerSpawn = GetPlayerSpawn(img);
+        playerSpawn = GetPlayerSpawn(img);
     }
 
-    private void createContainers() { containers = HelpMethods.GetContainers(img); }
+    private void createContainers() {
+        containers = HelpMethods.GetContainers(img);
+    }
 
-    private void createPotions() { potions = HelpMethods.GetPotions(img); }
+    private void createPotions() {
+        potions = HelpMethods.GetPotions(img);
+    }
 
     private void createEnemies() {
-     crabs = GetCrabs(img);
-     sharks=GetSharks(img);
-     minotaurs=GetMinotaurs(img);
-     toros = GetToros(img);
-
+        crabs = GetCrabs(img);
+        sharks = GetSharks(img);
+        minotaurs = GetMinotaurs(img);
+        toros = GetToros(img);
     }
 
-
-
     private void createLevelData() {
-             lvlData=GetLevelData(img);
+        lvlData = GetLevelData(img);
     }
 
     private void calcLvlOffsets() {
-     lvlTilesWide = img.getWidth();
-     maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;
-     maxLvlOffsetX = Game.TILES_SIZE*maxTilesOffset;
+        lvlTilesWide = img.getWidth();
+        maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;
+        maxLvlOffsetX = Game.TILES_SIZE * maxTilesOffset;
     }
 
-    public int getSpriteIndex(int x,int y){
-     return lvlData[y][x];
+    public int getSpriteIndex(int x, int y) {
+        return lvlData[y][x];
 
- }
- public int[][] getLvlData(){
-     return lvlData;
- }
+    }
 
-public int getLvlOffset(){
-     return maxLvlOffsetX;
-}
+    public int[][] getLvlData() {
+        return lvlData;
+    }
+
+    public int getLvlOffset() {
+        return maxLvlOffsetX;
+    }
 
     public ArrayList<Crabby> getCrabs() {
         return crabs;
     }
+
     public ArrayList<GameContainer> getContainers() {
         return containers;
     }
+
     public ArrayList<Potion> getPotions() {
         return potions;
     }
-    public ArrayList<Shark> getSharks(){return  sharks;}
-    public ArrayList<Minotaur> getMinotaurs(){
-    	return  minotaurs;
+
+    public ArrayList<Shark> getSharks() {
+        return sharks;
     }
-    
-    public ArrayList<Toro> getToros(){
-    	return toros;
+
+    public ArrayList<Minotaur> getMinotaurs() {
+        return minotaurs;
     }
-    
-  public Point getPlayerSpawn(){
-     return playerSpawn;
-  }
+
+    public ArrayList<Toro> getToros() {
+        return toros;
+    }
+
+    public Point getPlayerSpawn() {
+        return playerSpawn;
+    }
+
     public int getMapHeight() {
         return lvlData.length; // Số hàng trong mảng 2D là chiều cao của bản đồ (theo số tile)
     }

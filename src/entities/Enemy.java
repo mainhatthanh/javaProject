@@ -12,6 +12,7 @@ import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.GRAVITY;
 import static utilz.HelpMethods.*;
 import static utilz.Constants.Directions.*;
+import static entities.Player.expThatChange;
 
 public abstract class Enemy extends Entity {
     protected int enemyType;
@@ -124,10 +125,13 @@ public abstract class Enemy extends Entity {
         aniIndex = 0;
     }
 
-    public void hurt(int amount) {
+    public void hurt(int amount, Player player) {
         currentHealth -= amount;
-        if (currentHealth <= 0)
+        if (currentHealth <= 0){
             newState(DEAD);
+            player.changeExp(GetExperience(enemyType));
+            expThatChange += GetExperience(enemyType);
+        }
         else
             newState(HIT);
     }
@@ -174,10 +178,11 @@ public abstract class Enemy extends Entity {
 
     public void drawHealthBar(Graphics g, int xLvlOffset) {
         g.setColor(Color.red);
+        
         g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset),
                 (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE), enemyHealthWidth,
                 enemyHealthBarHeight);
-        g.setColor(Color.WHITE);
+        g.setColor(Color.LIGHT_GRAY);
         g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset),
                 (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE),
                 enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);

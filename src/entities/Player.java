@@ -46,9 +46,24 @@ public class Player extends Entity {
     private int staminaBarXStart = (int) ((34 + 10) * Game.SCALE);
     private int staminaBarYStart = (int) ((14 + 25 - 5) * Game.SCALE);
 
+    public static int expThatChange;
+
     private int healthWidth = healthBarWith;
 
     private int staminaWidth = staminaBarWidth;
+
+    //Exp
+    private int expBarWidth = (int)(32*10*Game.SCALE);
+    private int expBarHeight = (int) (3*Game.SCALE);
+    private int expBarYStart = (int) ((30) * Game.SCALE);
+    private int expBarXStart = (int) (Game.GAME_WIDTH/2 - expBarWidth/2);
+
+    private int lastCurrentExp = currentExp;
+    private int lastMaxExp = maxExp;
+    private int expWidth = 0;
+    // Khi levelUp = true thì hiện cửa sổ tăng sức mạnh bản thân
+    private boolean levelUp; 
+
     // attackBox
 
     private int flipX = 0;
@@ -65,10 +80,13 @@ public class Player extends Entity {
         this.currentHealth = maxHealth;
         this.maxStamina = 100;
         this.currentStamina = maxStamina;
+        this.currentExp = 0;
+        this.maxExp = 100;
         this.walkSpeed = Game.SCALE * 1.0f;
         loadAnimations();
         initHitbox(15, 27);
         initAttackBox();
+        expThatChange = 0;
     }
 
     public void setSpawn(Point spawn) {
@@ -103,6 +121,8 @@ public class Player extends Entity {
         }
         // cập nhật stamina
         updateStaminaBar();
+
+        updateExpBar();
 
         updateAttackBox();
 
@@ -142,6 +162,10 @@ public class Player extends Entity {
         staminaWidth = (int) ((currentStamina / (float) maxStamina) * staminaBarWidth);
     }
 
+    private void updateExpBar(){
+        expWidth = (int) ((currentExp / (float) maxExp)*expBarWidth);
+    }
+
     public void render(Graphics g, int xlvlOffset) {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
@@ -157,6 +181,10 @@ public class Player extends Entity {
         g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeigth);
         g.setColor(Color.yellow);
         g.fillRect(staminaBarXStart + statusBarX, staminaBarYStart + statusBarY, staminaWidth, staminaBarHeight);
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(expBarXStart, expBarYStart, expBarWidth , expBarHeight);
+        g.setColor(Color.GREEN);
+        g.fillRect(expBarXStart, expBarYStart, expWidth, expBarHeight);
     }
 
     private void updatePos() {
@@ -236,7 +264,6 @@ public class Player extends Entity {
         } else if (currentHealth >= maxHealth) {
             currentHealth = maxHealth;
         }
-
     }
 
     public void changeStamina(int value) {
@@ -246,6 +273,15 @@ public class Player extends Entity {
             currentStamina = 0;
         } else if (currentStamina >= maxStamina) {
             currentStamina = maxStamina;
+        }
+    }
+
+    public void changeExp(int value) {
+        currentExp += value;
+        if(currentExp >= maxExp){
+            levelUp = true;
+            currentExp -= maxExp;
+            maxExp = (int) (1.2*maxExp);
         }
     }
 
@@ -281,6 +317,10 @@ public class Player extends Entity {
         if (startAni != state)
             resetAniTick();
 
+    }
+
+    public void resetExp(){
+        
     }
 
     private void resetAniTick() {
@@ -364,6 +404,18 @@ public class Player extends Entity {
         hitbox.y = y;
         if (!IsEntityOnFloor(hitbox, lvlData))
             inAir = true;
+
+        while(expThatChange > 0){
+            if(expThatChange > currentExp){
+                expThatChange-=currentExp;
+                maxExp = (int) (maxExp/1.2);
+                currentExp = maxExp;
+            } else if (currentExp >= expThatChange) {
+                currentExp -= expThatChange;    
+                expThatChange -= expThatChange;
+            }
+        }
+
     }
 
     public int getMaxHealth() {
@@ -382,5 +434,20 @@ public class Player extends Entity {
         return currentStamina;
     }
 
+    public void setLevelUp(boolean a){
+        this.levelUp = a;
+    }
+
+    public boolean isLevelUp(){
+        return levelUp;
+    }
+
+    public void setCurrentExp(int exp){
+        this.currentExp = exp;
+    }
+
+    public int getCurrentExp(){
+        return currentExp;
+    }
     
 }
