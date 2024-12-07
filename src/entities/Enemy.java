@@ -26,7 +26,7 @@ public abstract class Enemy extends Entity {
     protected int attackBoxOffsetX;
 
     private int enemyHealthBarWidth = (int) (64 * Game.SCALE);
-    private int enemyHealthBarHeight = (int) (2 * Game.SCALE);
+    private int enemyHealthBarHeight = (int) (1.5 * Game.SCALE);
 
     private int enemyHealthWidth = enemyHealthBarWidth;
 
@@ -35,9 +35,7 @@ public abstract class Enemy extends Entity {
         this.enemyType = enemyState;
         this.maxHealth = GetMaxHealth(enemyState);
         this.currentHealth = maxHealth;
-        maxHealth = GetMaxHealth(enemyType);
-        currentHealth = maxHealth;
-        walkSpeed = Game.SCALE * 0.35f;
+        // this.walkSpeed = Game.SCALE * 0.35f;
     }
 
     protected void updateAttackBox() {
@@ -181,11 +179,11 @@ public abstract class Enemy extends Entity {
         g.setColor(Color.red);
         
         g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset),
-                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE), enemyHealthWidth,
+                (int) (hitbox.y + hitbox.height - hitbox.height - 4 * Game.SCALE), enemyHealthWidth,
                 enemyHealthBarHeight);
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset),
-                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE),
+                (int) (hitbox.y + hitbox.height - hitbox.height - 4 * Game.SCALE),
                 enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
     }
 

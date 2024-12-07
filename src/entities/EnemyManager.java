@@ -76,7 +76,7 @@ public class EnemyManager {
 
     }
 
-    public void update(int [][] lvlData,Player player){
+    public void update(int[][] lvlData, Player player) {
         boolean isAnyActiveCrabby = false;
         boolean isAnyActiveShark = false;
         boolean isAnyActiveMinotaur = false;
@@ -91,98 +91,101 @@ public class EnemyManager {
         boolean isAnyActiveBoss4 = false;
         boolean isAnyActiveBoss5 = false;
 
-        for (Shark sh : sharks){
+        for (Shark sh : sharks) {
             if (sh.isActive()) {
                 sh.updateHealthBar();
                 sh.update(lvlData, player);
                 isAnyActiveShark = true;
             }
         }
-            
 
-        for (Crabby c : crabbies){
+        for (Crabby c : crabbies) {
             if (c.isActive()) {
                 c.updateHealthBar();
-              c.update(lvlData, player);
-              isAnyActiveCrabby = true;
+                c.update(lvlData, player);
+                isAnyActiveCrabby = true;
+            }
+
+            for (Minotaur mino : minotaurs) {
+                if (mino.isActive()) {
+                    mino.updateHealthBar();
+                    mino.update(lvlData, player);
+                    isAnyActiveMinotaur = true;
+                }
+            }
+
+            for (Toro t : toros) {
+                if (t.isActive()) {
+                    t.updateHealthBar();
+                    t.update(lvlData, player);
+                    isAnyActiveToro = true;
+                }
+            }
+
+            for (Boss1 b : boss1)
+                if (b.isActive()) {
+                    b.updateHealthBar();
+                    b.update(lvlData, player);
+                    isAnyActiveBoss1 = true;
+                }
+            for (Boss2 b2 : boss2)
+                if (b2.isActive()) {
+                    b2.updateHealthBar();
+                    b2.update(lvlData, player);
+                    isAnyActiveBoss2 = true;
+                }
+
+            for (Boss3 b3 : boss3)
+                if (b3.isActive()) {
+                    b3.updateHealthBar();
+                    b3.update(lvlData, player);
+                    isAnyActiveBoss3 = true;
+                }
+
+            for (Boss4 b4 : boss4)
+                if (b4.isActive()) {
+                    b4.updateHealthBar();
+                    b4.update(lvlData, player);
+                    isAnyActiveBoss4 = true;
+                }
+
+            for (Boss5 b5 : boss5)
+                if (b5.isActive()) {
+                    b5.updateHealthBar();
+                    b5.update(lvlData, player);
+                    isAnyActiveBoss5 = true;
+                }
+
+            for (Monster_Eye1 me : moneyes)
+                if (me.isActive()) {
+                    me.updateHealthBar();
+                    me.update(lvlData, player);
+                    isAnyActiveMonEye1 = true;
+                }
+
+            for (Monster2 me2 : monster2s)
+                if (me2.isActive()) {
+                    me2.updateHealthBar();
+                    me2.update(lvlData, player);
+                    isAnyActiveMonster2 = true;
+                }
+
+            for (Spider spi : spiders)
+                if (spi.isActive()) {
+                    spi.updateHealthBar();
+                    spi.update(lvlData, player);
+                    isAnyActiveSpider = true;
+                }
+            if (!isAnyActiveCrabby && !isAnyActiveShark && !isAnyActiveMinotaur && !isAnyActiveToro
+                    && !isAnyActiveMonEye1 && !isAnyActiveBoss1
+                    && !isAnyActiveMonster2 && !isAnyActiveSpider && !isAnyActiveBoss2 && !isAnyActiveBoss3
+                    && !isAnyActiveBoss4 && !isAnyActiveBoss5) {
+
+                playing.setLevelCompleted(true);
+
+            }
+
         }
-
-        for (Minotaur mino : minotaurs){
-            if (mino.isActive()) {
-                mino.updateHealthBar();
-                mino.update(lvlData, player);
-                isAnyActiveMinotaur = true;
-            }
-        }
-
-        for (Toro t : toros){
-            if (t.isActive()) {
-                t.updateHealthBar();
-                t.update(lvlData, player);
-                isAnyActiveToro = true;
-            }
-        }
-        
-        for(Boss1 b:	boss1)
-            if(b.isActive()) {
-                b.update(lvlData, player);
-                isAnyActiveBoss1 = true;
-            }
-        for(Boss2 b2:	boss2)
-            if(b2.isActive()) {
-                b2.update(lvlData, player);
-                isAnyActiveBoss2 = true;
-            }
-        
-        for(Boss3 b3:	boss3)
-            if(b3.isActive()) {
-                b3.update(lvlData, player);
-                isAnyActiveBoss3 = true;
-            }
-        
-        for(Boss4 b4:	boss4)
-            if(b4.isActive()) {
-                b4.update(lvlData, player);
-                isAnyActiveBoss4 = true;
-            }
-        
-        for(Boss5 b5:	boss5)
-            if(b5.isActive()) {
-                b5.update(lvlData, player);
-                isAnyActiveBoss5 = true;
-            }
-        
-        for(Monster_Eye1 me:moneyes)
-            if(me.isActive()) {
-                me.update(lvlData, player);
-                isAnyActiveMonEye1 = true;
-            }
-        
-        for(Monster2 me2:monster2s)
-            if(me2.isActive()) {
-                me2.update(lvlData, player);
-                isAnyActiveMonster2 = true;
-            }
-        
-        for(Spider spi:	spiders)
-            if(spi.isActive()) {
-            	spi.update(lvlData, player);
-                isAnyActiveSpider = true;
-            }
-
-        if (!isAnyActiveCrabby && !isAnyActiveShark && !isAnyActiveMinotaur && !isAnyActiveToro) {
-            playing.setLevelCompleted(true);
-        }
-
-        if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur&&!isAnyActiveToro &&!isAnyActiveMonEye1 && !isAnyActiveBoss1
-                &&!isAnyActiveMonster2 && !isAnyActiveSpider && !isAnyActiveBoss2 && !isAnyActiveBoss3
-                && !isAnyActiveBoss4 && !isAnyActiveBoss5){
-                         
-            playing.setLevelCompleted(true);
-
-        }
-
-    }
     }
 
     public void draw(Graphics g, int xLvlOffset) {
@@ -204,37 +207,43 @@ public class EnemyManager {
 
     private void drawBoss5(Graphics g, int xLvlOffset) {
         for (Boss5 b5 : boss5) {
-            if (b5.isActive())
+            if (b5.isActive()) {
                 g.drawImage(boss5Arr[b5.getState()][b5.getAniIndex()],
                         (int) (b5.getHitBox().x - xLvlOffset - BOSS5_DRAWOFFSET_X + b5.flipX()),
                         (int) (b5.getHitBox().y - BOSS5_DRAWOFFSET_Y - 50),
                         (int) (BOSS5_WIDTH * b5.flipY() * 1.5), (int) (BOSS5_HEIGHT * 1.5), null);
-            b5.drawHitbox(g, xLvlOffset);
-            b5.drawAttackBox(g, xLvlOffset);
+                b5.drawHitbox(g, xLvlOffset);
+                b5.drawAttackBox(g, xLvlOffset);
+                b5.drawHealthBar(g, xLvlOffset);
+            }
         }
     }
 
     private void drawBoss4(Graphics g, int xLvlOffset) {
         for (Boss4 b4 : boss4) {
-            if (b4.isActive())
+            if (b4.isActive()) {
                 g.drawImage(boss4Arr[b4.getState()][b4.getAniIndex()],
                         (int) (b4.getHitBox().x - xLvlOffset - BOSS4_DRAWOFFSET_X + b4.flipX()),
                         (int) (b4.getHitBox().y - BOSS4_DRAWOFFSET_Y - 120),
                         (int) (BOSS4_WIDTH * b4.flipY()), (int) (BOSS4_HEIGHT), null);
-            b4.drawHitbox(g, xLvlOffset);
-            b4.drawAttackBox(g, xLvlOffset);
+                b4.drawHitbox(g, xLvlOffset);
+                b4.drawAttackBox(g, xLvlOffset);
+                b4.drawHealthBar(g, xLvlOffset);
+            }
         }
     }
 
     private void drawBoss3(Graphics g, int xLvlOffset) {
         for (Boss3 b3 : boss3) {
-            if (b3.isActive())
+            if (b3.isActive()) {
                 g.drawImage(boss3Arr[b3.getState()][b3.getAniIndex()],
                         (int) (b3.getHitBox().x - xLvlOffset - BOSS3_DRAWOFFSET_X + b3.flipX()),
                         (int) (b3.getHitBox().y - BOSS3_DRAWOFFSET_Y - 30),
                         (int) (BOSS3_WIDTH * b3.flipY()), (int) (BOSS3_HEIGHT), null);
-            b3.drawHitbox(g, xLvlOffset);
-            b3.drawAttackBox(g, xLvlOffset);
+                b3.drawHitbox(g, xLvlOffset);
+                b3.drawAttackBox(g, xLvlOffset);
+                b3.drawHealthBar(g, xLvlOffset);
+            }
         }
     }
 
@@ -247,57 +256,66 @@ public class EnemyManager {
                         (int) (BOSS2_WIDTH * b2.flipY()), (int) (BOSS2_HEIGHT), null);
             b2.drawHitbox(g, xLvlOffset);
             b2.drawAttackBox(g, xLvlOffset);
+            b2.drawHealthBar(g, xLvlOffset);
         }
     }
 
     private void drawSpider(Graphics g, int xLvlOffset) {
         for (Spider spi : spiders) {
-            if (spi.isActive())
+            if (spi.isActive()){
                 g.drawImage(spiderArr[spi.getState()][spi.getAniIndex()],
                         (int) (spi.getHitBox().x - xLvlOffset - SPIDER_DRAWOFFSET_X + spi.flipX()),
                         (int) (spi.getHitBox().y - SPIDER_DRAWOFFSET_Y - 90),
                         (int) (SPIDER_WIDTH * spi.flipY() * 3), (int) (SPIDER_HEIGHT * 3), null);
             spi.drawAttackHitbox(g, xLvlOffset);
             spi.drawHitbox(g, xLvlOffset);
+            spi.drawHealthBar(g, xLvlOffset);
+            }
         }
     }
 
     private void drawMon2(Graphics g, int xLvlOffset) {
         for (Monster2 me2 : monster2s) {
-            if (me2.isActive())
+            if (me2.isActive()) {
                 g.drawImage(monster2Arr[me2.getState()][me2.getAniIndex()],
                         (int) (me2.getHitBox().x - xLvlOffset - MON2_DRAWOFFSET_X + me2.flipX()),
-                        (int) (me2.getHitBox().y  - MON2_DRAWOFFSET_Y - 20),
+                        (int) (me2.getHitBox().y - MON2_DRAWOFFSET_Y - 20),
                         (int) (MON2_WIDTH * me2.flipY() * 1.5), (int) (MON2_HEIGHT * 1.5), null);
-            me2.drawAttackHitbox(g, xLvlOffset);
-            me2.drawHitbox(g, xLvlOffset);
+                me2.drawAttackHitbox(g, xLvlOffset);
+                me2.drawHitbox(g, xLvlOffset);
+                me2.drawHealthBar(g, xLvlOffset);
+            }
 
         }
     }
 
     private void drawMonEye1(Graphics g, int xLvlOffset) {
         for (Monster_Eye1 me : moneyes) {
-            if (me.isActive())
+            if (me.isActive()) {
                 g.drawImage(moneye1Arr[me.getState()][me.getAniIndex()],
                         (int) (me.getHitBox().x - xLvlOffset - MONEYE1_DRAWOFFSET_X + me.flipX()),
-                        (int) (me.getHitBox().y  - MONEYE1_DRAWOFFSET_Y),
+                        (int) (me.getHitBox().y - MONEYE1_DRAWOFFSET_Y),
                         (int) (MONEYE1_WIDTH * me.flipY()), (int) (MONEYE1_HEIGHT), null);
-            me.drawAttackHitbox(g, xLvlOffset);
-            me.drawHitbox(g, xLvlOffset);
+                me.drawHitbox(g, xLvlOffset);
+                me.drawAttackHitbox(g, xLvlOffset);
+                me.drawHealthBar(g, xLvlOffset);
+            }
 
         }
     }
 
     private void drawToros(Graphics g, int xLvlOffset) {
         for (Toro t : toros) {
-            if (t.isActive())
+            if (t.isActive()) {
                 g.drawImage(toroArr[t.getState()][t.getAniIndex()],
                         (int) (t.getHitBox().x - xLvlOffset - TORO_DRAWOFFSET_X + t.flipX()),
-                        (int) (t.getHitBox().y  - TORO_DRAWOFFSET_Y - 30),
+                        (int) (t.getHitBox().y - TORO_DRAWOFFSET_Y - 30),
                         (int) (TORO_WIDTH * t.flipY() * 1.5), (int) (TORO_HEIGHT * 1.5), null);
-            t.drawAttackHitbox(g, xLvlOffset);
-            t.drawHitbox(g, xLvlOffset);
-            t.drawHealthBar(g, xLvlOffset);
+                t.drawAttackHitbox(g, xLvlOffset);
+                t.drawHitbox(g, xLvlOffset);
+                t.drawHealthBar(g, xLvlOffset);
+
+            }
         }
     }
 
@@ -307,10 +325,10 @@ public class EnemyManager {
                 g.drawImage(crabbyArr[c.getState()][c.getAniIndex()],
                         (int) c.getHitBox().x - xLvloffset - CRABBY_DRAWOFFSET_X + c.flipX(),
                         (int) c.getHitBox().y - CRABBY_DRAWOFFSET_Y, CRABBY_WIDTH * c.flipY(), CRABBY_HEIGHT, null);
+                c.drawAttackBox(g, xLvloffset);
+                c.drawHitbox(g, xLvloffset);
                 c.drawHealthBar(g, xLvloffset);
             }
-            // c.drawAttackBox(g,xLvloffset);
-            // c.drawHitbox(g,xLvloffset);
         }
     }
 
@@ -320,10 +338,10 @@ public class EnemyManager {
                 g.drawImage(sharkArr[sh.getState()][sh.getAniIndex()],
                         (int) sh.getHitBox().x - xLvloffset - SHARK_DRAWOFFSET_X + sh.flipX(),
                         (int) sh.getHitBox().y - SHARK_DRAWOFFSET_Y, SHARK_WIDTH * sh.flipY(), SHARK_HEIGHT, null);
+                sh.drawAttackBox(g, xLvloffset);
+                sh.drawHitbox(g, xLvloffset);
                 sh.drawHealthBar(g, xLvloffset);
             }
-            // sh.drawAttackBox(g,xLvloffset);
-            // sh.drawHitbox(g,xLvloffset);
         }
     }
 
@@ -334,39 +352,40 @@ public class EnemyManager {
                         (int) mino.getHitBox().x - xLvloffset - MINOTAUR_DRAWOFFSET_X + mino.flipX(),
                         (int) mino.getHitBox().y - MINOTAUR_DRAWOFFSET_Y, MINOTAUR_WIDTH * mino.flipY(),
                         MINOTAUR_HEIGHT, null);
+                mino.drawHitbox(g, xLvloffset);
+                mino.drawAttackBox(g, xLvloffset);
                 mino.drawHealthBar(g, xLvloffset);
             }
-            // mino.drawHitbox(g,xLvloffset);
-            // mino.drawAttackBox(g,xLvloffset);
         }
     }
 
     private void drawBoss1(Graphics g, int xLvloffset) {
         for (Boss1 b : boss1) {
-            if (b.isActive())
+            if (b.isActive()) {
                 g.drawImage(boss1Arr[b.getState()][b.getAniIndex()],
                         (int) (b.getHitBox().x - xLvloffset - BOSS1_DRAWOFFSET_X + b.flipX()),
-                        (int) (b.getHitBox().y  - BOSS1_DRAWOFFSET_Y - 60),
+                        (int) (b.getHitBox().y - BOSS1_DRAWOFFSET_Y - 60),
                         (int) (BOSS1_WIDTH * b.flipY() * 1.5), (int) (BOSS1_HEIGHT * 1.5), null);
-            b.drawHitbox(g, xLvloffset);
-            b.drawAttackBox(g, xLvloffset);
+                b.drawHitbox(g, xLvloffset);
+                b.drawAttackBox(g, xLvloffset);
+                b.drawHealthBar(g, xLvloffset);
+            }
         }
     }
 
     public void checkEnemyHit(Rectangle2D.Float attackBox, Player player) {
         for (Crabby c : crabbies)
-            if (c.isActive())
-                if (c.getCurrentHealth() > 0)
-                    if (attackBox.intersects(c.getHitBox())) {
-                        c.hurt(10, player);
-                        return;
-                    }
+            if (c.getCurrentHealth() > 0)
+                if (attackBox.intersects(c.getHitBox())) {
+                    c.hurt(10, player);
+                    return;
+                }
 
-        for (Minotaur mino : minotaurs)
-            if (mino.isActive())
-                if (mino.getCurrentHealth() > 0)
-                    if (attackBox.intersects(mino.getHitBox())) {
-                        mino.hurt(10, player);
+        for (Shark shark : sharks)
+            if (shark.isActive())
+                if (shark.getCurrentHealth() > 0)
+                    if (attackBox.intersects(shark.getHitBox())) {
+                        shark.hurt(10, player);
                         return;
                     }
 
@@ -446,7 +465,7 @@ public class EnemyManager {
             if (spi.isActive())
                 if (spi.getCurrentHealth() > 0)
                     if (attackBox.intersects(spi.getHitBox())) {
-                        spi.hurt(10,player);
+                        spi.hurt(10, player);
                         return;
                     }
     }
