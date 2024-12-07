@@ -91,6 +91,7 @@ public abstract class Enemy extends Entity {
         changeWalkDir();
     }
 
+
     protected void turnTowardsPlayer(Player player) {
         if (player.hitbox.x > hitbox.x)
             walkDir = RIGHT;
@@ -249,6 +250,13 @@ public abstract class Enemy extends Entity {
 
     public boolean isActive() {
         return active;
+    }
+
+    public Rectangle2D.Float getHitbox(){
+        return hitbox;
+    }
+    public int getAniTick(){
+        return this.aniTick;
     }
 
 }

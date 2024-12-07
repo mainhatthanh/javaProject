@@ -69,6 +69,14 @@ public class Player extends Entity {
     private boolean attackChecked;
     private Playing playing;
 
+    private int tileY=0;
+
+
+    private boolean powerAttackActive;
+    private int powerAttackTick;
+    private int powerGrowSpeed=15;
+    private int powerGrowTick;
+
     public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, width, height);
         this.playing = playing;
@@ -81,7 +89,9 @@ public class Player extends Entity {
         this.maxExp = 100;
         this.walkSpeed = Game.SCALE * 1.0f;
         loadAnimations();
+
         initHitbox(15, 27);
+
         initAttackBox();
         expThatChange = 0;
     }
@@ -94,11 +104,15 @@ public class Player extends Entity {
     }
 
     private void initAttackBox() {
+
         attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y, (int) (20 * Game.SCALE), (int) (20 * Game.SCALE));
+
     }
 
     public void update() {
         updateHealthBar();
+        updateStaminaBar();
+
         if (currentHealth <= 0) {
             if (state != DEAD) {
                 state = DEAD;
@@ -112,20 +126,50 @@ public class Player extends Entity {
                 playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
             } else {
                 updateAnimationTick();
+
+                //fall if in air
+                if (inAir)
+                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
+                        hitbox.y += airSpeed;
+                        airSpeed += GRAVITY;
+                    } else
+                        inAir = false;
+
             }
 
             return;
         }
-        // cập nhật stamina
-        updateStaminaBar();
+            updateAttackBox();
 
         updateExpBar();
 
         updateAttackBox();
+            if (state == HIT) {
+                if (aniIndex <= GetSpriteAmount(state) - 3)
+                    pushBack(pushBackDir, lvlData, 1.25f);
+                updatePushBackDrawOffset();
+            } else
+                updatePos();
 
-        updatePos();
-        if (attacking)
+            if(moving) {
+                tileY = (int) (hitbox.y / Game.TILES_SIZE);
+                if(powerAttackActive){
+                    powerAttackTick++;
+                    if(powerAttackTick>=50){
+                        powerAttackTick=0;
+                        powerAttackActive=false;
+                    }
+                }
+
+            }
+
+
+
+
+
+        if (attacking||powerAttackActive)
             checkAttack();
+
         updateAnimationTick();
         setAnimation();
 
@@ -135,19 +179,25 @@ public class Player extends Entity {
         if (attackChecked || aniIndex != 1)
             return;
         attackChecked = true;
+
+        if(powerAttackActive)
+            attackChecked=false;
+
         playing.checkEnemyHit(attackBox);
         playing.getGame().getAudioPlayer().playAttackSound();
     }
 
     private void updateAttackBox() {
-        if (right) {
+
+        if (right||(powerAttackActive&&flipW==1)) {
             attackBox.x = hitbox.x + hitbox.width + (int) (Game.SCALE * 10);
 
-        } else if (left) {
+        } else if (left||(powerAttackActive&&flipW==-1)) {
             attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 10);
         }
 
         attackBox.y = hitbox.y + (int) (Game.SCALE * 10);
+
     }
 
     private void updateHealthBar() {
@@ -157,6 +207,11 @@ public class Player extends Entity {
     private void updateStaminaBar() {
         // hàm cập nhật stamina
         staminaWidth = (int) ((currentStamina / (float) maxStamina) * staminaBarWidth);
+
+        powerGrowTick++;
+        if(powerGrowTick>=powerGrowSpeed){
+            powerGrowTick=0;
+        }
     }
 
     private void updateExpBar(){
@@ -167,8 +222,10 @@ public class Player extends Entity {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
         drawUI(g);
+
         // drawAttackHitbox(g, xlvlOffset);
         // drawHitbox(g, xlvlOffset);
+
 
     }
 
@@ -186,48 +243,57 @@ public class Player extends Entity {
 
     private void updatePos() {
         moving = false;
+
         if (jump)
             jump();
         if (!inAir)
+            if(!powerAttackActive)
             if ((!left && !right) || (right && left))
                 return;
 
         float xSpeed = 0;
 
-        if (left) {
-            xSpeed -= walkSpeed;
-            flipX = (int) (width * 1.5);
-            flipW = -1;
-        }
+	if(left&&!right) {
+	
+			xSpeed -= walkSpeed;
+			 flipX = (int)(width*1.5);
+			 flipW = -1;
+	}
+	
+	 if(right&&!left) {
+		 xSpeed += walkSpeed;
+	     flipX = 0;
+	     flipW = 1;
+	 }
 
-        if (right) {
-            xSpeed += walkSpeed;
-            flipX = 0;
-            flipW = 1;
+     if(powerAttackActive){
+         if((!left&&!right)||(left&&right)){
+             if(flipW==-1)
+                 xSpeed=-walkSpeed;
+             else
+                 xSpeed=walkSpeed;
+         }
+         xSpeed*=3;
+     }
+	 if(!inAir)
+	     if(!IsEntityOnFloor(hitbox,lvlData))
+	         inAir=true;
 
-        }
-        if (!inAir)
-            if (!IsEntityOnFloor(hitbox, lvlData))
-                inAir = true;
-
-        if (inAir) {
+        if (inAir&&!powerAttackActive) {
             if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
                 hitbox.y += airSpeed;
                 airSpeed += GRAVITY;
                 updateXPos(xSpeed);
             } else {
                 hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed);
-
                 if (airSpeed > 0)
                     resetInAir();
                 else
                     airSpeed = fallSpeedAfterCollision;
                 updateXPos(xSpeed);
             }
-        } else {
+        } else
             updateXPos(xSpeed);
-
-        }
         moving = true;
 
     }
@@ -250,6 +316,11 @@ public class Player extends Entity {
             hitbox.x += xSpeed;
         } else {
             hitbox.x = GetEntityXPosNextToWall(hitbox, xSpeed);
+            if(powerAttackActive){
+                powerAttackActive=false;
+                powerAttackTick=0;
+
+            }
         }
     }
 
@@ -301,6 +372,13 @@ public class Player extends Entity {
                 state = JUMP;
             else
                 state = FALLING;
+        }
+
+        if(powerAttackActive){
+            state=ATTACK;
+            aniIndex=1;
+            aniTick=0;
+            return;
         }
         if (attacking) {
             state = ATTACK;
@@ -447,4 +525,20 @@ public class Player extends Entity {
         return currentExp;
     }
     
+    public Rectangle2D.Float getHitbox() {
+        return hitbox;
+    }
+
+    public int getTileY(){
+        return tileY;
+    }
+
+    public void powerAttack() {
+        if(powerAttackActive)
+            return;
+        if(currentStamina>=40){
+            powerAttackActive=true;
+            changeStamina(-40);
+        }
+    }
 }
