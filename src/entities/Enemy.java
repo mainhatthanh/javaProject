@@ -16,7 +16,7 @@ import static utilz.Constants.Directions.*;
 public abstract class Enemy extends Entity {
     protected int enemyType;
     protected boolean firstUpdate = true;
-    protected float walkSpeed = 0.35f * Game.SCALE;
+    protected float walkSpeed ;
     protected int walkDir = LEFT;
     protected int tileY;
     protected float attackDistance = Game.TILES_SIZE;
@@ -24,10 +24,10 @@ public abstract class Enemy extends Entity {
     protected boolean attackChecked;
     protected int attackBoxOffsetX;
 
-    private int enemyHealthBarWidth = (int) (64 * Game.SCALE);
-    private int enemyHealthBarHeight = (int) (2 * Game.SCALE);
+    protected int enemyHealthBarWidth ;
+	protected int enemyHealthBarHeight ;
 
-    private int enemyHealthWidth = enemyHealthBarWidth;
+	protected int enemyHealthWidth = enemyHealthBarWidth;
 
     public Enemy(float x, float y, int width, int height, int enemyState) {
         super(x, y, width, height);
@@ -36,7 +36,7 @@ public abstract class Enemy extends Entity {
         this.currentHealth = maxHealth;
         maxHealth = GetMaxHealth(enemyType);
         currentHealth = maxHealth;
-        walkSpeed = Game.SCALE * 0.35f;
+
     }
 
     protected void updateAttackBox() {
@@ -50,7 +50,7 @@ public abstract class Enemy extends Entity {
         else
             attackBox.x = hitbox.x - attackBoxOffsetX;
 
-        attackBox.y = hitbox.y;
+        attackBox.y = hitbox.y + 20;
     }
 
     protected void firstUpdateCheck(int[][] lvlData) {
@@ -127,13 +127,14 @@ public abstract class Enemy extends Entity {
 
     public void hurt(int amount) {
         currentHealth -= amount;
-        if (currentHealth <= 0)
+        if (currentHealth <= 0) {
             newState(DEAD);
+        }
         else
             newState(HIT);
     }
 
-    protected void checkEnmyHit(Rectangle2D.Float attackBox, Player player) {
+    public void checkEnmyHit(Rectangle2D.Float attackBox, Player player) {
         if (attackBox.intersects(player.hitbox)) {
         }
         player.changeHealth(-GetEnemyDmg(enemyType));
@@ -158,13 +159,12 @@ public abstract class Enemy extends Entity {
         }
     }
 
-    public void update(int[][] lvlData) {
-        updateMove(lvlData);
-        updateAnimationTick();
-
-        updateHealthBar();
-
-    }
+//    public void update(int[][] lvlData) {
+//        updateMove(lvlData);
+//        updateAnimationTick();
+//        updateHealthBar();
+//
+//    }
 
     public void updateHealthBar() {
         if (currentHealth < 0) {
@@ -174,14 +174,17 @@ public abstract class Enemy extends Entity {
     }
 
     public void drawHealthBar(Graphics g, int xLvlOffset) {
-        g.setColor(Color.red);
-        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset),
-                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE), enemyHealthWidth,
-                enemyHealthBarHeight);
-        g.setColor(Color.WHITE);
-        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset),
-                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE),
-                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
+
+	        g.setColor(Color.red);
+	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset),
+	                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE), enemyHealthWidth,
+	                enemyHealthBarHeight);
+	        g.setColor(Color.WHITE);
+	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset),
+	                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE),
+	                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
+    	
+    	
     }
 
     private void updateMove(int[][] lvlData) {

@@ -128,7 +128,7 @@ public class Constants {
         public static final int MONEYE1_WIDTH = (int) (MONEYE1_WIDTH_DEFAULT * Game.SCALE);
         public static final int MONEYE1_HEIGHT = (int) (MONEYE1_HEIGHT_DEFAULT * Game.SCALE);
         public static final int MONEYE1_DRAWOFFSET_X = (int) (23 * Game.SCALE);
-        public static final int MONEYE1_DRAWOFFSET_Y = (int) (32 * Game.SCALE);
+        public static final int MONEYE1_DRAWOFFSET_Y = (int) (40 * Game.SCALE);
         
         public static final int	BOSS1_WIDTH_DEFAULT = 96;
         public static final int BOSS1_HEIGHT_DEFAULT = 64;
@@ -149,7 +149,7 @@ public class Constants {
         public static final int MINOTAUR_WIDTH = (int) (MINOTAUR_WIDTH_DEFAULT * Game.SCALE);
         public static final int MINOTAUR_HEIGHT = (int) (MINOTAUR_HEIGHT_DEFAULT * Game.SCALE);
         public static final int MINOTAUR_DRAWOFFSET_X = (int) (-50 * Game.SCALE);
-        public static final int MINOTAUR_DRAWOFFSET_Y = (int) (22* Game.SCALE);
+        public static final int MINOTAUR_DRAWOFFSET_Y = (int) (30* Game.SCALE);
         
         public static final int TORO_WIDTH_DEFAULT = 96;
         public static final int TORO_HEIGHT_DEFAULT = 96;
@@ -207,7 +207,7 @@ public class Constants {
                     else if( enemy_type == BOSS1 || enemy_type == BOSS2)
                     	return 6;
                     else if(enemy_type == MONSTER_EYE1)
-                    	return 13;
+                    	return 9;
                     else if(enemy_type == SPIDER || enemy_type == BOSS3)
                     	return 4;
                     else if(enemy_type == BOSS4)
@@ -245,19 +245,19 @@ public class Constants {
         public static int GetMaxHealth(int enemy_type) {
             switch (enemy_type) {
               case CRABBY:
-                    return 15;
+                    return 50;
                 case MINOTAUR:
-                    return 60;
+                    return 50;
                 case SHARK:
-                    return 30;
+                    return 50;
                 case TORO: 
-                	return 100;
+                	return 50;
                 case BOSS1:
-                	return 100;
+                	return 50;
                 case BOSS2:
-                	return 150;
+                	return 50;
                 case BOSS3:
-                	return 200;
+                	return 50;
                 case BOSS4:
                 	return 50;
                 case BOSS5:
@@ -265,42 +265,42 @@ public class Constants {
                 case MONSTER_EYE1:
                 	return 50;
                 case MONSTER2:
-                	return 30;
+                	return 50;
                 case SPIDER:
-                	return 20;
+                	return 50;
                 default:
-                    return 100;
+                    return 50;
             }
         }
 
         public static int GetEnemyDmg(int enemy_type) {
             switch (enemy_type) {
-                case CRABBY:
-                    return 15;
-                case MINOTAUR:
-                    return 20;
-                case SHARK:
-                    return 30;
-                case TORO:
-                	return 20;
-                case BOSS1: 
-                	return 30;
-                case BOSS2:
-                	return (int)(1);
-                case BOSS3:
-                	return 10;
-                case BOSS4:
-                	return 10;
-                case BOSS5:
-                	return 10;
-                case MONSTER_EYE1:
-                	return 10;
-                case MONSTER2:
-                	return 15;
-                case SPIDER :
-                	return 10;
+//                case CRABBY:
+//                    return 2;
+//                case MINOTAUR:
+//                    return 20;
+//                case SHARK:
+//                	return 2;
+//                case TORO:
+//                	return 2;
+//                case BOSS1: 
+//                	return 2;
+//                case BOSS2:
+//                	return 2;
+//                case BOSS3:
+//                	return 2;
+//                case BOSS4:
+//                	return 2;
+//                case BOSS5:
+//                	return 2;
+//                case MONSTER_EYE1:
+//                	return 2;
+//                case MONSTER2:
+//                	return 2;
+//                case SPIDER :
+//                	return 2;
                 default:
-                    return 0;
+                	return 10;
             }
         }
     }
@@ -360,6 +360,7 @@ public class Constants {
         public static final int JUMP = 2;
         public static final int FALLING = 3;
         public static final int ATTACK = 4;
+        
         public static final int HIT = 5;
         public static final int DEAD = 6;
 

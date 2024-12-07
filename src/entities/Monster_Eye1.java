@@ -21,26 +21,34 @@ public class Monster_Eye1 extends Enemy {
 
 	    public Monster_Eye1(float x, float y) {
 	        super(x, y, MONEYE1_WIDTH, MONEYE1_HEIGHT, MONSTER_EYE1);
-	        initHitbox(17,25);
+	        initHitbox(30,25);
 	        initAttackBox();
+	        this.enemyHealthBarWidth = (int)(30* Game.SCALE);
+	        this.enemyHealthBarHeight = (int)(2* Game.SCALE);
+	        this.enemyHealthWidth = enemyHealthBarWidth;
+	        this.walkSpeed = 0.3f * Game.SCALE;
 	    }
+	    
 	    private void initAttackBox(){
-	        attackBox=new Rectangle2D.Float(x,y,(int)(67*Game.SCALE),(int)(25*Game.SCALE));
+	        attackBox=new Rectangle2D.Float(x,y,(int)(30*Game.SCALE),(int)(25*Game.SCALE));
 	        attackBoxOffsetX = (int)(Game.SCALE*30);
 	    }
-
-
 
 	    public void update(int[][] lvlData,Player player){
 	        updateBehaviour(lvlData,player);
 	        updateAnimationTick();
-	        updateAttackBox();
+	        updateAttackBoxFlip();
+	        updateHealthBar();
 
 	    }
+	    
+	    protected void updateAttackBoxFlip() {
+	        if (walkDir == RIGHT)
+	            attackBox.x = hitbox.x + hitbox.width;
+	        else
+	            attackBox.x = hitbox.x - attackBoxOffsetX;
 
-	    protected void updateAttackBox() {
-	        attackBox.x= hitbox.x-attackBoxOffsetX;
-	        attackBox.y=hitbox.y;
+	        attackBox.y = hitbox.y;
 	    }
 
 	    private void updateBehaviour(int[][] lvlData,Player player) {
@@ -67,7 +75,7 @@ public class Monster_Eye1 extends Enemy {
 	                case ATTACK:
 	                    if(aniIndex==0)
 	                        attackChecked = false;
-	                    if(aniIndex==10&&!attackChecked)
+	                    if(aniIndex==9 &&!attackChecked)
 	                        checkEnmyHit(attackBox,player);
 	                    break;
 	                case HIT:
@@ -77,6 +85,19 @@ public class Monster_Eye1 extends Enemy {
 	        }
 
 	    }
+	    
+	    public void drawHealthBar(Graphics g, int xLvlOffset) {
+
+		        g.setColor(Color.red);
+		        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
+		                (int) (hitbox.y + hitbox.height - attackBox.height - 12 * Game.SCALE), enemyHealthWidth,
+		                enemyHealthBarHeight);
+		        g.setColor(Color.WHITE);
+		        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
+		                (int) (hitbox.y + hitbox.height - attackBox.height - 12 * Game.SCALE),
+		                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
+	    	
+	    }
 
 
 
@@ -85,9 +106,18 @@ public class Monster_Eye1 extends Enemy {
 	        g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
 
 	    }
+	    
+	    private int flipHealth() {
+	    	if(walkDir == RIGHT)
+	    		return 5;
+	    	else
+	    		return -10;
+	    }
+	    
+	    
 	    public int flipX(){
 	        if(walkDir==RIGHT)
-	            return 0;
+	            return 15;
 	        else
 	            return  width;
 	    }

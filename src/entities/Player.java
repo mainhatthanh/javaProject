@@ -20,7 +20,7 @@ public class Player extends Entity {
 
     private int[][] lvlData;
     private float xDrawOffset = 38 * Game.SCALE;
-    private float yDrawOffset = 10 * Game.SCALE;
+    private float yDrawOffset = 15 * Game.SCALE;
     // jumping / gravity
 
     private float jumpSpeed = -2.35f * Game.SCALE;
@@ -74,15 +74,15 @@ public class Player extends Entity {
     }
 
     public void setSpawn(Point spawn) {
-        this.x = spawn.x;
+        this.x = spawn.x ;
         this.y = spawn.y;
-        hitbox.x = x;
-        hitbox.y = y;
+        hitbox.x = x ;
+        hitbox.y = y ;
     }
 
     private void initAttackBox() {
 
-        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y, (int) (20 * Game.SCALE), (int) (20 * Game.SCALE));
+        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) (30 * Game.SCALE), (int) (20 * Game.SCALE));
 
     }
 
@@ -129,10 +129,11 @@ public class Player extends Entity {
     private void updateAttackBox() {
 
         if (right) {
-            attackBox.x = hitbox.x + hitbox.width + (int) (Game.SCALE * 10);
+//            attackBox.x = hitbox.x + hitbox.width + (int) (Game.SCALE * 10);
+        	attackBox.x = hitbox.x + hitbox.width ;
 
         } else if (left) {
-            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 10);
+            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 17);
         }
 
         attackBox.y = hitbox.y + (int) (Game.SCALE * 10);
@@ -153,8 +154,8 @@ public class Player extends Entity {
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
         drawUI(g);
 
-        // drawAttackHitbox(g, xlvlOffset);
-        // drawHitbox(g, xlvlOffset);
+//         drawAttackHitbox(g, xlvlOffset);
+//         drawHitbox(g, xlvlOffset);
 
 
     }
@@ -163,7 +164,7 @@ public class Player extends Entity {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
         g.setColor(Color.red);
         g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeigth);
-        g.setColor(Color.yellow);
+        g.setColor(Color.blue);
         g.fillRect(staminaBarXStart + statusBarX, staminaBarYStart + statusBarY, staminaWidth, staminaBarHeight);
     }
 
