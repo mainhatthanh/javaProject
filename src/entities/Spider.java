@@ -3,7 +3,6 @@ import main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 
 import static utilz.Constants.Directions.*;
 import static utilz.Constants.EnemyConstants.*;

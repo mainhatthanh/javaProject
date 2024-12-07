@@ -16,8 +16,6 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Boss5 extends Enemy {
-	
-	private int attackBoxOffSetX;
 
 	public Boss5(float x, float y) {
 		 super(x, y, BOSS5_WIDTH, BOSS5_HEIGHT, BOSS5);

@@ -2,17 +2,12 @@ package entities;
 
 import gameState.Playing;
 import levels.Level;
-import utilz.Constants;
 import utilz.LoadSave;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import entities.Player;
-
-import static utilz.Constants.Bullet.BALL_1EYE_HEIGHT;
-import static utilz.Constants.Bullet.BALL_1EYE_WIDTH;
 import static utilz.Constants.EnemyConstants.*;
 
 public class EnemyManager {
