@@ -44,6 +44,7 @@ public class LoadSave {
 
 
     public static final String MONSTER_EYE1_ATLAS = "moneye1_atlas.png";
+    public static final String BALL1EYE = "ball1Eye.png";
     public static final String MONSTER2_ATLAS = "monster2_atlas.png";
     public static final String SPIDER_ATLAS = "spider_atlas.png";
 

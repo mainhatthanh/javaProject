@@ -27,6 +27,18 @@ public class Constants {
         }
     }
 
+    public static class Bullet{
+        public static final int BALL_1EYE_DEFAULT_WIDTH = 20;
+        public static final int BALL_1EYE_DEFAULT_HEIGHT = 15;
+
+        public static final int BALL_1EYE_WIDTH = (int)(Game.SCALE*BALL_1EYE_DEFAULT_WIDTH);
+        public static final int BALL_1EYE_HEIGHT = (int)(Game.SCALE*BALL_1EYE_DEFAULT_HEIGHT);
+        public static final float SPEED = 0.4f*Game.SCALE;
+
+
+
+    }
+
     public static class ObjectsConstants {
         public static final int RED_POTION = 0;
         public static final int BLUE_POTION = 1;

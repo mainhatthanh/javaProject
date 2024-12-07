@@ -4,6 +4,7 @@ package entities;
 
 import gameState.Playing;
 import levels.Level;
+import utilz.Constants;
 import utilz.LoadSave;
 
 import java.awt.*;
@@ -11,7 +12,12 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import entities.Player;
+
+import static utilz.Constants.Bullet.BALL_1EYE_HEIGHT;
+import static utilz.Constants.Bullet.BALL_1EYE_WIDTH;
 import static utilz.Constants.EnemyConstants.*;
+
+
 
 
 public class EnemyManager {
@@ -47,6 +53,8 @@ public class EnemyManager {
 
 
 
+
+
   public EnemyManager(Playing playing){
       this.playing=playing;
       loadEnemyImgsCrabby();
@@ -61,6 +69,7 @@ public class EnemyManager {
       loadEnemyImgsBoss3();
       loadEnemyImgsBoss4();
       loadEnemyImgsBoss5();
+
 
 
   }
@@ -96,6 +105,8 @@ public class EnemyManager {
       boolean isAnyActiveBoss3 = false;
       boolean isAnyActiveBoss4 = false;
       boolean isAnyActiveBoss5 = false;
+
+
 
       
 
@@ -157,7 +168,7 @@ public class EnemyManager {
                 isAnyActiveBoss5 = true;
             }
         
-        for(Monster_Eye1 me:	moneyes)
+        for(Monster_Eye1 me:moneyes)
             if(me.isActive()) {
                 me.update(lvlData, player);
                 isAnyActiveMonEye1 = true;
@@ -176,12 +187,14 @@ public class EnemyManager {
             }
 
 
-      if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur&&!isAnyActiveToro && !isAnyActiveBoss1 && !isAnyActiveBoss1 
+      if(!isAnyActiveCrabby&&!isAnyActiveShark&&!isAnyActiveMinotaur&&!isAnyActiveToro &&isAnyActiveMonEye1&& !isAnyActiveBoss1 && !isAnyActiveBoss1
     		  &&!isAnyActiveMonster2 && !isAnyActiveSpider && !isAnyActiveBoss2 && !isAnyActiveBoss3
     		  && !isAnyActiveBoss4 && !isAnyActiveBoss5){
           playing.setLevelCompleted(true);
 
       }
+
+
 
 
   }
@@ -193,6 +206,7 @@ public class EnemyManager {
       drawToros(g, xLvlOffset , yLvlOffset);
       drawBoss1(g, xLvlOffset, yLvlOffset);
       drawMonEye1(g, xLvlOffset, yLvlOffset);
+
       drawMon2(g, xLvlOffset, yLvlOffset);
       drawSpider(g, xLvlOffset, yLvlOffset);
       drawBoss2(g, xLvlOffset, yLvlOffset);
@@ -254,6 +268,7 @@ public class EnemyManager {
             	g.drawImage(monster2Arr[me2.getState()][me2.getAniIndex()], (int)(me2.getHitBox().x -xLvlOffset - MON2_DRAWOFFSET_X + me2.flipX()), (int)(me2.getHitBox().y - yLvlOffset - MON2_DRAWOFFSET_Y-20), (int)(MON2_WIDTH * me2.flipY()*1.5) , (int)(MON2_HEIGHT*1.5), null);
             me2.drawAttackHitbox(g,xLvlOffset);
             me2.drawHitbox(g,xLvlOffset);
+
     	}	
 }
 
@@ -265,6 +280,9 @@ public class EnemyManager {
             	g.drawImage(moneye1Arr[me.getState()][me.getAniIndex()], (int)(me.getHitBox().x -xLvlOffset - MONEYE1_DRAWOFFSET_X + me.flipX()), (int)(me.getHitBox().y - yLvlOffset - MONEYE1_DRAWOFFSET_Y), (int)(MONEYE1_WIDTH * me.flipY()) , (int)(MONEYE1_HEIGHT), null);
             me.drawAttackHitbox(g,xLvlOffset);
             me.drawHitbox(g,xLvlOffset);
+
+
+
     	}
     }
 
@@ -540,4 +558,8 @@ public class EnemyManager {
       for(Spider spi : spiders)
     	  spi.resetEnemy();
     }
+
+
+
+
 }

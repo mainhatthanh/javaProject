@@ -247,4 +247,11 @@ public abstract class Enemy extends Entity {
         return active;
     }
 
+    public Rectangle2D.Float getHitbox(){
+        return hitbox;
+    }
+    public int getAniTick(){
+        return this.aniTick;
+    }
+
 }

@@ -8,6 +8,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+
 import entities.EnemyManager;
 import entities.Player;
 
@@ -33,6 +34,7 @@ public class Playing extends State implements Statemethods {
     private PauseOverlay pauseOverlay;
     private GameOverOverlay gameOverOverlay;
     private LevelCompletedOverlay levelCompletedOverlay;
+    //private BulletManager bulletManager;
     private boolean paused = false;
 
     private int xLvlOffset;
@@ -52,19 +54,15 @@ public class Playing extends State implements Statemethods {
     private boolean lvlCompleted = false;
     private boolean playerDying;
 
+    int[][] lvlData;
+
+
     public Playing(Game game) {
         super(game);
         initClasses();
 
         backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BACKGROUND_IMG);
-        /*
-         * bigCloud = LoadSave.GetSpriteAtlas(LoadSave.BIG_CLOUDS);
-         * smallCloud = LoadSave.GetSpriteAtlas(LoadSave.SMALL_CLOUDS);
-         * smallCloudsPos = new int[8];
-         * for (int i = 0; i < smallCloudsPos.length; i++)
-         * smallCloudsPos[i] = (int) (90 * Game.SCALE) + rnd.nextInt((int) (100 *
-         * Game.SCALE));
-         */
+
 
         caclcLvlOffset();
         loadStartLevel();
@@ -80,6 +78,7 @@ public class Playing extends State implements Statemethods {
     private void loadStartLevel() {
         enemyManager.loadEnemies(levelManager.getCurrentLevel());
         objectManager.loadObjects(levelManager.getCurrentLevel());
+       // bulletManager.loadBullets(levelManager.getCurrentLevel());
 
     }
 
@@ -95,6 +94,7 @@ public class Playing extends State implements Statemethods {
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
         objectManager = new ObjectManager(this);
+        //bulletManager = new BulletManager(this);
 
         player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this);
         player.loadLvlData(levelManager.getCurrentLevel().getLvlData());
@@ -132,6 +132,7 @@ public class Playing extends State implements Statemethods {
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             objectManager.update();
+            //bulletManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             checkCloseToBorder();
         }
 
@@ -161,6 +162,7 @@ public class Playing extends State implements Statemethods {
         player.render(g, xLvlOffset);
         enemyManager.draw(g, xLvlOffset, yLvlOffset);
         objectManager.draw(g, xLvlOffset);
+        //bulletManager.draw(g,xLvlOffset);
 
         if (paused) {
             g.setColor(new Color(0, 0, 0, 150));
@@ -172,17 +174,7 @@ public class Playing extends State implements Statemethods {
             levelCompletedOverlay.draw(g);
     }
 
-    /*
-     * private void drawClouds(Graphics g) {
-     * for (int i = 0; i < 3; i++)
-     * g.drawImage(bigCloud, i * BIG_CLOUD_WIDTH - (int) (xLvlOffset * 0.3), (int)
-     * (204 * Game.SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
-     * 
-     * for (int i = 0; i < smallCloudsPos.length; i++)
-     * g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * 4 * i - (int) (xLvlOffset * 0.7),
-     * smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
-     * }
-     */
+
 
     public void resetAll() {
         gameOver = false;
@@ -191,6 +183,7 @@ public class Playing extends State implements Statemethods {
         playerDying = false;
         player.resetAll();
         enemyManager.resetAllEnemies();
+       // bulletManager.resetBullets();
 
     }
 
@@ -204,12 +197,18 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (!gameOver)
-            if (e.getButton() == MouseEvent.BUTTON1){
-                if(player.getCurrentStamina() >= GetStamina(ATTACK)){
+        if (!gameOver){
+            if (e.getButton() == MouseEvent.BUTTON1) {
+                if (player.getCurrentStamina() >= GetStamina(ATTACK)) {
                     player.setAttacking(true);
                     player.changeStamina(-GetStamina(ATTACK));
                 }
+            }
+            else if (e.getButton() == MouseEvent.BUTTON3) {
+                    player.powerAttack();
+                }
+
+
                 else{ 
                     System.out.println("Khong du mana");
                 }
@@ -364,6 +363,11 @@ public class Playing extends State implements Statemethods {
         this.playerDying = playerDying;
     }
 
+    /*public BulletManager getBulletManager(){
+        return bulletManager;
+
+    }*/
+
     public boolean enoughStamina(int player_action){
         if(player.getCurrentStamina() >= GetStamina(player_action))
             return true;
@@ -372,7 +376,7 @@ public class Playing extends State implements Statemethods {
     }
 
     public void restoreStaminaDefault(){
-        player.changeStamina(5);
+        player.changeStamina(1);
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
