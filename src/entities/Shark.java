@@ -1,9 +1,8 @@
 package entities;
-import main.Game;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
+import main.Game;
 
 import static utilz.Constants.Directions.RIGHT;
 import static utilz.Constants.EnemyConstants.*;
@@ -23,11 +22,7 @@ public class Shark extends Enemy {
         this.enemyHealthBarHeight = (int)(2* Game.SCALE);
         this.enemyHealthWidth = enemyHealthBarWidth;
         this.walkSpeed = 0.3f * Game.SCALE;
-
     }
-
-
-
 
     public void update(int[][] lvlData, Player player) {
         updateBehaviour(lvlData, player);
@@ -35,6 +30,15 @@ public class Shark extends Enemy {
         updateAttackBoxFlip();
         updateHealthBar();
 
+    }
+    
+    protected void updateAttackBoxFlip() {
+        if (walkDir == RIGHT)
+            attackBox.x = hitbox.x + hitbox.width;
+        else
+            attackBox.x = hitbox.x - 30;
+
+        attackBox.y = hitbox.y + 5;
     }
 
     protected void updateAttackBox() {
@@ -82,11 +86,11 @@ public class Shark extends Enemy {
 
         g.setColor(Color.red);
         g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
-                (int) (hitbox.y + hitbox.height - attackBox.height - 2 * Game.SCALE), enemyHealthWidth,
+                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE), enemyHealthWidth,
                 enemyHealthBarHeight);
         g.setColor(Color.WHITE);
         g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset+ this.flipHealth()),
-                (int) (hitbox.y + hitbox.height - attackBox.height - 2 * Game.SCALE),
+                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE),
                 enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
 	
 	

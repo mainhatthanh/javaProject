@@ -5,19 +5,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import entities.Boss1;
-import entities.Boss2;
-import entities.Boss3;
-import entities.Boss4;
-import entities.Boss5;
-import entities.Crabby;
+import entities.*;
 
-import entities.Minotaur;
-import entities.Monster2;
-import entities.Monster_Eye1;
-import entities.Shark;
-import entities.Spider;
-import entities.Toro;
 import main.Game;
 import objects.GameContainer;
 import objects.Potion;
@@ -321,5 +310,27 @@ public class HelpMethods {
             }
         return new Point(1*Game.TILES_SIZE,1*Game.TILES_SIZE);
     }
+
+   /* public static boolean IsBulletHittingLevel(Bullet b, int[][] lvlData) {
+        return IsSolid(b.getHitbox().x + b.getHitbox().width / 2, b.getHitbox().y + b.getHitbox().height / 2, lvlData);
+    }*/
+
+    public static boolean CanMESeePlayer(int[][] lvlData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile) {
+        int firstXTile = (int) (firstHitbox.x / Game.TILES_SIZE);
+        int secondXTile = (int) (secondHitbox.x / Game.TILES_SIZE);
+
+        if (firstXTile > secondXTile)
+            return IsAllTilesClear(secondXTile, firstXTile, yTile, lvlData);
+        else
+            return IsAllTilesClear(firstXTile, secondXTile, yTile, lvlData);
+    }
+    public static boolean IsAllTilesClear(int xStart, int xEnd, int y, int[][] lvlData) {
+        for (int i = 0; i < xEnd - xStart; i++)
+            if (IsTileSolid(xStart + i, y, lvlData))
+                return false;
+        return true;
+    }
+
+
 
 }

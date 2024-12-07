@@ -8,22 +8,22 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+
 import entities.EnemyManager;
 import entities.Player;
 
 import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
-import ui.GameOverOverlay;
+import ui.GameOverOverlay; 
 import ui.LevelCompletedOverlay;
 import ui.PauseOverlay;
 import utilz.LoadSave;
 
-import static utilz.Constants.Environment.*;
 import static utilz.Constants.PlayerConstants.ATTACK;
-import static utilz.Constants.PlayerConstants.GetAniFromKey;
 import static utilz.Constants.PlayerConstants.GetStamina;
 import static utilz.Constants.PlayerConstants.JUMP;
+import static entities.Player.expThatChange;
 
 public class Playing extends State implements Statemethods {
     private Player player;
@@ -33,38 +33,31 @@ public class Playing extends State implements Statemethods {
     private PauseOverlay pauseOverlay;
     private GameOverOverlay gameOverOverlay;
     private LevelCompletedOverlay levelCompletedOverlay;
+    //private BulletManager bulletManager;
     private boolean paused = false;
 
     private int xLvlOffset;
-    private int yLvlOffset;
 
     private int leftBorder = (int) (0.5 * Game.GAME_WIDTH);
     private int rightBorder = (int) (0.5 * Game.GAME_WIDTH);
 
     private int maxLvlOffsetX;
-    private int maxLvlOffsetY;
 
-    private BufferedImage backgroundImg, groundImg, bigCloud, smallCloud;
-    private int[] smallCloudsPos;
-    private Random rnd = new Random();
+    private BufferedImage backgroundImg, groundImg;
 
     private boolean gameOver;
     private boolean lvlCompleted = false;
     private boolean playerDying;
+
+    int[][] lvlData;
+
 
     public Playing(Game game) {
         super(game);
         initClasses();
 
         backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BACKGROUND_IMG);
-        /*
-         * bigCloud = LoadSave.GetSpriteAtlas(LoadSave.BIG_CLOUDS);
-         * smallCloud = LoadSave.GetSpriteAtlas(LoadSave.SMALL_CLOUDS);
-         * smallCloudsPos = new int[8];
-         * for (int i = 0; i < smallCloudsPos.length; i++)
-         * smallCloudsPos[i] = (int) (90 * Game.SCALE) + rnd.nextInt((int) (100 *
-         * Game.SCALE));
-         */
+
 
         caclcLvlOffset();
         loadStartLevel();
@@ -80,6 +73,7 @@ public class Playing extends State implements Statemethods {
     private void loadStartLevel() {
         enemyManager.loadEnemies(levelManager.getCurrentLevel());
         objectManager.loadObjects(levelManager.getCurrentLevel());
+       // bulletManager.loadBullets(levelManager.getCurrentLevel());
 
     }
 
@@ -95,6 +89,7 @@ public class Playing extends State implements Statemethods {
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
         objectManager = new ObjectManager(this);
+        //bulletManager = new BulletManager(this);
 
         player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this);
         player.loadLvlData(levelManager.getCurrentLevel().getLvlData());
@@ -122,16 +117,17 @@ public class Playing extends State implements Statemethods {
             pauseOverlay.update();
         } else if (lvlCompleted) {
             levelCompletedOverlay.update();
+            expThatChange = 0;
         } else if (gameOver) {
             gameOverOverlay.update();
         } else if (playerDying) {
             player.update();
-
         } else {
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             objectManager.update();
+            //bulletManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             checkCloseToBorder();
         }
 
@@ -159,8 +155,9 @@ public class Playing extends State implements Statemethods {
 
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
-        enemyManager.draw(g, xLvlOffset, yLvlOffset);
+        enemyManager.draw(g, xLvlOffset);
         objectManager.draw(g, xLvlOffset);
+        //bulletManager.draw(g,xLvlOffset);
 
         if (paused) {
             g.setColor(new Color(0, 0, 0, 150));
@@ -168,29 +165,25 @@ public class Playing extends State implements Statemethods {
             pauseOverlay.draw(g);
         } else if (gameOver)
             gameOverOverlay.draw(g);
-        else if (lvlCompleted)
+        else if (lvlCompleted){
             levelCompletedOverlay.draw(g);
+            expThatChange = 0;
+        }
     }
 
-    /*
-     * private void drawClouds(Graphics g) {
-     * for (int i = 0; i < 3; i++)
-     * g.drawImage(bigCloud, i * BIG_CLOUD_WIDTH - (int) (xLvlOffset * 0.3), (int)
-     * (204 * Game.SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
-     * 
-     * for (int i = 0; i < smallCloudsPos.length; i++)
-     * g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * 4 * i - (int) (xLvlOffset * 0.7),
-     * smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
-     * }
-     */
+
 
     public void resetAll() {
         gameOver = false;
         paused = false;
+        if(lvlCompleted == true){
+            expThatChange = 0;
+        }
         lvlCompleted = false;
         playerDying = false;
         player.resetAll();
         enemyManager.resetAllEnemies();
+       // bulletManager.resetBullets();
 
     }
 
@@ -199,17 +192,23 @@ public class Playing extends State implements Statemethods {
     }
 
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
-        enemyManager.checkEnemyHit(attackBox);
+        enemyManager.checkEnemyHit(attackBox , player);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (!gameOver)
-            if (e.getButton() == MouseEvent.BUTTON1){
-                if(player.getCurrentStamina() >= GetStamina(ATTACK)){
+        if (!gameOver){
+            if (e.getButton() == MouseEvent.BUTTON1) {
+                if (player.getCurrentStamina() >= GetStamina(ATTACK)) {
                     player.setAttacking(true);
                     player.changeStamina(-GetStamina(ATTACK));
                 }
+            }
+            else if (e.getButton() == MouseEvent.BUTTON3) {
+                    player.powerAttack();
+                }
+
+
                 else{ 
                     System.out.println("Khong du mana");
                 }
@@ -332,6 +331,10 @@ public class Playing extends State implements Statemethods {
             game.getAudioPlayer().lvlCompleted();
     }
 
+    public boolean getLevelCompleted(){
+        return lvlCompleted;
+    }
+
     public void setMaxLvlOffset(int lvlOffset) {
         this.maxLvlOffsetX = lvlOffset;
     }
@@ -364,6 +367,11 @@ public class Playing extends State implements Statemethods {
         this.playerDying = playerDying;
     }
 
+    /*public BulletManager getBulletManager(){
+        return bulletManager;
+
+    }*/
+
     public boolean enoughStamina(int player_action){
         if(player.getCurrentStamina() >= GetStamina(player_action))
             return true;
@@ -372,7 +380,7 @@ public class Playing extends State implements Statemethods {
     }
 
     public void restoreStaminaDefault(){
-        player.changeStamina(5);
+        player.changeStamina(10);
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }

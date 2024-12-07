@@ -1,8 +1,9 @@
 package entities;
-import main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+
+import main.Game;
 
 import static utilz.Constants.ANI_SPEED;
 import static utilz.Constants.Directions.*;
@@ -17,13 +18,18 @@ public class Minotaur extends Enemy {
     public Minotaur(float x, float y) {
 
         super(x , y, MINOTAUR_WIDTH, MINOTAUR_HEIGHT, MINOTAUR);
-        initHitbox(30, 25);
-        initAttackBox(20,25,20);
+        initHitbox(30, 30);
+        initAttackBox();
         this.enemyHealthBarWidth = (int)(30* Game.SCALE);
-        this.enemyHealthBarHeight = (int)(2* Game.SCALE);
+        this.enemyHealthBarHeight = (int)(1.5* Game.SCALE);
         this.enemyHealthWidth = enemyHealthBarWidth;
         this.walkSpeed = 0.4f * Game.SCALE;
         
+    }
+    
+    private void initAttackBox(){
+        attackBox=new Rectangle2D.Float(x,y,(int)(20*Game.SCALE),(int)(30*Game.SCALE));
+        attackBoxOffsetX = (int)(Game.SCALE*20);
     }
 
     public void update(int[][] lvlData, Player player) {
@@ -60,9 +66,9 @@ public class Minotaur extends Enemy {
             aniIndex++;
             if(state == DEAD && aniIndex == 15) {
             	if(walkDir ==RIGHT)
-            		checkEnmyHit(new Rectangle2D.Float(attackBox.x - hitbox.width-attackBox.width, attackBox.y, attackBox.width * 2 + hitbox.width, hitbox.height), player);
+            		checkEnmyHit(new Rectangle2D.Float(hitbox.x - attackBox.width, attackBox.y, attackBox.width * 2 + hitbox.width, hitbox.height), player);
             	else if(walkDir == LEFT)
-            		checkEnmyHit(new Rectangle2D.Float(attackBox.x - attackBox.width, attackBox.y, attackBox.width * 2 + hitbox.width, hitbox.height), player);
+            		checkEnmyHit(new Rectangle2D.Float(hitbox.x + attackBox.width, attackBox.y, attackBox.width * 2 + hitbox.width, hitbox.height), player);
             }
             	
             if (aniIndex >= GetSpriteAmount(enemyType, state)) {
@@ -124,27 +130,7 @@ public class Minotaur extends Enemy {
         g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
 
     }
-    
-    public void drawHealthBar(Graphics g, int xLvlOffset) {
-        g.setColor(Color.red);
-        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
-                (int) (hitbox.y + hitbox.height - attackBox.height - 12 * Game.SCALE), enemyHealthWidth,
-                enemyHealthBarHeight);
-        g.setColor(Color.white);
-        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
-                (int) (hitbox.y + hitbox.height - attackBox.height - 12 * Game.SCALE),
-                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
-	
-	
-    }
-    
-    private int flipHealth() {
-    	if(walkDir == RIGHT)
-    		return 25;
-    	else
-    		return -25;
-    }
-    
+
     
     public int flipX(){
         if(walkDir==RIGHT)

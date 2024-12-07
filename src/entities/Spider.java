@@ -3,7 +3,6 @@ import main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 
 import static utilz.Constants.Directions.*;
 import static utilz.Constants.EnemyConstants.*;
@@ -17,17 +16,17 @@ public class Spider extends Enemy{
     public Spider(float x, float y) {
 
         super(x, y, SPIDER_WIDTH, SPIDER_HEIGHT, SPIDER);
-        initHitbox(40,9);
+        initHitbox(40,12);
         initAttackBox();
-        this.enemyHealthBarWidth = (int)(20* Game.SCALE);
-        this.enemyHealthBarHeight = (int)(2* Game.SCALE);
+        this.enemyHealthBarWidth = (int)(20 * Game.SCALE);
+        this.enemyHealthBarHeight = (int)(1.5 * Game.SCALE);
         this.enemyHealthWidth = enemyHealthBarWidth;
         this.walkSpeed = 0.3f * Game.SCALE;
         
     }
     private void initAttackBox(){
-        attackBox=new Rectangle2D.Float(x,y,(int)(10*Game.SCALE),(int)(9*Game.SCALE));
-        attackBoxOffsetX = (int)(Game.SCALE*10);
+        attackBox=new Rectangle2D.Float(x,y,(int)(20*Game.SCALE),(int)(12*Game.SCALE));
+        attackBoxOffsetX = (int)(Game.SCALE*20);
     }
 
     
@@ -93,7 +92,7 @@ public class Spider extends Enemy{
     }
     public int flipX(){
         if(walkDir==RIGHT)
-            return width  + 80;
+            return width  + 90;
         else
             return  -15;
     }

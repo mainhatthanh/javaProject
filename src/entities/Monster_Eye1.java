@@ -17,11 +17,11 @@ import main.Game;
 
 public class Monster_Eye1 extends Enemy {
 
-	 private int attackBoxOffsetX;
-
+	private int attackBoxOffsetX;
+	
 	    public Monster_Eye1(float x, float y) {
 	        super(x, y, MONEYE1_WIDTH, MONEYE1_HEIGHT, MONSTER_EYE1);
-	        initHitbox(30,25);
+	        initHitbox(30,30);
 	        initAttackBox();
 	        this.enemyHealthBarWidth = (int)(30* Game.SCALE);
 	        this.enemyHealthBarHeight = (int)(2* Game.SCALE);
@@ -30,8 +30,8 @@ public class Monster_Eye1 extends Enemy {
 	    }
 	    
 	    private void initAttackBox(){
-	        attackBox=new Rectangle2D.Float(x,y,(int)(30*Game.SCALE),(int)(25*Game.SCALE));
-	        attackBoxOffsetX = (int)(Game.SCALE*30);
+	        attackBox=new Rectangle2D.Float(x,y,(int)(35*Game.SCALE),(int)(30*Game.SCALE));
+	        attackBoxOffsetX = (int)(Game.SCALE*35);
 	    }
 
 	    public void update(int[][] lvlData,Player player){
@@ -39,7 +39,6 @@ public class Monster_Eye1 extends Enemy {
 	        updateAnimationTick();
 	        updateAttackBoxFlip();
 	        updateHealthBar();
-
 	    }
 	    
 	    protected void updateAttackBoxFlip() {
@@ -51,83 +50,107 @@ public class Monster_Eye1 extends Enemy {
 	        attackBox.y = hitbox.y;
 	    }
 
-	    private void updateBehaviour(int[][] lvlData,Player player) {
-	        if (firstUpdate){
-	         firstUpdateCheck(lvlData);
+	protected void updateAttackBox() {
+		attackBox.x= hitbox.x-attackBoxOffsetX;
+		attackBox.y=hitbox.y;
+	}
 
-	        }
-	        if(inAir) {
-	           updateInAir(lvlData);
-	        }else{
-	            switch (state){
-	                case IDLE :
-	                    newState(RUNNING);
-	                    break;
+	private void updateBehaviour(int[][] lvlData,Player player) {
+		if (firstUpdate){
+			firstUpdateCheck(lvlData);
 
-	                case RUNNING:
-	                    if(canSeePlayer(lvlData,player)) {
-	                        turnTowardsPlayer(player);
-	                        if (isPlayerCloseAttack(player))
-	                            newState(ATTACK);
-	                    }
-	                    move(lvlData);
-	                    break;
-	                case ATTACK:
-	                    if(aniIndex==0)
-	                        attackChecked = false;
-	                    if(aniIndex==9 &&!attackChecked)
-	                        checkEnmyHit(attackBox,player);
-	                    break;
-	                case HIT:
-	                    break;
-	            }
+		}
+		if(inAir) {
+			updateInAir(lvlData);
+		}else{
+			switch (state){
+				case IDLE :
+					newState(RUNNING);
+					break;
+				case RUNNING:
+					if(canSeePlayer(lvlData,player)) {
+						turnTowardsPlayer(player);
+						if (isPlayerCloseAttack(player))
+							newState(ATTACK);
+					}
+					move(lvlData);
+					break;
+				case ATTACK:
+					if(aniIndex==0)
+						attackChecked = false;
+					if(aniIndex==10&&!attackChecked)
+						checkEnmyHit(attackBox,player);
+					break;
+				case HIT:
+					break;
+			}
 
-	        }
 
-	    }
+		}
+	}
+
 	    
 	    public void drawHealthBar(Graphics g, int xLvlOffset) {
 
 		        g.setColor(Color.red);
 		        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
-		                (int) (hitbox.y + hitbox.height - attackBox.height - 12 * Game.SCALE), enemyHealthWidth,
+		                (int) (hitbox.y + hitbox.height - attackBox.height - 8 * Game.SCALE), enemyHealthWidth,
 		                enemyHealthBarHeight);
 		        g.setColor(Color.WHITE);
 		        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
-		                (int) (hitbox.y + hitbox.height - attackBox.height - 12 * Game.SCALE),
+		                (int) (hitbox.y + hitbox.height - attackBox.height - 8 * Game.SCALE),
 		                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
 	    	
 	    }
 
-
-
-	    public void drawAttackBox(Graphics g,int xLvlOffset){
-	        g.setColor(Color.red);
-	        g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
-
+	public void drawAttackBox(Graphics g,int xLvlOffset){
+		g.setColor(Color.red);
+		g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
 	    }
 	    
 	    private int flipHealth() {
 	    	if(walkDir == RIGHT)
 	    		return 5;
 	    	else
-	    		return -10;
+	    		return -5;
 	    }
-	    
 	    
 	    public int flipX(){
 	        if(walkDir==RIGHT)
-	            return 15;
+	            return 18;
 	        else
-	            return  width;
+	            return  width -3;
 	    }
 	    public int flipY(){
 	          if(walkDir==RIGHT)
 	              return 1;
-	          else{
-	              return -1;
-	          }
-	    }
+	          else
+	              return -1;    
+	}
 
 
 }
+
+
+/*	public void update(){
+		if(doAnimation)
+			updateAnimationTick();
+	}*/
+
+	/*public int getTileY(){
+		return tileY;
+	}
+
+	public void setAnimation(boolean doAnimation){
+		this.doAnimation=doAnimation;
+	}
+
+	public void reset(){
+		aniIndex = 0;
+		aniTick = 0;
+		active = true;
+
+
+			doAnimation = true;
+
+	}*/
