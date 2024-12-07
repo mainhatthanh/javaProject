@@ -95,8 +95,9 @@ public class Player extends Entity {
     }
 
     public void update() {
-        updateStaminaBar();
         updateHealthBar();
+        updateStaminaBar();
+
         if (currentHealth <= 0) {
             if (state != DEAD) {
                 state = DEAD;
@@ -192,7 +193,6 @@ public class Player extends Entity {
         powerGrowTick++;
         if(powerGrowTick>=powerGrowSpeed){
             powerGrowTick=0;
-            changeStamina(1);
         }
     }
 

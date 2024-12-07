@@ -376,7 +376,7 @@ public class Playing extends State implements Statemethods {
     }
 
     public void restoreStaminaDefault(){
-        player.changeStamina(1);
+        player.changeStamina(10);
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
