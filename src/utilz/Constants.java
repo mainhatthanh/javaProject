@@ -264,7 +264,7 @@ public class Constants {
                   case TORO:
                       return 35;
                   default:
-                      return 0;
+                      return 20;
               }
         }
 
@@ -326,8 +326,21 @@ public class Constants {
 //                case SPIDER :
 //                	return 2;
                 default:
-                	return 0;
+                	return 10;
             }
+        }
+        
+        
+        public static int GetNumberMessageBoss(int enemy_type) {
+        	switch(enemy_type) {
+//        	case TORO:
+//        	case BOSS2:
+//        	case BOSS3:
+//        	case BOSS4:
+//        	case BOSS5:
+        	default:
+        		return 3;
+        	}
         }
     }
 

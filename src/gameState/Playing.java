@@ -2,6 +2,7 @@ package gameState;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
@@ -18,6 +19,7 @@ import objects.ObjectManager;
 import ui.GameOverOverlay; 
 import ui.LevelCompletedOverlay;
 import ui.PauseOverlay;
+import ui.UI;
 import utilz.LoadSave;
 
 import static utilz.Constants.PlayerConstants.ATTACK;
@@ -26,6 +28,12 @@ import static utilz.Constants.PlayerConstants.JUMP;
 import static entities.Player.expThatChange;
 
 public class Playing extends State implements Statemethods {
+	
+	private int exp ;
+	private int textIndex = 0;
+	
+	private UI ui ;
+	
     private Player player;
     private LevelManager levelManager;
     private EnemyManager enemyManager;
@@ -95,6 +103,7 @@ public class Playing extends State implements Statemethods {
         player.loadLvlData(levelManager.getCurrentLevel().getLvlData());
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
 
+        ui = new UI(this);
         pauseOverlay = new PauseOverlay(this); 
         gameOverOverlay = new GameOverOverlay(this);
         levelCompletedOverlay = new LevelCompletedOverlay(this);
@@ -120,12 +129,22 @@ public class Playing extends State implements Statemethods {
             expThatChange = 0;
         } else if (gameOver) {
             gameOverOverlay.update();
-        } else if (playerDying) {
+        }
+        else if(enemyManager.checkBoss) {
+        	ui.setText(enemyManager.messBoss, 3);
+        }
+        else if (playerDying) {
             player.update();
         } else {
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
+            exp = enemyManager.getExpUp();
+            if(exp != 0) {
+            	String a ="+"+ exp;
+            	ui.showMessage(a);
+            	enemyManager.setExpUp(0);
+            }
             objectManager.update();
             //bulletManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             checkCloseToBorder();
@@ -153,6 +172,9 @@ public class Playing extends State implements Statemethods {
         g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
         g.drawImage(groundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
 
+        Graphics2D g2 = (Graphics2D) g;
+        ui.draw(g2);
+        
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
         enemyManager.draw(g, xLvlOffset);
@@ -165,6 +187,10 @@ public class Playing extends State implements Statemethods {
             pauseOverlay.draw(g);
         } else if (gameOver)
             gameOverOverlay.draw(g);
+        
+        else if(enemyManager.checkBoss) {
+        	ui.drawDialogueScreen(g2, textIndex);
+        }
         else if (lvlCompleted){
             levelCompletedOverlay.draw(g);
             expThatChange = 0;
@@ -179,6 +205,7 @@ public class Playing extends State implements Statemethods {
         if(lvlCompleted == true){
             expThatChange = 0;
         }
+        textIndex =0;
         lvlCompleted = false;
         playerDying = false;
         player.resetAll();
@@ -207,8 +234,6 @@ public class Playing extends State implements Statemethods {
             else if (e.getButton() == MouseEvent.BUTTON3) {
                     player.powerAttack();
                 }
-
-
                 else{ 
                     System.out.println("Khong du mana");
                 }
@@ -217,8 +242,9 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (gameOver)
+        if (gameOver) {
             gameOverOverlay.keyPressed(e);
+        }
         else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_A:
@@ -233,6 +259,15 @@ public class Playing extends State implements Statemethods {
                 case KeyEvent.VK_RIGHT:
                     player.setRight(true);
                     break;
+                    
+                case KeyEvent.VK_ENTER:
+                	textIndex += 1;
+                	break;
+                case KeyEvent.VK_Q:
+                	enemyManager.checkBoss = false;
+                	break;
+                	
+                	
                 case KeyEvent.VK_SPACE:
                     if(player.getCurrentStamina() >= GetStamina(JUMP)){
                         player.setJump(true);
@@ -354,6 +389,10 @@ public class Playing extends State implements Statemethods {
     public EnemyManager getEnemyManager() {
         return enemyManager;
     }
+    
+    public UI getUi() {
+    	return ui;
+    }
 
     public LevelManager getLevelManager() {
         return levelManager;
@@ -384,5 +423,6 @@ public class Playing extends State implements Statemethods {
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
+    
 
 }
