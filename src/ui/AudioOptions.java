@@ -81,7 +81,6 @@ public class AudioOptions {
 
         musicButton.resetBools();
         sfxButton.resetBools();
-
         volumeButton.resetBools();
 
     }
