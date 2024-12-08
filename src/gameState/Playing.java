@@ -15,16 +15,15 @@ import entities.Player;
 import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
-import ui.GameOverOverlay;
+import ui.GameOverOverlay; 
 import ui.LevelCompletedOverlay;
 import ui.PauseOverlay;
 import utilz.LoadSave;
 
-import static utilz.Constants.Environment.*;
 import static utilz.Constants.PlayerConstants.ATTACK;
-import static utilz.Constants.PlayerConstants.GetAniFromKey;
 import static utilz.Constants.PlayerConstants.GetStamina;
 import static utilz.Constants.PlayerConstants.JUMP;
+import static entities.Player.expThatChange;
 
 public class Playing extends State implements Statemethods {
     private Player player;
@@ -38,17 +37,13 @@ public class Playing extends State implements Statemethods {
     private boolean paused = false;
 
     private int xLvlOffset;
-    private int yLvlOffset;
 
     private int leftBorder = (int) (0.5 * Game.GAME_WIDTH);
     private int rightBorder = (int) (0.5 * Game.GAME_WIDTH);
 
     private int maxLvlOffsetX;
-    private int maxLvlOffsetY;
 
-    private BufferedImage backgroundImg, groundImg, bigCloud, smallCloud;
-    private int[] smallCloudsPos;
-    private Random rnd = new Random();
+    private BufferedImage backgroundImg, groundImg;
 
     private boolean gameOver;
     private boolean lvlCompleted = false;
@@ -122,11 +117,11 @@ public class Playing extends State implements Statemethods {
             pauseOverlay.update();
         } else if (lvlCompleted) {
             levelCompletedOverlay.update();
+            expThatChange = 0;
         } else if (gameOver) {
             gameOverOverlay.update();
         } else if (playerDying) {
             player.update();
-
         } else {
             levelManager.update();
             player.update();
@@ -160,7 +155,7 @@ public class Playing extends State implements Statemethods {
 
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
-        enemyManager.draw(g, xLvlOffset, yLvlOffset);
+        enemyManager.draw(g, xLvlOffset);
         objectManager.draw(g, xLvlOffset);
         //bulletManager.draw(g,xLvlOffset);
 
@@ -170,8 +165,10 @@ public class Playing extends State implements Statemethods {
             pauseOverlay.draw(g);
         } else if (gameOver)
             gameOverOverlay.draw(g);
-        else if (lvlCompleted)
+        else if (lvlCompleted){
             levelCompletedOverlay.draw(g);
+            expThatChange = 0;
+        }
     }
 
 
@@ -179,6 +176,9 @@ public class Playing extends State implements Statemethods {
     public void resetAll() {
         gameOver = false;
         paused = false;
+        if(lvlCompleted == true){
+            expThatChange = 0;
+        }
         lvlCompleted = false;
         playerDying = false;
         player.resetAll();
@@ -192,7 +192,7 @@ public class Playing extends State implements Statemethods {
     }
 
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
-        enemyManager.checkEnemyHit(attackBox);
+        enemyManager.checkEnemyHit(attackBox , player);
     }
 
     @Override
@@ -329,6 +329,10 @@ public class Playing extends State implements Statemethods {
         this.lvlCompleted = levelCompleted;
         if (levelCompleted)
             game.getAudioPlayer().lvlCompleted();
+    }
+
+    public boolean getLevelCompleted(){
+        return lvlCompleted;
     }
 
     public void setMaxLvlOffset(int lvlOffset) {

@@ -18,25 +18,37 @@ import main.Game;
 public class Monster_Eye1 extends Enemy {
 
 	private int attackBoxOffsetX;
+	
+	    public Monster_Eye1(float x, float y) {
+	        super(x, y, MONEYE1_WIDTH, MONEYE1_HEIGHT, MONSTER_EYE1);
+	        initHitbox(30,30);
+	        initAttackBox();
+	        this.enemyHealthBarWidth = (int)(30* Game.SCALE);
+	        this.enemyHealthBarHeight = (int)(2* Game.SCALE);
+	        this.enemyHealthWidth = enemyHealthBarWidth;
+	        this.walkSpeed = 0.3f * Game.SCALE;
+	    }
+	    
+	    private void initAttackBox(){
+	        attackBox=new Rectangle2D.Float(x,y,(int)(35*Game.SCALE),(int)(30*Game.SCALE));
+	        attackBoxOffsetX = (int)(Game.SCALE*35);
+	    }
 
-	public Monster_Eye1(float x, float y) {
-		super(x, y, MONEYE1_WIDTH, MONEYE1_HEIGHT, MONSTER_EYE1);
-		initHitbox(17,25);
-		initAttackBox();
-	}
-	private void initAttackBox(){
-		attackBox=new Rectangle2D.Float(x,y,(int)(67*Game.SCALE),(int)(25*Game.SCALE));
-		attackBoxOffsetX = (int)(Game.SCALE*30);
-	}
+	    public void update(int[][] lvlData,Player player){
+	        updateBehaviour(lvlData,player);
+	        updateAnimationTick();
+	        updateAttackBoxFlip();
+	        updateHealthBar();
+	    }
+	    
+	    protected void updateAttackBoxFlip() {
+	        if (walkDir == RIGHT)
+	            attackBox.x = hitbox.x + hitbox.width;
+	        else
+	            attackBox.x = hitbox.x - attackBoxOffsetX;
 
-
-
-	public void update(int[][] lvlData,Player player){
-		updateBehaviour(lvlData,player);
-		updateAnimationTick();
-		updateAttackBox();
-
-	}
+	        attackBox.y = hitbox.y;
+	    }
 
 	protected void updateAttackBox() {
 		attackBox.x= hitbox.x-attackBoxOffsetX;
@@ -55,7 +67,6 @@ public class Monster_Eye1 extends Enemy {
 				case IDLE :
 					newState(RUNNING);
 					break;
-
 				case RUNNING:
 					if(canSeePlayer(lvlData,player)) {
 						turnTowardsPlayer(player);
@@ -74,29 +85,47 @@ public class Monster_Eye1 extends Enemy {
 					break;
 			}
 
-		}
 
+		}
 	}
 
+	    
+	    public void drawHealthBar(Graphics g, int xLvlOffset) {
 
+		        g.setColor(Color.red);
+		        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
+		                (int) (hitbox.y + hitbox.height - attackBox.height - 8 * Game.SCALE), enemyHealthWidth,
+		                enemyHealthBarHeight);
+		        g.setColor(Color.WHITE);
+		        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
+		                (int) (hitbox.y + hitbox.height - attackBox.height - 8 * Game.SCALE),
+		                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
+	    	
+	    }
 
 	public void drawAttackBox(Graphics g,int xLvlOffset){
 		g.setColor(Color.red);
 		g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
-
-	}
-	public int flipX(){
-		if(walkDir==RIGHT)
-			return 0;
-		else
-			return  width;
-	}
-	public int flipY(){
-		if(walkDir==RIGHT)
-			return 1;
-		else{
-			return -1;
-		}
+	    }
+	    
+	    private int flipHealth() {
+	    	if(walkDir == RIGHT)
+	    		return 5;
+	    	else
+	    		return -5;
+	    }
+	    
+	    public int flipX(){
+	        if(walkDir==RIGHT)
+	            return 18;
+	        else
+	            return  width -3;
+	    }
+	    public int flipY(){
+	          if(walkDir==RIGHT)
+	              return 1;
+	          else
+	              return -1;    
 	}
 
 

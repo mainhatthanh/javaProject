@@ -21,7 +21,8 @@ public class AudioPlayer {
     private Clip[] songs,effects;
     private int currentSongId;
     private float volume=1f;
-    private boolean songMute,effectMute;
+    private boolean songMute;
+    private boolean effectMute;
     private Random rand = new Random();
 
     public AudioPlayer(){
@@ -70,7 +71,7 @@ public class AudioPlayer {
         }
     }
     public void toggleEffectMute(){
-        this.songMute=!effectMute;
+        this.effectMute=!effectMute;
         for(Clip c:effects){
             BooleanControl booleanControl = (BooleanControl) c.getControl(BooleanControl.Type.MUTE);
             booleanControl.setValue(effectMute);

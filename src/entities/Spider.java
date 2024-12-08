@@ -3,7 +3,6 @@ import main.Game;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 
 import static utilz.Constants.Directions.*;
 import static utilz.Constants.EnemyConstants.*;
@@ -11,17 +10,22 @@ import static utilz.Constants.EnemyConstants.*;
 
 public class Spider extends Enemy{
 
-
+	
     private int attackBoxOffsetX;
 
     public Spider(float x, float y) {
 
         super(x, y, SPIDER_WIDTH, SPIDER_HEIGHT, SPIDER);
-        initHitbox(30,9);
+        initHitbox(40,12);
         initAttackBox();
+        this.enemyHealthBarWidth = (int)(20 * Game.SCALE);
+        this.enemyHealthBarHeight = (int)(1.5 * Game.SCALE);
+        this.enemyHealthWidth = enemyHealthBarWidth;
+        this.walkSpeed = 0.3f * Game.SCALE;
+        
     }
     private void initAttackBox(){
-        attackBox=new Rectangle2D.Float(x,y,(int)(70*Game.SCALE),(int)(9*Game.SCALE));
+        attackBox=new Rectangle2D.Float(x,y,(int)(20*Game.SCALE),(int)(12*Game.SCALE));
         attackBoxOffsetX = (int)(Game.SCALE*20);
     }
 
@@ -29,13 +33,18 @@ public class Spider extends Enemy{
     public void update(int[][] lvlData,Player player){
         updateBehaviour(lvlData,player);
         updateAnimationTick();
-        updateAttackBox();
+        updateAttackBoxFlip1();
+        updateHealthBar();
 
     }
+    
+    private void updateAttackBoxFlip1() {
+    	if (walkDir == RIGHT)
+            attackBox.x = hitbox.x + hitbox.width ;
+        else
+            attackBox.x = hitbox.x - attackBoxOffsetX;
 
-    protected void updateAttackBox() {
-        attackBox.x= hitbox.x-attackBoxOffsetX;
-        attackBox.y=hitbox.y;
+        attackBox.y = hitbox.y;
     }
 
     private void updateBehaviour(int[][] lvlData,Player player) {
@@ -83,9 +92,9 @@ public class Spider extends Enemy{
     }
     public int flipX(){
         if(walkDir==RIGHT)
-            return width  + 60;
+            return width  + 90;
         else
-            return  -30;
+            return  -15;
     }
     public int flipY(){
           if(walkDir==RIGHT)

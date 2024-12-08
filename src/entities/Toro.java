@@ -4,18 +4,9 @@ import static utilz.Constants.Directions.*;
 
 
 import static utilz.Constants.EnemyConstants.*;
-import static utilz.Constants.EnemyConstants.MINOTAUR;
-import static utilz.Constants.EnemyConstants.MINOTAUR_HEIGHT;
-import static utilz.Constants.EnemyConstants.MINOTAUR_WIDTH;
 import static utilz.Constants.EnemyConstants.HIT;
 import static utilz.Constants.EnemyConstants.IDLE;
 import static utilz.Constants.EnemyConstants.RUNNING;
-
-import static utilz.HelpMethods.CanMoveHere;
-import static utilz.HelpMethods.IsFloor;
-import static utilz.HelpMethods.GetEntityYPosUnderRoofOrAboveFloor;
-import static utilz.HelpMethods.IsEntityOnFloor;
-
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -29,29 +20,36 @@ public class Toro extends Enemy {
 
 	public Toro(float x, float y) {
 		super(x , y, TORO_WIDTH, TORO_HEIGHT, TORO);
-		initHitbox(20, 20);
-
+		initHitbox(40, 30);
+		this.enemyHealthBarWidth = (int)(35* Game.SCALE);
+        this.enemyHealthBarHeight = (int)(3* Game.SCALE);
+        this.enemyHealthWidth = enemyHealthBarWidth;
+        this.walkSpeed = 0.38f * Game.SCALE;
 		initAttackBox();
 	}
 	
 	//khai bao attackbox
 	private void initAttackBox() {
-		attackBox = new Rectangle2D.Float(x , y, (int)(Game.SCALE * 50),(int)(Game.SCALE * 30));
-		attackBoxOffsetX = (int)(Game.SCALE *10);
+		attackBox = new Rectangle2D.Float(x , y, (int)(Game.SCALE * 40),(int)(Game.SCALE * 30));
+		attackBoxOffsetX = (int)(Game.SCALE *40);
 		
 	}
 
 	public void update(int[][] lvlData, Player player) {
 		updateBehaviour(lvlData,player);
-		updateAnimationTick();
-		updateAttackBox();
+        updateAnimationTick();
+        updateAttackBoxFlip();
+        updateHealthBar();
 	}
 	
-	protected void updateAttackBox() {
-        attackBox.x= hitbox.x-attackBoxOffsetX;
-        attackBox.y=hitbox.y;
-    }
+	protected void updateAttackBoxFlip() {
+        if (walkDir == RIGHT)
+            attackBox.x = hitbox.x + hitbox.width;
+        else
+            attackBox.x = hitbox.x - attackBoxOffsetX;
 
+        attackBox.y = hitbox.y ;
+    }
 	private void updateBehaviour(int[][] lvlData, Player player) {
 		if(firstUpdate) 
 			firstUpdateCheck(lvlData);
@@ -84,12 +82,30 @@ public class Toro extends Enemy {
 		}
 	}
 	
+	public void drawHealthBar(Graphics g, int xLvlOffset) {
+
+        g.setColor(Color.red);
+        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
+                (int) (hitbox.y + hitbox.height - attackBox.height - 12 * Game.SCALE), enemyHealthWidth,
+                enemyHealthBarHeight);
+        g.setColor(Color.WHITE);
+        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
+                (int) (hitbox.y + hitbox.height - attackBox.height - 12 * Game.SCALE),
+                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
+	
+}
+	private int flipHealth() {
+    	if(walkDir == RIGHT)
+    		return 5;
+    	else
+    		return -5;
+    }
 	
 	public int flipX() {
 		if(walkDir == RIGHT)
 			return 0;
 		else
-			return width;
+			return width + 15;
 	}
 	
 	public int flipY() {
