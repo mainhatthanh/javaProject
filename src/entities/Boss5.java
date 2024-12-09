@@ -16,6 +16,9 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Boss5 extends Enemy {
+	
+	private int count =0;
+	private boolean check ;
 
 	public Boss5(float x, float y) {
 		 super(x, y, BOSS5_WIDTH, BOSS5_HEIGHT, BOSS5);
@@ -24,6 +27,8 @@ public class Boss5 extends Enemy {
 	        this.enemyHealthBarHeight = (int)(3* Game.SCALE);
 	        this.enemyHealthWidth = enemyHealthBarWidth;
 	        this.walkSpeed = 0.38f * Game.SCALE;
+	        this.setDialogue();
+	        
 	        initAttackBox();
 		
 	}
@@ -37,6 +42,8 @@ public class Boss5 extends Enemy {
 	        updateAnimationTick();
 	        updateAttackBoxFlip();
 	        updateHealthBar();
+	        
+	        
 
 	    }
 
@@ -55,6 +62,7 @@ public class Boss5 extends Enemy {
 
 	                case RUNNING:
 	                    if(canSeePlayer(lvlData,player)) {
+	                    	count ++;
 	                        turnTowardsPlayer(player);
 	                        if (isPlayerCloseAttack(player))
 	                            newState(ATTACK);
@@ -111,5 +119,14 @@ public class Boss5 extends Enemy {
 	          else{
 	              return -1;
 	          }
+	    }
+	    
+	  //chỉ cập nhật trò chuyện ở lần đầu xuất hiện
+	    public boolean getCheckBoss() {
+	    	if(count == 1)
+	    		return true;
+	    	else
+	    		return false;
+//	    	return check;
 	    }
 }
