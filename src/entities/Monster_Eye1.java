@@ -78,7 +78,7 @@ public class Monster_Eye1 extends Enemy {
 				case ATTACK:
 					if(aniIndex==0)
 						attackChecked = false;
-					if(aniIndex==10&&!attackChecked)
+					if(aniIndex== 4 &&!attackChecked)
 						checkEnmyHit(attackBox,player);
 					break;
 				case HIT:

@@ -7,6 +7,10 @@ import utilz.LoadSave;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import static utilz.Constants.ANI_SPEED;
 import static utilz.Constants.GRAVITY;
 import static utilz.Constants.PlayerConstants.*;
@@ -14,12 +18,10 @@ import static utilz.HelpMethods.*;
 
 public class Player extends Entity {
     private BufferedImage[][] animations;
-
-    private boolean moving = false, attacking = false;
-    private boolean right, left, jump;
-
-    private int[][] lvlData;
-    private float xDrawOffset = 38 * Game.SCALE;
+    protected int playerDamage;
+    private double levelUpTimesIncrease = 1.1;
+    
+    public static int levelUpTime;
     private float yDrawOffset = 15 * Game.SCALE;
     // jumping / gravity
 
@@ -28,6 +30,12 @@ public class Player extends Entity {
 
     // Status BarUI
     private BufferedImage statusBarImg;
+
+    private boolean moving = false, attacking = false;
+    private boolean right, left, jump;
+
+    private int[][] lvlData;
+    private float xDrawOffset = 38 * Game.SCALE;
 
     private int statusBarWidth = (int) (192 * Game.SCALE);
     private int statusBarHeight = (int) (58 * Game.SCALE);
@@ -59,7 +67,15 @@ public class Player extends Entity {
     private int expBarXStart = (int) (Game.GAME_WIDTH/2 - expBarWidth/2);
     private int expWidth = 0;
     // Khi levelUp = true thì hiện cửa sổ tăng sức mạnh bản thân
-    private boolean levelUp; 
+    private boolean levelUp;
+    private boolean isShowLevelUp;
+
+    private BufferedImage levelUpImg;
+    private int lvlUpWidth=(int)(64*Game.SCALE);
+    private int lvlUpHeight=(int)(64*Game.SCALE);
+
+
+
 
     // attackBox
 
@@ -88,6 +104,9 @@ public class Player extends Entity {
         this.currentExp = 0;
         this.maxExp = 100;
         this.walkSpeed = Game.SCALE * 1.0f;
+        this.playerDamage = 10;
+        this.levelUpTime = 0;
+        this.levelUp=false;
         loadAnimations();
 
         initHitbox(15, 27);
@@ -112,6 +131,9 @@ public class Player extends Entity {
     public void update() {
         updateHealthBar();
         updateStaminaBar();
+        playerUpdateLevel(levelUp);
+        //updateIsShowLvlUp(isShowLevelUp);
+        //System.out.println(maxHealth + " " + maxStamina + " "+ playerDamage);
 
         if (currentHealth <= 0) {
             if (state != DEAD) {
@@ -171,6 +193,26 @@ public class Player extends Entity {
 
     }
 
+    /*private void updateIsShowLvlUp(boolean isShowLevelUp) {
+        if(isShowLevelUp){
+            g.drawImage(levelUpImg, (int) (hitbox.x - 30)- xlvlOffset, (int) (hitbox.y - 60), lvlUpWidth, lvlUpHeight, null);
+            resetIsShowLevelUp();
+
+        }
+    }*/
+
+
+    public void playerUpdateLevel(boolean levelUp){
+        if(levelUp){
+            maxHealth *= levelUpTimesIncrease;
+            maxStamina *= levelUpTimesIncrease;
+            setPlayerDamage((int)(levelUpTimesIncrease*getPlayerDamage()));
+            levelUpTime += 1;
+        }
+        resetBooleanLevelUp();
+
+    }
+
     private void checkAttack() {
         if (attackChecked || aniIndex != 1)
             return;
@@ -217,7 +259,9 @@ public class Player extends Entity {
     public void render(Graphics g, int xlvlOffset) {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
+
         drawUI(g);
+
 
 //         drawAttackHitbox(g, xlvlOffset);
 //         drawHitbox(g, xlvlOffset);
@@ -225,17 +269,29 @@ public class Player extends Entity {
 
     }
 
+    public void drawLvlUp(Graphics g,int xlvlOffset){
+        if(isShowLevelUp) {
+            g.drawImage(levelUpImg, (int) (hitbox.x - 30)- xlvlOffset, (int) (hitbox.y - 60), lvlUpWidth, lvlUpHeight, null);
+            resetIsShowLevelUp();
+        }
+    }
+
+
+
     private void drawUI(Graphics g) {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
         g.setColor(Color.red);
         g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeigth);
-        g.setColor(Color.blue);
+        g.setColor(Color.YELLOW);
         g.fillRect(staminaBarXStart + statusBarX, staminaBarYStart + statusBarY, staminaWidth, staminaBarHeight);
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(expBarXStart, expBarYStart, expBarWidth , expBarHeight);
         g.setColor(Color.GREEN);
         g.fillRect(expBarXStart, expBarYStart, expWidth, expBarHeight);
+
     }
+
+
 
     private void updatePos() {
         moving = false;
@@ -344,6 +400,7 @@ public class Player extends Entity {
         currentExp += value;
         if(currentExp >= maxExp){
             levelUp = true;
+            isShowLevelUp=true;
             currentExp -= maxExp;
             maxExp = (int) (1.2*maxExp);
         }
@@ -448,6 +505,7 @@ public class Player extends Entity {
                 animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
 
         statusBarImg = LoadSave.GetSpriteAtlas(LoadSave.STATUS_BAR);
+        levelUpImg=LoadSave.GetSpriteAtlas(LoadSave.LEVEL_UP_IMG);
 
     }
 
@@ -485,6 +543,13 @@ public class Player extends Entity {
                 currentExp -= expThatChange;    
                 expThatChange -= expThatChange;
             }
+        }
+
+        while(levelUpTime > 0){
+            maxHealth = (int) Math.ceil(maxHealth/levelUpTimesIncrease);
+            maxStamina = (int) Math.ceil(maxStamina/levelUpTimesIncrease);
+            playerDamage = (int) Math.ceil(playerDamage/levelUpTimesIncrease);
+            levelUpTime -= 1;
         }
 
     }
@@ -536,5 +601,28 @@ public class Player extends Entity {
             powerAttackActive=true;
             changeStamina(-40);
         }
+    }
+
+    public void setPlayerDamage(int a){
+        this.playerDamage = a;
+    }
+
+    public int getPlayerDamage(){
+        return playerDamage;
+    }
+   private void resetIsShowLevelUp() {
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.schedule(() -> {
+            isShowLevelUp = false;
+            System.out.println("Level up Img has been reset!");
+            scheduler.shutdown(); // Dừng Scheduler sau khi thực hiện
+        }, 2, TimeUnit.SECONDS); // 3 giây
+    }
+    private void resetBooleanLevelUp(){
+        this.levelUp=false;
+    }
+
+    public boolean getIsShowLvlUp(){
+        return isShowLevelUp;
     }
 }
