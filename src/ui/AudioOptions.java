@@ -1,6 +1,5 @@
 package ui;
 
-import gameState.Gamestate;
 import main.Game;
 
 import java.awt.*;
@@ -55,6 +54,20 @@ public class AudioOptions {
         }
 
     }
+   /*public void mouseDragged(MouseEvent e) {
+       if (volumeButton.isMousePressed()) {
+           float valueBefore = volumeButton.getFloatValue();
+           volumeButton.changeX(e.getX());
+           float valueAfter = volumeButton.getFloatValue();
+
+           // Làm mượt giá trị
+           if (Math.abs(valueBefore - valueAfter) > 0.01f) {
+               float smoothedValue = valueBefore * 0.8f + valueAfter * 0.2f;
+               game.getAudioPlayer().setVolume(smoothedValue);
+           }
+       }
+   }*/
+
 
     public void mousePressed(MouseEvent e) {
         if (isIn(e, musicButton))
