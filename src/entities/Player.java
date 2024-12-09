@@ -176,9 +176,9 @@ public class Player extends Entity {
 
     public void playerUpdateLevel(boolean levelUp){
         if(levelUp){
-            maxHealth *= 1.05;
-            maxStamina *= 1.05;
-            setPlayerDamage((int)(1.05*getPlayerDamage()));
+            maxHealth *= 1.1;
+            maxStamina *= 1.1;
+            setPlayerDamage((int)(1.1*getPlayerDamage()));
         }
     }
     private void checkAttack() {
