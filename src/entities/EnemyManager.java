@@ -337,8 +337,8 @@ public class EnemyManager {
                         (int) (me.getHitBox().x - xLvlOffset - MONEYE1_DRAWOFFSET_X + me.flipX()),
                         (int) (me.getHitBox().y - MONEYE1_DRAWOFFSET_Y + 5),
                         (int) (MONEYE1_WIDTH * me.flipY()), (int) (MONEYE1_HEIGHT), null);
-                me.drawHitbox(g, xLvlOffset);
-                me.drawAttackHitbox(g, xLvlOffset);
+                // me.drawHitbox(g, xLvlOffset);
+                // me.drawAttackHitbox(g, xLvlOffset);
                 me.drawHealthBar(g, xLvlOffset);
             }
     }
@@ -386,7 +386,7 @@ public class EnemyManager {
         for (Crabby c : crabbies)
             if (c.getCurrentHealth() > 0)
                 if (attackBox.intersects(c.getHitBox())) {
-                    c.hurt(10, player);
+                    c.hurt(player.playerDamage, player);
                     expUp = c.getExpUpdate();
                     return;
                 }
@@ -395,7 +395,7 @@ public class EnemyManager {
             if (shark.isActive())
                 if (shark.getCurrentHealth() > 0)
                     if (attackBox.intersects(shark.getHitBox())) {
-                        shark.hurt(10, player);
+                        shark.hurt(player.playerDamage, player);
                         expUp = shark.getExpUpdate();
                         return;
                     }
@@ -404,7 +404,7 @@ public class EnemyManager {
             if (me.isActive())
                 if (me.getCurrentHealth() > 0)
                     if (attackBox.intersects(me.getHitBox())) {
-                        me.hurt(10, player);
+                        me.hurt(player.playerDamage, player);
                         expUp = me.getExpUpdate();
                         return;
                     }
@@ -413,7 +413,7 @@ public class EnemyManager {
             if (me2.isActive())
                 if (me2.getCurrentHealth() > 0)
                     if (attackBox.intersects(me2.getHitBox())) {
-                        me2.hurt(10, player);
+                        me2.hurt(player.playerDamage, player);
                         expUp = me2.getExpUpdate();
                         return;
                     }
@@ -422,7 +422,7 @@ public class EnemyManager {
             if (spi.isActive())
                 if (spi.getCurrentHealth() > 0)
                     if (attackBox.intersects(spi.getHitBox())) {
-                        spi.hurt(10, player);
+                        spi.hurt(player.playerDamage, player);
                         expUp = spi.getExpUpdate();
                         return;
                     }
@@ -431,7 +431,7 @@ public class EnemyManager {
             if (mino.isActive())
                 if (mino.getCurrentHealth() > 0)
                     if (attackBox.intersects(mino.getHitBox())) {
-                        mino.hurt(10, player);
+                        mino.hurt(player.playerDamage, player);
                         expUp = mino.getExpUpdate();
                         return;
                     }
@@ -441,7 +441,7 @@ public class EnemyManager {
             if (t.isActive())
                 if (t.getCurrentHealth() > 0)
                     if (attackBox.intersects(t.getHitBox())) {
-                        t.hurt(10, player);
+                        t.hurt(player.playerDamage, player);
                         expUp = t.getExpUpdate();
                         return;
                     }
@@ -450,7 +450,7 @@ public class EnemyManager {
             if (b.isActive())
                 if (b.getCurrentHealth() > 0)
                     if (attackBox.intersects(b.getHitBox())) {
-                        b.hurt(10, player);
+                        b.hurt(player.playerDamage, player);
                         expUp = b.getExpUpdate();
                         return;
                     }
@@ -459,7 +459,7 @@ public class EnemyManager {
             if (b2.isActive())
                 if (b2.getCurrentHealth() > 0)
                     if (attackBox.intersects(b2.getHitBox())) {
-                        b2.hurt(10, player);
+                        b2.hurt(player.playerDamage, player);
                         expUp = b2.getExpUpdate();
                         return;
                     }
@@ -468,7 +468,7 @@ public class EnemyManager {
             if (b3.isActive())
                 if (b3.getCurrentHealth() > 0)
                     if (attackBox.intersects(b3.getHitBox())) {
-                        b3.hurt(10, player);
+                        b3.hurt(player.playerDamage, player);
                         expUp = b3.getExpUpdate();
                         return;
                     }
@@ -477,7 +477,7 @@ public class EnemyManager {
             if (b4.isActive())
                 if (b4.getCurrentHealth() > 0)
                     if (attackBox.intersects(b4.getHitBox())) {
-                        b4.hurt(10, player);
+                        b4.hurt(player.playerDamage, player);
                         expUp = b4.getExpUpdate();
                         return;
                     }
@@ -486,7 +486,7 @@ public class EnemyManager {
             if (b5.isActive())
                 if (b5.getCurrentHealth() > 0)
                     if (attackBox.intersects(b5.getHitBox())) {
-                        b5.hurt(10, player);
+                        b5.hurt(player.playerDamage, player);
                         expUp = b5.getExpUpdate();
                         return;
                     }

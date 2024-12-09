@@ -14,6 +14,7 @@ import static utilz.HelpMethods.*;
 
 public class Player extends Entity {
     private BufferedImage[][] animations;
+    protected int playerDamage;
 
     private boolean moving = false, attacking = false;
     private boolean right, left, jump;
@@ -88,6 +89,7 @@ public class Player extends Entity {
         this.currentExp = 0;
         this.maxExp = 100;
         this.walkSpeed = Game.SCALE * 1.0f;
+        this.playerDamage = 10;
         loadAnimations();
 
         initHitbox(15, 27);
@@ -112,6 +114,7 @@ public class Player extends Entity {
     public void update() {
         updateHealthBar();
         updateStaminaBar();
+        playerUpdateLevel(levelUp);
 
         if (currentHealth <= 0) {
             if (state != DEAD) {
@@ -171,6 +174,13 @@ public class Player extends Entity {
 
     }
 
+    public void playerUpdateLevel(boolean levelUp){
+        if(levelUp){
+            maxHealth *= 1.05;
+            maxStamina *= 1.05;
+            setPlayerDamage((int)(1.05*getPlayerDamage()));
+        }
+    }
     private void checkAttack() {
         if (attackChecked || aniIndex != 1)
             return;
@@ -229,7 +239,7 @@ public class Player extends Entity {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
         g.setColor(Color.red);
         g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeigth);
-        g.setColor(Color.blue);
+        g.setColor(Color.YELLOW);
         g.fillRect(staminaBarXStart + statusBarX, staminaBarYStart + statusBarY, staminaWidth, staminaBarHeight);
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(expBarXStart, expBarYStart, expBarWidth , expBarHeight);
@@ -536,5 +546,13 @@ public class Player extends Entity {
             powerAttackActive=true;
             changeStamina(-40);
         }
+    }
+
+    public void setPlayerDamage(int a){
+        this.playerDamage = a;
+    }
+
+    public int getPlayerDamage(){
+        return playerDamage;
     }
 }
