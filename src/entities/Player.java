@@ -401,6 +401,7 @@ public class Player extends Entity {
         if(currentExp >= maxExp){
             levelUp = true;
             isShowLevelUp=true;
+            playing.getGame().getAudioPlayer().playEffect((AudioPlayer.LEVEL_UP));//Lvl up effect
             currentExp -= maxExp;
             maxExp = (int) (1.2*maxExp);
         }
@@ -618,6 +619,8 @@ public class Player extends Entity {
             scheduler.shutdown(); // Dừng Scheduler sau khi thực hiện
         }, 2, TimeUnit.SECONDS); // 3 giây
     }
+
+
     private void resetBooleanLevelUp(){
         this.levelUp=false;
     }

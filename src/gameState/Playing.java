@@ -182,7 +182,7 @@ public class Playing extends State implements Statemethods {
         enemyManager.draw(g, xLvlOffset);
         objectManager.draw(g, xLvlOffset);
 
-
+       //draw lvlUp khi len cap
         if(player.getIsShowLvlUp()){
             player.drawLvlUp(g,xLvlOffset);
         }
