@@ -15,12 +15,9 @@ import static utilz.HelpMethods.*;
 public class Player extends Entity {
     private BufferedImage[][] animations;
     protected int playerDamage;
-
-    private boolean moving = false, attacking = false;
-    private boolean right, left, jump;
-
-    private int[][] lvlData;
-    private float xDrawOffset = 38 * Game.SCALE;
+    private double levelUpTimesIncrease = 1.1;
+    
+    public static int levelUpTime;
     private float yDrawOffset = 15 * Game.SCALE;
     // jumping / gravity
 
@@ -29,6 +26,12 @@ public class Player extends Entity {
 
     // Status BarUI
     private BufferedImage statusBarImg;
+
+    private boolean moving = false, attacking = false;
+    private boolean right, left, jump;
+
+    private int[][] lvlData;
+    private float xDrawOffset = 38 * Game.SCALE;
 
     private int statusBarWidth = (int) (192 * Game.SCALE);
     private int statusBarHeight = (int) (58 * Game.SCALE);
@@ -90,6 +93,7 @@ public class Player extends Entity {
         this.maxExp = 100;
         this.walkSpeed = Game.SCALE * 1.0f;
         this.playerDamage = 10;
+        this.levelUpTime = 0;
         loadAnimations();
 
         initHitbox(15, 27);
@@ -115,6 +119,7 @@ public class Player extends Entity {
         updateHealthBar();
         updateStaminaBar();
         playerUpdateLevel(levelUp);
+        System.out.println(maxHealth + " " + maxStamina + " "+ playerDamage);
 
         if (currentHealth <= 0) {
             if (state != DEAD) {
@@ -176,11 +181,14 @@ public class Player extends Entity {
 
     public void playerUpdateLevel(boolean levelUp){
         if(levelUp){
-            maxHealth *= 1.1;
-            maxStamina *= 1.1;
-            setPlayerDamage((int)(1.1*getPlayerDamage()));
+            maxHealth *= levelUpTimesIncrease;
+            maxStamina *= levelUpTimesIncrease;
+            setPlayerDamage((int)(levelUpTimesIncrease*getPlayerDamage()));
+            levelUpTime += 1;
         }
+        resetBooleanLevelUp();
     }
+
     private void checkAttack() {
         if (attackChecked || aniIndex != 1)
             return;
@@ -497,6 +505,13 @@ public class Player extends Entity {
             }
         }
 
+        while(levelUpTime > 0){
+            maxHealth = (int) Math.ceil(maxHealth/levelUpTimesIncrease);
+            maxStamina = (int) Math.ceil(maxStamina/levelUpTimesIncrease);
+            playerDamage = (int) Math.ceil(playerDamage/levelUpTimesIncrease);
+            levelUpTime -= 1;
+        }
+
     }
 
     public int getMaxHealth() {
@@ -554,5 +569,8 @@ public class Player extends Entity {
 
     public int getPlayerDamage(){
         return playerDamage;
+    }
+    public void resetBooleanLevelUp(){
+        this.levelUp = false;
     }
 }

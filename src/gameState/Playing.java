@@ -26,6 +26,7 @@ import static utilz.Constants.PlayerConstants.ATTACK;
 import static utilz.Constants.PlayerConstants.GetStamina;
 import static utilz.Constants.PlayerConstants.JUMP;
 import static entities.Player.expThatChange;
+import static entities.Player.levelUpTime;
 
 public class Playing extends State implements Statemethods {
 	
@@ -127,6 +128,7 @@ public class Playing extends State implements Statemethods {
         } else if (lvlCompleted) {
             levelCompletedOverlay.update();
             expThatChange = 0;
+            levelUpTime = 0;
         } else if (gameOver) {
             gameOverOverlay.update();
         }
@@ -194,6 +196,7 @@ public class Playing extends State implements Statemethods {
         else if (lvlCompleted){
             levelCompletedOverlay.draw(g);
             expThatChange = 0;
+            levelUpTime = 0;
         }
     }
 
@@ -204,6 +207,7 @@ public class Playing extends State implements Statemethods {
         paused = false;
         if(lvlCompleted == true){
             expThatChange = 0;
+            levelUpTime = 0;
         }
         textIndex =0;
         lvlCompleted = false;
