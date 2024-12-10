@@ -30,10 +30,12 @@ import static utilz.HelpMethods.*;
 
 public class Level {
     private BufferedImage img;
-      private int lvlTilesWide;
+    private int lvlTilesWide;
     private int maxTilesOffset;
     private int maxLvlOffsetX;
     private int[][] lvlData;
+    
+    
     private ArrayList<Crabby> crabs;
     private ArrayList<GameContainer> containers;
     private ArrayList<Potion> potions;
@@ -45,18 +47,18 @@ public class Level {
     
     private ArrayList<Shark> sharks;
     private ArrayList<Minotaur> minotaurs;
-    private ArrayList<Toro> toros;
-    private ArrayList<Boss1> boss1;
     private ArrayList<Monster_Eye1> monEye1;
     private ArrayList<Monster2> monster2;
     private ArrayList<Spider> spiders;
+    
+    private ArrayList<Toro> toros;
+    private ArrayList<Boss1> boss1;
     private ArrayList<Boss2> boss2;
     private ArrayList<Boss3> boss3;
     private ArrayList<Boss4> boss4;
     private ArrayList<Boss5> boss5;
 
-
-
+    
     private Point playerSpawn;
 
     
@@ -108,21 +110,27 @@ public class Level {
 
 	private void calcPlayerSpawn() {
      playerSpawn = GetPlayerSpawn(img);
+
     }
 
-    private void createContainers() { containers = HelpMethods.GetContainers(img); }
+    private void createContainers() {
+        containers = HelpMethods.GetContainers(img);
+    }
 
-    private void createPotions() { potions = HelpMethods.GetPotions(img); }
+    private void createPotions() {
+        potions = HelpMethods.GetPotions(img);
+    }
 
     private void createEnemies() {
      crabs = GetCrabs(img);
      sharks=GetSharks(img);
      minotaurs=GetMinotaurs(img);
-     toros = GetToros(img);
-     boss1 = GetBoss1(img);
      monEye1 = GetMonEye1(img);
      monster2 = GetMonster2(img);
      spiders = GetSpider(img);
+     
+     toros = GetToros(img);
+     boss1 = GetBoss1(img);
      boss2 = GetBoss2(img);
      boss3 = GetBoss3(img);
      boss4 = GetBoss4(img);
@@ -130,29 +138,28 @@ public class Level {
 
     }
 
-
-
     private void createLevelData() {
-             lvlData=GetLevelData(img);
+        lvlData = GetLevelData(img);
     }
 
     private void calcLvlOffsets() {
-     lvlTilesWide = img.getWidth();
-     maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;
-     maxLvlOffsetX = Game.TILES_SIZE*maxTilesOffset;
+        lvlTilesWide = img.getWidth();
+        maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;
+        maxLvlOffsetX = Game.TILES_SIZE * maxTilesOffset;
     }
 
-    public int getSpriteIndex(int x,int y){
-     return lvlData[y][x];
+    public int getSpriteIndex(int x, int y) {
+        return lvlData[y][x];
 
- }
- public int[][] getLvlData(){
-     return lvlData;
- }
+    }
 
-public int getLvlOffset(){
-     return maxLvlOffsetX;
-}
+    public int[][] getLvlData() {
+        return lvlData;
+    }
+
+    public int getLvlOffset() {
+        return maxLvlOffsetX;
+    }
 
     public ArrayList<Crabby> getCrabs() {
         return crabs;
@@ -164,9 +171,12 @@ public int getLvlOffset(){
     	return swords;
     }
     
+
+
     public ArrayList<GameContainer> getContainers() {
         return containers;
     }
+
     public ArrayList<Potion> getPotions() {
         return potions;
     }
@@ -180,9 +190,23 @@ public int getLvlOffset(){
 		return cannons;
 	}
     public ArrayList<Shark> getSharks(){return  sharks;}
-    public ArrayList<Minotaur> getMinotaurs(){
-    	return  minotaurs;
+
+    public ArrayList<Minotaur> getMinotaurs() {
+        return minotaurs;
     }
+
+    public ArrayList<Monster_Eye1> getMonEye1(){
+    	return monEye1;
+    }
+    
+    public ArrayList<Monster2> getMonster2(){
+    	return monster2;
+    }
+    
+    public ArrayList<Spider> getSpider(){
+    	return spiders;
+    }
+    
     
     public ArrayList<Toro> getToros(){
     	return toros;
@@ -206,18 +230,6 @@ public int getLvlOffset(){
     
     public ArrayList<Boss5> getBoss5(){
     	return boss5;
-    }
-    
-    public ArrayList<Monster_Eye1> getMonEye1(){
-    	return monEye1;
-    }
-    
-    public ArrayList<Monster2> getMonster2(){
-    	return monster2;
-    }
-    
-    public ArrayList<Spider> getSpider(){
-    	return spiders;
     }
     
   public Point getPlayerSpawn(){

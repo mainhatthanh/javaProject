@@ -22,20 +22,34 @@ public class Boss1 extends Enemy {
 
         super(x, y, BOSS1_WIDTH, BOSS1_HEIGHT, BOSS1);
         initHitbox(30,30);
+        this.enemyHealthBarWidth = (int)(35* Game.SCALE);
+        this.enemyHealthBarHeight = (int)(3* Game.SCALE);
+        this.enemyHealthWidth = enemyHealthBarWidth;
+        this.walkSpeed = 0.38f * Game.SCALE;
         initAttackBox();
     }
     private void initAttackBox(){
-        attackBox=new Rectangle2D.Float(x,y,(int)(90*Game.SCALE),(int)(30*Game.SCALE));
+        attackBox=new Rectangle2D.Float(x,y,(int)(30*Game.SCALE),(int)(30*Game.SCALE));
         attackBoxOffsetX = (int)(Game.SCALE*30);
     }
 
 
 
     public void update(int[][] lvlData,Player player){
-        updateBehaviour(lvlData,player);
+    	updateBehaviour(lvlData,player);
         updateAnimationTick();
-        updateAttackBox();
+        updateAttackBoxFlip();
+        updateHealthBar();
 
+    }
+    
+    protected void updateAttackBoxFlip() {
+        if (walkDir == RIGHT)
+            attackBox.x = hitbox.x + hitbox.width;
+        else
+            attackBox.x = hitbox.x - attackBoxOffsetX;
+
+        attackBox.y = hitbox.y + 5;
     }
 
     protected void updateAttackBox() {
@@ -78,8 +92,22 @@ public class Boss1 extends Enemy {
         }
 
     }
-
-
+	public void drawHealthBar(Graphics g, int xLvlOffset) {
+        g.setColor(Color.red);
+        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
+                (int) (hitbox.y + hitbox.height - attackBox.height - 22 * Game.SCALE), enemyHealthWidth,
+                enemyHealthBarHeight);
+        g.setColor(Color.WHITE);
+        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
+                (int) (hitbox.y + hitbox.height - attackBox.height - 22 * Game.SCALE),
+                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
+}
+	private int flipHealth() {
+    	if(walkDir == RIGHT)
+    		return 8;
+    	else
+    		return -8;
+    }
 
     public void drawAttackBox(Graphics g,int xLvlOffset){
         g.setColor(Color.red);

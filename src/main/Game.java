@@ -12,12 +12,15 @@ import ui.AudioOptions;
 import utilz.LoadSave;
 
 public class Game implements Runnable {
-
+	
+	
     private GameWindow gameWindow;
     private GamePanel gamePanel;
     private Thread gameThread;
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
+    private int frames;
+    
 
     private Playing playing;
     private Menu menu;
@@ -40,7 +43,7 @@ public class Game implements Runnable {
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.setFocusable(true);
-        gamePanel.requestFocus();
+        gamePanel.requestFocus(true);
 
         startGameLoop();
 
@@ -125,11 +128,13 @@ public class Game implements Runnable {
             if (deltaF >= 1) {
                 gamePanel.repaint();
                 frames++;
+                
                 deltaF--;
             }
 
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
+                this.frames = frames;
                 System.out.println("FPS: " + frames + " | UPS: " + updates);
                 playing.restoreStaminaDefault(); //Hôì mana sau 1s
                 frames = 0;
@@ -159,6 +164,10 @@ public class Game implements Runnable {
         return audioOptions;
     }
 
+    public int getFPS() {
+    	return frames;
+    }
+    
     public AudioPlayer getAudioPlayer() {
         return audioPlayer;
     }

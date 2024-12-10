@@ -7,6 +7,10 @@ import utilz.LoadSave;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import static utilz.Constants.ANI_SPEED;
 import static utilz.Constants.GRAVITY;
 import static utilz.Constants.PlayerConstants.*;
@@ -14,13 +18,11 @@ import static utilz.HelpMethods.*;
 
 public class Player extends Entity {
     private BufferedImage[][] animations;
-
-    private boolean moving = false, attacking = false;
-    private boolean right, left, jump;
-
-    private int[][] lvlData;
-    private float xDrawOffset = 38 * Game.SCALE;
-    private float yDrawOffset = 10 * Game.SCALE;
+    protected int playerDamage;
+    private double levelUpTimesIncrease = 1.1;
+    
+    public static int levelUpTime;
+    private float yDrawOffset = 15 * Game.SCALE;
     // jumping / gravity
 
     private float jumpSpeed = -2.35f * Game.SCALE;
@@ -28,6 +30,12 @@ public class Player extends Entity {
 
     // Status BarUI
     private BufferedImage statusBarImg;
+
+    private boolean moving = false, attacking = false;
+    private boolean right, left, jump;
+
+    private int[][] lvlData;
+    private float xDrawOffset = 38 * Game.SCALE;
 
     private int statusBarWidth = (int) (192 * Game.SCALE);
     private int statusBarHeight = (int) (58 * Game.SCALE);
@@ -46,9 +54,29 @@ public class Player extends Entity {
     private int staminaBarXStart = (int) ((34 + 10) * Game.SCALE);
     private int staminaBarYStart = (int) ((14 + 25 - 5) * Game.SCALE);
 
+    public static int expThatChange;
+
     private int healthWidth = healthBarWith;
 
     private int staminaWidth = staminaBarWidth;
+
+    //Exp
+    private int expBarWidth = (int)(32*10*Game.SCALE);
+    private int expBarHeight = (int) (3*Game.SCALE);
+    private int expBarYStart = (int) ((30) * Game.SCALE);
+    private int expBarXStart = (int) (Game.GAME_WIDTH/2 - expBarWidth/2);
+    private int expWidth = 0;
+    // Khi levelUp = true thì hiện cửa sổ tăng sức mạnh bản thân
+    private boolean levelUp;
+    private boolean isShowLevelUp;
+
+    private BufferedImage levelUpImg;
+    private int lvlUpWidth=(int)(64*Game.SCALE);
+    private int lvlUpHeight=(int)(64*Game.SCALE);
+
+
+
+
     // attackBox
 
     private int flipX = 0;
@@ -59,6 +87,13 @@ public class Player extends Entity {
     private boolean attackChecked;
     private Playing playing;
 
+
+
+    private boolean powerAttackActive;
+    private int powerAttackTick;
+    private int powerGrowSpeed=15;
+    private int powerGrowTick;
+
     public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, width, height);
         this.playing = playing;
@@ -67,29 +102,40 @@ public class Player extends Entity {
         this.currentHealth = maxHealth;
         this.maxStamina = 100;
         this.currentStamina = maxStamina;
+        this.currentExp = 0;
+        this.maxExp = 100;
         this.walkSpeed = Game.SCALE * 1.0f;
+        this.playerDamage = 10;
+        this.levelUpTime = 0;
+        this.levelUp=false;
         loadAnimations();
 
         initHitbox(15, 27);
 
         initAttackBox();
+        expThatChange = 0;
     }
 
     public void setSpawn(Point spawn) {
-        this.x = spawn.x;
+        this.x = spawn.x ;
         this.y = spawn.y;
-        hitbox.x = x;
-        hitbox.y = y;
+        hitbox.x = x ;
+        hitbox.y = y ;
     }
 
     private void initAttackBox() {
 
-        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y, (int) (20 * Game.SCALE), (int) (20 * Game.SCALE));
+        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) (30 * Game.SCALE), (int) (20 * Game.SCALE));
 
     }
 
     public void update() {
         updateHealthBar();
+        updateStaminaBar();
+        playerUpdateLevel(levelUp);
+        //updateIsShowLvlUp(isShowLevelUp);
+        //System.out.println(maxHealth + " " + maxStamina + " "+ playerDamage);
+
         if (currentHealth <= 0) {
             if (state != DEAD) {
                 state = DEAD;
@@ -103,23 +149,48 @@ public class Player extends Entity {
                 playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
             } else {
                 updateAnimationTick();
+
+                //fall if in air
+                if (inAir)
+                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
+                        hitbox.y += airSpeed;
+                        airSpeed += GRAVITY;
+                    } else
+                        inAir = false;
+
             }
 
             return;
         }
-        // cập nhật stamina
-        updateStaminaBar();
+            updateAttackBox();
+
+        updateExpBar();
 
         updateAttackBox();
+            if (state == HIT) {
+                if (aniIndex <= GetSpriteAmount(state) - 3)
+                    pushBack(pushBackDir, lvlData, 1.25f);
+                updatePushBackDrawOffset();
+            } else
+                updatePos();
 
-        updatePos();
-        if (moving) {
-        	checkPotionTouched();
-        	checkTrapTouched();
-        	tileY = (int) (hitbox.y / Game.TILES_SIZE);
-        }
-        if (attacking)
+            if(moving) {
+            	checkPotionTouched();
+            	checkTrapTouched();
+                tileY = (int) (hitbox.y / Game.TILES_SIZE);
+                if(powerAttackActive){
+                    powerAttackTick++;
+                    if(powerAttackTick>=50){
+                        powerAttackTick=0;
+                        powerAttackActive=false;
+                    }
+                }
+
+            }
+
+        if (attacking||powerAttackActive)
             checkAttack();
+
         updateAnimationTick();
         setAnimation();
 
@@ -135,24 +206,47 @@ public class Player extends Entity {
     	playing.checkPotionTouched(hitbox);
     }
 
+    /*private void updateIsShowLvlUp(boolean isShowLevelUp) {
+        if(isShowLevelUp){
+            g.drawImage(levelUpImg, (int) (hitbox.x - 30)- xlvlOffset, (int) (hitbox.y - 60), lvlUpWidth, lvlUpHeight, null);
+            resetIsShowLevelUp();
+
+        }
+    }*/
+
+
+    public void playerUpdateLevel(boolean levelUp){
+        if(levelUp){
+            maxHealth *= levelUpTimesIncrease;
+            maxStamina *= levelUpTimesIncrease;
+            setPlayerDamage((int)(levelUpTimesIncrease*getPlayerDamage()));
+            levelUpTime += 1;
+        }
+        resetBooleanLevelUp();
+
+    }
 
 
     private void checkAttack() {
         if (attackChecked || aniIndex != 1)
             return;
         attackChecked = true;
+
+        if(powerAttackActive)
+            attackChecked=false;
+
         playing.checkEnemyHit(attackBox);
         playing.getGame().getAudioPlayer().playAttackSound();
         playing.checkObjectHit(attackBox);
     }
 
     private void updateAttackBox() {
+        if (right||(powerAttackActive&&flipW==1)) {
+            attackBox.x = hitbox.x + hitbox.width + (int) (Game.SCALE * 8);
 
-        if (right) {
-            attackBox.x = hitbox.x + hitbox.width + (int) (Game.SCALE * 10);
+        } else if (left||(powerAttackActive&&flipW==-1)) {
+            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 20);
 
-        } else if (left) {
-            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 10);
         }
 
         attackBox.y = hitbox.y + (int) (Game.SCALE * 10);
@@ -166,26 +260,54 @@ public class Player extends Entity {
     private void updateStaminaBar() {
         // hàm cập nhật stamina
         staminaWidth = (int) ((currentStamina / (float) maxStamina) * staminaBarWidth);
+
+        powerGrowTick++;
+        if(powerGrowTick>=powerGrowSpeed){
+            powerGrowTick=0;
+        }
+    }
+
+    private void updateExpBar(){
+        expWidth = (int) ((currentExp / (float) maxExp)*expBarWidth);
     }
 
     public void render(Graphics g, int xlvlOffset) {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
+
         drawUI(g);
 
-        drawAttackHitbox(g, xlvlOffset);
-        drawHitbox(g, xlvlOffset);
+
+
+//         drawAttackHitbox(g, xlvlOffset);
+//         drawHitbox(g, xlvlOffset);
 
 
     }
+
+    public void drawLvlUp(Graphics g,int xlvlOffset){
+        if(isShowLevelUp) {
+            g.drawImage(levelUpImg, (int) (hitbox.x - 30)- xlvlOffset, (int) (hitbox.y - 60), lvlUpWidth, lvlUpHeight, null);
+            resetIsShowLevelUp();
+        }
+    }
+
+
 
     private void drawUI(Graphics g) {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
         g.setColor(Color.red);
         g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeigth);
-        g.setColor(Color.yellow);
+        g.setColor(Color.YELLOW);
         g.fillRect(staminaBarXStart + statusBarX, staminaBarYStart + statusBarY, staminaWidth, staminaBarHeight);
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(expBarXStart, expBarYStart, expBarWidth , expBarHeight);
+        g.setColor(Color.GREEN);
+        g.fillRect(expBarXStart, expBarYStart, expWidth, expBarHeight);
+
     }
+
+
 
     private void updatePos() {
         moving = false;
@@ -193,46 +315,54 @@ public class Player extends Entity {
         if (jump)
             jump();
         if (!inAir)
+            if(!powerAttackActive)
             if ((!left && !right) || (right && left))
                 return;
 
         float xSpeed = 0;
 
-	if(left) {
 
+	if(left&&!right) {
 			xSpeed -= walkSpeed;
 			 flipX = (int)(width*1.5);
 			 flipW = -1;
 	}
 
-	 if(right) {
-
+	
+	 if(right&&!left) {
 		 xSpeed += walkSpeed;
 	     flipX = 0;
 	     flipW = 1;
 	 }
+
+     if(powerAttackActive){
+         if((!left&&!right)||(left&&right)){
+             if(flipW==-1)
+                 xSpeed=-walkSpeed;
+             else
+                 xSpeed=walkSpeed;
+         }
+         xSpeed*=3;
+     }
 	 if(!inAir)
 	     if(!IsEntityOnFloor(hitbox,lvlData))
 	         inAir=true;
 
-        if (inAir) {
+        if (inAir&&!powerAttackActive) {
             if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
                 hitbox.y += airSpeed;
                 airSpeed += GRAVITY;
                 updateXPos(xSpeed);
             } else {
                 hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed);
-
                 if (airSpeed > 0)
                     resetInAir();
                 else
                     airSpeed = fallSpeedAfterCollision;
                 updateXPos(xSpeed);
             }
-        } else {
+        } else
             updateXPos(xSpeed);
-
-        }
         moving = true;
 
     }
@@ -255,6 +385,11 @@ public class Player extends Entity {
             hitbox.x += xSpeed;
         } else {
             hitbox.x = GetEntityXPosNextToWall(hitbox, xSpeed);
+            if(powerAttackActive){
+                powerAttackActive=false;
+                powerAttackTick=0;
+
+            }
         }
     }
 
@@ -266,7 +401,6 @@ public class Player extends Entity {
         } else if (currentHealth >= maxHealth) {
             currentHealth = maxHealth;
         }
-
     }
 
     public void kill(int value) {
@@ -288,7 +422,16 @@ public class Player extends Entity {
         }
     }
 
-
+    public void changeExp(int value) {
+        currentExp += value;
+        if(currentExp >= maxExp){
+            levelUp = true;
+            isShowLevelUp=true;
+            playing.getGame().getAudioPlayer().playEffect((AudioPlayer.LEVEL_UP));//Lvl up effect
+            currentExp -= maxExp;
+            maxExp = (int) (1.2*maxExp);
+        }
+    }
 
     public void updateGame() {
         updatePos();
@@ -310,6 +453,13 @@ public class Player extends Entity {
             else
                 state = FALLING;
         }
+
+        if(powerAttackActive){
+            state=ATTACK;
+            aniIndex=1;
+            aniTick=0;
+            return;
+        }
         if (attacking) {
             state = ATTACK;
             if (startAni != ATTACK) {
@@ -322,6 +472,10 @@ public class Player extends Entity {
         if (startAni != state)
             resetAniTick();
 
+    }
+
+    public void resetExp(){
+        
     }
 
     private void resetAniTick() {
@@ -378,6 +532,7 @@ public class Player extends Entity {
                 animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
 
         statusBarImg = LoadSave.GetSpriteAtlas(LoadSave.STATUS_BAR);
+        levelUpImg=LoadSave.GetSpriteAtlas(LoadSave.LEVEL_UP_IMG);
 
     }
 
@@ -405,6 +560,25 @@ public class Player extends Entity {
         hitbox.y = y;
         if (!IsEntityOnFloor(hitbox, lvlData))
             inAir = true;
+
+        while(expThatChange > 0){
+            if(expThatChange > currentExp){
+                expThatChange-=currentExp;
+                maxExp = (int) (maxExp/1.2);
+                currentExp = maxExp;
+            } else if (currentExp >= expThatChange) {
+                currentExp -= expThatChange;    
+                expThatChange -= expThatChange;
+            }
+        }
+
+        while(levelUpTime > 0){
+            maxHealth = (int) Math.ceil(maxHealth/levelUpTimesIncrease);
+            maxStamina = (int) Math.ceil(maxStamina/levelUpTimesIncrease);
+            playerDamage = (int) Math.ceil(playerDamage/levelUpTimesIncrease);
+            levelUpTime -= 1;
+        }
+
     }
 
 
@@ -424,9 +598,62 @@ public class Player extends Entity {
     public int getCurrentStamina(){
         return currentStamina;
     }
-    public int getTileY() {
-		return tileY;
-	}
+
+    public void setLevelUp(boolean a){
+        this.levelUp = a;
+    }
+
+    public boolean isLevelUp(){
+        return levelUp;
+    }
+
+    public void setCurrentExp(int exp){
+        this.currentExp = exp;
+    }
+
+    public int getCurrentExp(){
+        return currentExp;
+    }
+    
+    public Rectangle2D.Float getHitbox() {
+        return hitbox;
+    }
+
+    public int getTileY(){
+        return tileY;
+    }
+
+    public void powerAttack() {
+        if(powerAttackActive)
+            return;
+        if(currentStamina>=40){
+            powerAttackActive=true;
+            changeStamina(-40);
+        }
+    }
+
+    public void setPlayerDamage(int a){
+        this.playerDamage = a;
+    }
+
+    public int getPlayerDamage(){
+        return playerDamage;
+    }
+   private void resetIsShowLevelUp() {
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.schedule(() -> {
+            isShowLevelUp = false;
+            System.out.println("Level up Img has been reset!");
+            scheduler.shutdown(); // Dừng Scheduler sau khi thực hiện
+        }, 2, TimeUnit.SECONDS); // 3 giây
+    }
 
 
+    private void resetBooleanLevelUp(){
+        this.levelUp=false;
+    }
+
+    public boolean getIsShowLvlUp(){
+        return isShowLevelUp;
+    }
 }

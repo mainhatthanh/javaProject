@@ -2,7 +2,6 @@ package utilz;
 
 import java.awt.event.KeyEvent;
 
-import entities.Minotaur;
 import main.Game;
 
 public class Constants {
@@ -35,6 +34,18 @@ public class Constants {
 		public static final int CANNON_BALL_HEIGHT = (int)(Game.SCALE * CANNON_BALL_DEFAULT_HEIGHT);
 		public static final float SPEED = 0.75f * Game.SCALE;
 	}
+
+    public static class Bullet{
+        public static final int BALL_1EYE_DEFAULT_WIDTH = 20;
+        public static final int BALL_1EYE_DEFAULT_HEIGHT = 15;
+
+        public static final int BALL_1EYE_WIDTH = (int)(Game.SCALE*BALL_1EYE_DEFAULT_WIDTH);
+        public static final int BALL_1EYE_HEIGHT = (int)(Game.SCALE*BALL_1EYE_DEFAULT_HEIGHT);
+        public static final float SPEED = 0.4f*Game.SCALE;
+
+
+
+    }
 
     public static class ObjectsConstants {
         public static final int RED_POTION = 0;
@@ -106,12 +117,12 @@ public class Constants {
         public static final int CRABBY = 0;
         public static final int MINOTAUR = 1;
         public static final int SHARK = 2;        
-        public static final int MONSTER_EYE1 = 5;
-        public static final int MONSTER2 = 6;
-        public static final int SPIDER = 7;
+        public static final int MONSTER_EYE1 = 3;
+        public static final int MONSTER2 = 4;
+        public static final int SPIDER = 5;
         
-        public static final int TORO = 3;
-        public static final int BOSS1 = 4;
+        public static final int TORO = 6;
+        public static final int BOSS1 = 7;
         public static final int BOSS2 = 8;
         public static final int BOSS3 = 9;
         public static final int BOSS4 = 10;
@@ -172,7 +183,7 @@ public class Constants {
         public static final int MONEYE1_WIDTH = (int) (MONEYE1_WIDTH_DEFAULT * Game.SCALE);
         public static final int MONEYE1_HEIGHT = (int) (MONEYE1_HEIGHT_DEFAULT * Game.SCALE);
         public static final int MONEYE1_DRAWOFFSET_X = (int) (23 * Game.SCALE);
-        public static final int MONEYE1_DRAWOFFSET_Y = (int) (32 * Game.SCALE);
+        public static final int MONEYE1_DRAWOFFSET_Y = (int) (30 * Game.SCALE);
         
         public static final int	BOSS1_WIDTH_DEFAULT = 96;
         public static final int BOSS1_HEIGHT_DEFAULT = 64;
@@ -193,7 +204,7 @@ public class Constants {
         public static final int MINOTAUR_WIDTH = (int) (MINOTAUR_WIDTH_DEFAULT * Game.SCALE);
         public static final int MINOTAUR_HEIGHT = (int) (MINOTAUR_HEIGHT_DEFAULT * Game.SCALE);
         public static final int MINOTAUR_DRAWOFFSET_X = (int) (-50 * Game.SCALE);
-        public static final int MINOTAUR_DRAWOFFSET_Y = (int) (22* Game.SCALE);
+        public static final int MINOTAUR_DRAWOFFSET_Y = (int) (35* Game.SCALE);
         
         public static final int TORO_WIDTH_DEFAULT = 96;
         public static final int TORO_HEIGHT_DEFAULT = 96;
@@ -207,7 +218,7 @@ public class Constants {
         public static final int SHARK_WIDTH = (int) (SHARK_WIDTH_DEFAULT * Game.SCALE);
         public static final int SHARK_HEIGHT = (int) (SHARK_HEIGHT_DEFAULT * Game.SCALE);
         public static final int SHARK_DRAWOFFSET_X = (int) (8 * Game.SCALE);
-        public static final int SHARK_DRAWOFFSET_Y = (int) (-5 * Game.SCALE);
+        public static final int SHARK_DRAWOFFSET_Y = (int) (0 * Game.SCALE);
 
         public static int GetSpriteAmount(int enemy_type, int enemy_state) {
             switch (enemy_state) {
@@ -251,7 +262,7 @@ public class Constants {
                     else if( enemy_type == BOSS1 || enemy_type == BOSS2)
                     	return 6;
                     else if(enemy_type == MONSTER_EYE1)
-                    	return 13;
+                    	return 9;
                     else if(enemy_type == SPIDER || enemy_type == BOSS3)
                     	return 4;
                     else if(enemy_type == BOSS4)
@@ -286,22 +297,37 @@ public class Constants {
 
         }
 
+        public static int GetExperience(int enemy_type){
+            switch (enemy_type) {
+                case CRABBY:
+                      return 10;
+                  case MINOTAUR:
+                      return 50;
+                  case SHARK:
+                      return 15;
+                  case TORO:
+                      return 35;
+                  default:
+                      return 20;
+              }
+        }
+
         public static int GetMaxHealth(int enemy_type) {
             switch (enemy_type) {
               case CRABBY:
-                    return 15;
+                    return 50;
                 case MINOTAUR:
-                    return 60;
+                    return 50;
                 case SHARK:
-                    return 30;
+                    return 50;
                 case TORO: 
-                	return 100;
+                	return 50;
                 case BOSS1:
-                	return 100;
+                	return 50;
                 case BOSS2:
-                	return 150;
+                	return 50;
                 case BOSS3:
-                	return 200;
+                	return 50;
                 case BOSS4:
                 	return 50;
                 case BOSS5:
@@ -309,45 +335,58 @@ public class Constants {
                 case MONSTER_EYE1:
                 	return 50;
                 case MONSTER2:
-                	return 30;
+                	return 50;
                 case SPIDER:
-                	return 20;
+                	return 50;
                 default:
-                    return 100;
+                    return 50;
             }
         }
 
         public static int GetEnemyDmg(int enemy_type) {
             switch (enemy_type) {
-                case CRABBY:
-                    return 15;
+               case CRABBY:
+                   return 2;
                 case MINOTAUR:
-                    return 20;
-                case SHARK:
-                    return 30;
+                   return 20;
+               case SHARK:
+              	return 2;
                 case TORO:
-                	return 20;
-                case BOSS1: 
-                	return 30;
-                case BOSS2:
-                	return (int)(1);
+               	return 2;
+                case BOSS1:
+               	return 2;
+               case BOSS2:
+               	return 2;
                 case BOSS3:
-                	return 10;
+                	return 2;
                 case BOSS4:
-                	return 10;
+                	return 2;
                 case BOSS5:
-                	return 10;
+               	return 2;
                 case MONSTER_EYE1:
-                	return 10;
-                case MONSTER2:
-                	return 15;
+                	return 2;
                 case SPIDER :
-                	return 10;
+                	return 2;
                 default:
-                    return 0;
+                	return 10;
             }
         }
+        
+        
+        public static int GetNumberMessageBoss(int enemy_type) {
+        	switch(enemy_type) {
+//        	case TORO:
+//        	case BOSS2:
+//        	case BOSS3:
+//        	case BOSS4:
+//        	case BOSS5:
+        	default:
+        		return 3;
+        	}
+        }
     }
+
+
 
     public static class Environment {
         public static final int BIG_CLOUD_WIDTH_DEFAULT = 448;
@@ -404,6 +443,7 @@ public class Constants {
         public static final int JUMP = 2;
         public static final int FALLING = 3;
         public static final int ATTACK = 4;
+        
         public static final int HIT = 5;
         public static final int DEAD = 6;
 
@@ -430,9 +470,9 @@ public class Constants {
         public static int GetStamina(int player_action){
             switch(player_action){
                 case JUMP:
-                    return 10;
-                case ATTACK:
                     return 5;
+                case ATTACK:
+                    return 3;
                 default: 
                     return 0;
             }

@@ -1,9 +1,8 @@
 package entities;
-import main.Game;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
+import main.Game;
 
 import static utilz.Constants.Directions.RIGHT;
 import static utilz.Constants.EnemyConstants.*;
@@ -17,19 +16,29 @@ public class Shark extends Enemy {
     public Shark(float x, float y) {
 
         super(x, y, SHARK_WIDTH, SHARK_HEIGHT, SHARK);
-        initHitbox(18, 22);
+        initHitbox(25, 22);
         initAttackBox(20,20,20);
-
+        this.enemyHealthBarWidth = (int)(20* Game.SCALE);
+        this.enemyHealthBarHeight = (int)(2* Game.SCALE);
+        this.enemyHealthWidth = enemyHealthBarWidth;
+        this.walkSpeed = 0.3f * Game.SCALE;
     }
-
-
-
 
     public void update(int[][] lvlData, Player player) {
         updateBehaviour(lvlData, player);
         updateAnimationTick();
         updateAttackBoxFlip();
+        updateHealthBar();
 
+    }
+    
+    protected void updateAttackBoxFlip() {
+        if (walkDir == RIGHT)
+            attackBox.x = hitbox.x + hitbox.width;
+        else
+            attackBox.x = hitbox.x - 30;
+
+        attackBox.y = hitbox.y + 5;
     }
 
     protected void updateAttackBox() {
@@ -71,16 +80,41 @@ public class Shark extends Enemy {
 
         }
     }
+    
+    
+    public void drawHealthBar(Graphics g, int xLvlOffset) {
+
+        g.setColor(Color.red);
+        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
+                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE), enemyHealthWidth,
+                enemyHealthBarHeight);
+        g.setColor(Color.WHITE);
+        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset+ this.flipHealth()),
+                (int) (hitbox.y + hitbox.height - attackBox.height - 4 * Game.SCALE),
+                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
+	
+	
+    }
+    
     public void drawAttackBox(Graphics g,int xLvlOffset){
         g.setColor(Color.red);
         g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
 
     }
+    
+    private int flipHealth() {
+    	if(walkDir == RIGHT)
+    		return 6;
+    	else
+    		return -10;
+    }
+    
+    
     public int flipX(){
         if(walkDir==RIGHT)
-            return width;
+            return width + 12;
         else
-            return  0;
+            return  -9;
     }
     public int flipY(){
         if(walkDir==RIGHT)

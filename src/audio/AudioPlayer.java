@@ -17,11 +17,13 @@ public class AudioPlayer {
     public static int ATTACK_ONE = 4;
     public static int ATTACK_TWO = 5;
     public static int ATTACK_THREE = 6;
+    public static int LEVEL_UP = 7;
 
     private Clip[] songs,effects;
     private int currentSongId;
     private float volume=1f;
-    private boolean songMute,effectMute;
+    private boolean songMute;
+    private boolean effectMute;
     private Random rand = new Random();
 
     public AudioPlayer(){
@@ -38,7 +40,7 @@ public class AudioPlayer {
     }
 
     private void loadEffect(){
-        String[] effectNames = {"die", "jump", "gameover", "lvlcompleted", "attack1", "attack2", "attack3"};
+        String[] effectNames = {"die", "jump", "gameover", "lvlcompleted", "attack1", "attack2", "attack3","levelUp"};
         effects=new Clip[effectNames.length];
         for(int i=0;i<effects.length;i++)
             effects[i]=getClip(effectNames[i]);
@@ -70,7 +72,7 @@ public class AudioPlayer {
         }
     }
     public void toggleEffectMute(){
-        this.songMute=!effectMute;
+        this.effectMute=!effectMute;
         for(Clip c:effects){
             BooleanControl booleanControl = (BooleanControl) c.getControl(BooleanControl.Type.MUTE);
             booleanControl.setValue(effectMute);
@@ -114,7 +116,6 @@ public class AudioPlayer {
 
     public void playSong(int song){
         stopSong();
-
         currentSongId = song;
         updateSongVolume();
         songs[currentSongId].setMicrosecondPosition(0);
@@ -131,11 +132,11 @@ public class AudioPlayer {
 
     }
     private void updateEffectsVolume(){
-        for(Clip c:effects) {
+
             FloatControl gainControl = (FloatControl) songs[currentSongId].getControl(FloatControl.Type.MASTER_GAIN);
             float range = gainControl.getMaximum() - gainControl.getMinimum();
             float gain = (range * volume) + gainControl.getMinimum();
             gainControl.setValue(gain);
-        }
+
     }
 }
