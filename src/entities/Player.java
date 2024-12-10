@@ -53,6 +53,8 @@ public class Player extends Entity {
 
     private int flipX = 0;
     private int flipW = 1;
+    
+    private int tileY = 0;
 
     private boolean attackChecked;
     private Playing playing;
@@ -114,6 +116,7 @@ public class Player extends Entity {
         if (moving) {
         	checkPotionTouched();
         	checkTrapTouched();
+        	tileY = (int) (hitbox.y / Game.TILES_SIZE);
         }
         if (attacking)
             checkAttack();
@@ -122,7 +125,8 @@ public class Player extends Entity {
 
     }
 
-    private void checkTrapTouched() {
+
+	private void checkTrapTouched() {
 		playing.checkTrapTouched(this);
 
 	}
@@ -169,8 +173,8 @@ public class Player extends Entity {
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
         drawUI(g);
 
-        // drawAttackHitbox(g, xlvlOffset);
-        // drawHitbox(g, xlvlOffset);
+        drawAttackHitbox(g, xlvlOffset);
+        drawHitbox(g, xlvlOffset);
 
 
     }
@@ -420,6 +424,9 @@ public class Player extends Entity {
     public int getCurrentStamina(){
         return currentStamina;
     }
+    public int getTileY() {
+		return tileY;
+	}
 
 
 }

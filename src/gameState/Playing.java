@@ -131,7 +131,7 @@ public class Playing extends State implements Statemethods {
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
-            objectManager.update();
+            objectManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             checkCloseToBorder();
         }
 
@@ -213,6 +213,9 @@ public class Playing extends State implements Statemethods {
     public void checkPotionTouched(Rectangle2D.Float hitbox) {
     	objectManager.checkObjectTouched(hitbox);
     }
+    
+    
+    
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -251,9 +254,6 @@ public class Playing extends State implements Statemethods {
                         player.setJump(true);
                         player.changeStamina(-GetStamina(JUMP));
                     }
-                    else{
-                        System.out.println("Khong du mana");
-                    }
                     break;
                 case KeyEvent.VK_ESCAPE:
                     paused = !paused;
@@ -265,6 +265,9 @@ public class Playing extends State implements Statemethods {
                     }else{
                         System.out.println("Khong du mana");
                     }
+                    break;
+                case KeyEvent.VK_E:
+                	objectManager.checkChestsOpen(player.getHitBox());
                     break;
             }
             // player.changeStamina(-GetStamina(GetAniFromKey(e)));

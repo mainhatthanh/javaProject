@@ -21,9 +21,12 @@ import entities.Toro;
 import main.Game;
 import objects.GameContainer;
 import objects.Potion;
+import objects.Projectile;
 import objects.Trap1;
+import objects.Cannon;
 import objects.Chest;
-
+import objects.Scroll;
+import objects.Sword;
 
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.ObjectsConstants.*;
@@ -50,6 +53,11 @@ public class HelpMethods {
 
         return IsTileSolid((int) xIndex, (int) yIndex, lvlData);
     }
+    
+    public static boolean IsProjectileHittingLevel(Projectile p, int[][] lvlData) {
+		return IsSolid(p.getHitbox().x + p.getHitbox().width / 2, p.getHitbox().y + p.getHitbox().height / 2, lvlData);
+
+	}
 
     public static boolean IsTileSolid(int xTile, int yTile, int[][] lvlData) {
         int value = lvlData[yTile][xTile];
@@ -101,6 +109,23 @@ public class HelpMethods {
         else
         return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
     }
+    
+    public static boolean CanCannonSeePlayer(int[][] lvlData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile) {
+		int firstXTile = (int) (firstHitbox.x / Game.TILES_SIZE);
+		int secondXTile = (int) (secondHitbox.x / Game.TILES_SIZE);
+
+		if (firstXTile > secondXTile)
+			return IsAllTilesClear(secondXTile, firstXTile, yTile, lvlData);
+		else
+			return IsAllTilesClear(firstXTile, secondXTile, yTile, lvlData);
+	}
+
+	public static boolean IsAllTilesClear(int xStart, int xEnd, int y, int[][] lvlData) {
+		for (int i = 0; i < xEnd - xStart; i++)
+			if (IsTileSolid(xStart + i, y, lvlData))
+				return false;
+		return true;
+	}
 
     public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
         for (int i = 0; i < xEnd - xStart; i++) {
@@ -178,6 +203,46 @@ public class HelpMethods {
 
     }
     
+    public static ArrayList<Scroll> GetScroll(BufferedImage img) {
+        ArrayList<Scroll> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == SCROLL)
+                    list.add(new Scroll(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+    
+    public static ArrayList<Sword> GetSwords(BufferedImage img) {
+        ArrayList<Sword> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == SWORD)
+                    list.add(new Sword(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+    
+    public static ArrayList<Cannon> GetCannons(BufferedImage img) {
+		ArrayList<Cannon> list = new ArrayList<>();
+
+		for (int j = 0; j < img.getHeight(); j++)
+			for (int i = 0; i < img.getWidth(); i++) {
+				Color color = new Color(img.getRGB(i, j));
+				int value = color.getBlue();
+				if (value == CANNON_LEFT || value == CANNON_RIGHT)
+					list.add(new Cannon(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+			}
+
+		return list;
+	}
+    
     public static ArrayList<Chest> GetChests(BufferedImage img) {
         ArrayList<Chest> list = new ArrayList<>();
         for (int j = 0; j < img.getHeight(); j++)
@@ -190,6 +255,10 @@ public class HelpMethods {
         return list;
 
     }
+    
+    
+    
+    
 
 
     public static ArrayList<GameContainer> GetContainers(BufferedImage img) {

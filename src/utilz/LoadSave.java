@@ -53,6 +53,11 @@ public class LoadSave {
     public static final String CONTAINER_ATLAS = "objects_sprites.png";
     public static final String TRAP1_ATLAS = "trap1_atlas.png";
     public static final String CHEST_ATLAS = "chest.png";
+    public static final String TOXICTRAP_ATLAS = "ToxicTrap.png";
+    public static final String SCROLL_ATLAS = "scroll_atlas.png";
+    public static final String SWORD_ATLAS = "sword_atlas.png";
+    public static final String CANNON_ATLAS = "cannon_atlas.png";
+	public static final String CANNON_BALL = "ball.png";
 
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
