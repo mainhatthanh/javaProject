@@ -81,11 +81,12 @@ public class Player extends Entity {
 
     private int flipX = 0;
     private int flipW = 1;
+    
+    private int tileY = 0;
 
     private boolean attackChecked;
     private Playing playing;
 
-    private int tileY=0;
 
 
     private boolean powerAttackActive;
@@ -174,6 +175,8 @@ public class Player extends Entity {
                 updatePos();
 
             if(moving) {
+            	checkPotionTouched();
+            	checkTrapTouched();
                 tileY = (int) (hitbox.y / Game.TILES_SIZE);
                 if(powerAttackActive){
                     powerAttackTick++;
@@ -191,6 +194,16 @@ public class Player extends Entity {
         updateAnimationTick();
         setAnimation();
 
+    }
+
+
+	private void checkTrapTouched() {
+		playing.checkTrapTouched(this);
+
+	}
+
+	private void checkPotionTouched() {
+    	playing.checkPotionTouched(hitbox);
     }
 
     /*private void updateIsShowLvlUp(boolean isShowLevelUp) {
@@ -213,6 +226,7 @@ public class Player extends Entity {
 
     }
 
+
     private void checkAttack() {
         if (attackChecked || aniIndex != 1)
             return;
@@ -223,6 +237,7 @@ public class Player extends Entity {
 
         playing.checkEnemyHit(attackBox);
         playing.getGame().getAudioPlayer().playAttackSound();
+        playing.checkObjectHit(attackBox);
     }
 
     private void updateAttackBox() {
@@ -261,6 +276,7 @@ public class Player extends Entity {
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
         drawUI(g);
+
 
 
 //         drawAttackHitbox(g, xlvlOffset);
@@ -305,12 +321,13 @@ public class Player extends Entity {
 
         float xSpeed = 0;
 
+
 	if(left&&!right) {
-	
 			xSpeed -= walkSpeed;
 			 flipX = (int)(width*1.5);
 			 flipW = -1;
 	}
+
 	
 	 if(right&&!left) {
 		 xSpeed += walkSpeed;
@@ -385,6 +402,15 @@ public class Player extends Entity {
             currentHealth = maxHealth;
         }
     }
+
+    public void kill(int value) {
+    	currentHealth = 0;
+    }
+
+    private void gameOver() {
+		// TODO Auto-generated method stub
+
+	}
 
     public void changeStamina(int value) {
         // thay đổi stamina
@@ -555,9 +581,11 @@ public class Player extends Entity {
 
     }
 
+
+
     public int getMaxHealth() {
         return maxHealth;
-    }   
+    }
 
     public void setCurrentStamina(int x){
         this.currentStamina = x;

@@ -25,6 +25,15 @@ public class Constants {
             return 0;
         }
     }
+    
+    public static class Projectiles{
+		public static final int CANNON_BALL_DEFAULT_WIDTH = 15;
+		public static final int CANNON_BALL_DEFAULT_HEIGHT = 15;
+		
+		public static final int CANNON_BALL_WIDTH = (int)(Game.SCALE * CANNON_BALL_DEFAULT_WIDTH);
+		public static final int CANNON_BALL_HEIGHT = (int)(Game.SCALE * CANNON_BALL_DEFAULT_HEIGHT);
+		public static final float SPEED = 0.75f * Game.SCALE;
+	}
 
     public static class Bullet{
         public static final int BALL_1EYE_DEFAULT_WIDTH = 20;
@@ -43,17 +52,50 @@ public class Constants {
         public static final int BLUE_POTION = 1;
         public static final int BARREL = 2;
         public static final int BOX = 3;
+        public static final int TRAP1 = 4;
+        public static final int CHEST = 5;
+        public static final int SCROLL = 6;
+        public static final int SWORD = 7;
+        public static final int CANNON_LEFT = 8;
+        public static final int CANNON_RIGHT = 9;
 
         public static final int RED_POTION_VALUE = 15;
-        public static final int BLUE_POTION_VALUE = 10;
+        public static final int BLUE_POTION_VALUE = 100;
+        public static final int TRAP1_VALUE = 20;
+        public static final int SWORD_VALUE = 20;
+        
+        public static final int CANNON_WIDTH_DEFAULT = 40;
+		public static final int CANNON_HEIGHT_DEFAULT = 26;
+		public static final int CANNON_WIDTH = (int) (CANNON_WIDTH_DEFAULT * Game.SCALE);
+		public static final int CANNON_HEIGHT = (int) (CANNON_HEIGHT_DEFAULT * Game.SCALE);
 
-        public static final int CONTAINER_WIDTH_DEFAULT = 50;
+        public static final int CONTAINER_WIDTH_DEFAULT = 40;
         public static final int CONTAINER_HEIGHT_DEFAULT = 30;
         public static final int CONTAINER_WIDTH = (int) (CONTAINER_WIDTH_DEFAULT * Game.SCALE);
         public static final int CONTAINER_HEIGHT = (int) (CONTAINER_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int CHEST_WIDTH_DEFAULT = 48;
+        public static final int CHEST_HEIGHT_DEFAULT = 48;
+        public static final int CHEST_WIDTH = (int) (CHEST_WIDTH_DEFAULT * Game.SCALE);
+        public static final int CHEST_HEIGHT = (int) (CHEST_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int SWORD_WIDTH_DEFAULT = 15;
+        public static final int SWORD_HEIGHT_DEFAULT = 15;
+        public static final int SWORD_WIDTH = (int) (SWORD_WIDTH_DEFAULT * Game.SCALE);
+        public static final int SWORD_HEIGHT = (int) (SWORD_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int SCROLL_WIDTH_DEFAULT = 13;
+        public static final int SCROLL_HEIGHT_DEFAULT = 13;
+        public static final int SCROLL_WIDTH = (int) (SCROLL_WIDTH_DEFAULT * Game.SCALE);
+        public static final int SCROLL_HEIGHT = (int) (SCROLL_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int TRAP1_WIDTH_DEFAULT = 32;
+        public static final int TRAP1_HEIGHT_DEFAULT = 32;
+        public static final int TRAP1_WIDTH = (int) (TRAP1_WIDTH_DEFAULT * Game.SCALE);
+        public static final int TRAP1_HEIGHT = (int) (TRAP1_HEIGHT_DEFAULT * Game.SCALE);
 
-        public static final int POTION_WIDTH_DEFAULT = 20;
-        public static final int POTION_HEIGHT_DEFAULT = 26;
+        public static final int POTION_WIDTH_DEFAULT = 12;
+        public static final int POTION_HEIGHT_DEFAULT = 16;
         public static final int POTION_WIDTH = (int) (POTION_WIDTH_DEFAULT * Game.SCALE);
         public static final int POTION_HEIGHT = (int) (POTION_HEIGHT_DEFAULT * Game.SCALE);
 
@@ -63,6 +105,8 @@ public class Constants {
                     return 7;
                 case BARREL, BOX:
                     return 8;
+                case CHEST:
+                	return 3;
             }
 
             return 1;

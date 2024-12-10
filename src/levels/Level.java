@@ -15,6 +15,11 @@ import entities.Toro;
 import main.Game;
 import objects.GameContainer;
 import objects.Potion;
+import objects.Scroll;
+import objects.Sword;
+import objects.Trap1;
+import objects.Cannon;
+import objects.Chest;
 import utilz.HelpMethods;
 
 import java.awt.*;
@@ -34,6 +39,12 @@ public class Level {
     private ArrayList<Crabby> crabs;
     private ArrayList<GameContainer> containers;
     private ArrayList<Potion> potions;
+    private ArrayList<Trap1> trap1;
+    private ArrayList<Chest> chests;
+    private ArrayList<Scroll> scrolls;
+    private ArrayList<Sword> swords;
+    private ArrayList<Cannon> cannons;
+    
     private ArrayList<Shark> sharks;
     private ArrayList<Minotaur> minotaurs;
     private ArrayList<Monster_Eye1> monEye1;
@@ -57,12 +68,49 @@ public class Level {
      createEnemies();
      createContainers();
      createPotions();
+     createTrap1();
+     createChest();
+     createScroll();
+     createSword();
+     createCannons();
+     
      calcLvlOffsets();
      calcPlayerSpawn();
  }
+ 
+ 	private void createCannons() {
+		cannons = HelpMethods.GetCannons(img);
+	}
 
-    private void calcPlayerSpawn() {
-        playerSpawn = GetPlayerSpawn(img);
+   
+
+	private void createSword() {
+		swords = HelpMethods.GetSwords(img);
+	
+}
+
+
+
+	private void createScroll() {
+		scrolls = HelpMethods.GetScroll(img);
+	
+}
+
+
+
+	private void createChest() {
+    	chests = HelpMethods.GetChests(img);
+	
+}
+
+	private void createTrap1() {
+    	trap1 = HelpMethods.GetTrap1(img);
+	
+}
+
+	private void calcPlayerSpawn() {
+     playerSpawn = GetPlayerSpawn(img);
+
     }
 
     private void createContainers() {
@@ -116,6 +164,14 @@ public class Level {
     public ArrayList<Crabby> getCrabs() {
         return crabs;
     }
+    public ArrayList<Chest> getChests() {
+        return chests;
+    }
+    public ArrayList<Sword> getSwords(){
+    	return swords;
+    }
+    
+
 
     public ArrayList<GameContainer> getContainers() {
         return containers;
@@ -124,10 +180,16 @@ public class Level {
     public ArrayList<Potion> getPotions() {
         return potions;
     }
-
-    public ArrayList<Shark> getSharks() {
-        return sharks;
+    public ArrayList<Scroll> getScrolls() {
+    	return scrolls;
     }
+    public ArrayList<Trap1> getTrap1() {
+        return trap1;
+    }
+    public ArrayList<Cannon> getCannons(){
+		return cannons;
+	}
+    public ArrayList<Shark> getSharks(){return  sharks;}
 
     public ArrayList<Minotaur> getMinotaurs() {
         return minotaurs;

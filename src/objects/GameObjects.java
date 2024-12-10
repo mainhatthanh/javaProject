@@ -28,8 +28,10 @@ public class GameObjects {
             aniTick =0;
             aniIndex++;
             if(aniIndex>=getSpriteAmount(objType)){
-                aniIndex = 0;
-                if (objType == BARREL || objType == BOX) {
+            	if (objType != CHEST)
+            		aniIndex = 0;
+            	else aniIndex = 2;
+                if (objType == BARREL || objType == BOX || objType == TRAP1 || objType == CHEST ) {
                     doAnimation = false;
                     active = false;
                 }
@@ -44,7 +46,7 @@ public class GameObjects {
         aniIndex = 0;
         active = true;
 
-        if (objType == BARREL || objType == BOX)
+        if (objType == BARREL || objType == BOX || objType == TRAP1 || objType == CHEST || objType == CANNON_LEFT || objType == CANNON_RIGHT)
             doAnimation = false;
         else
             doAnimation = true;
@@ -66,6 +68,10 @@ public class GameObjects {
     public void setActive(boolean active) {
         this.active = active;
     }
+    
+    public void setAnimation(boolean doAnimation) {
+    	this.doAnimation = doAnimation;
+    }
 
     public Rectangle2D.Float getHitbox() {
         return hitbox;
@@ -86,4 +92,7 @@ public class GameObjects {
     public int getAniIndex() {
         return aniIndex;
     }
+    public int getAniTick() {
+		return aniTick;
+	}
 }

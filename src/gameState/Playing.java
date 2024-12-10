@@ -104,6 +104,7 @@ public class Playing extends State implements Statemethods {
         player.loadLvlData(levelManager.getCurrentLevel().getLvlData());
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
 
+
         ui = new UI(this);
         pauseOverlay = new PauseOverlay(this); 
         gameOverOverlay = new GameOverOverlay(this);
@@ -147,7 +148,7 @@ public class Playing extends State implements Statemethods {
             	ui.showMessage(a);
             	enemyManager.setExpUp(0);
             }
-            objectManager.update();
+            objectManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             //bulletManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             checkCloseToBorder();
         }
@@ -205,8 +206,6 @@ public class Playing extends State implements Statemethods {
         }
     }
 
-
-
     public void resetAll() {
         gameOver = false;
         paused = false;
@@ -219,6 +218,8 @@ public class Playing extends State implements Statemethods {
         playerDying = false;
         player.resetAll();
         enemyManager.resetAllEnemies();
+
+        objectManager.resetAllObjects();
        // bulletManager.resetBullets();
 
     }
@@ -230,6 +231,21 @@ public class Playing extends State implements Statemethods {
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
         enemyManager.checkEnemyHit(attackBox , player);
     }
+
+    public void checkTrapTouched(Player p) {
+    	objectManager.checkTrapTouched(p);
+    }
+
+    public void checkObjectHit(Rectangle2D.Float attackbox) {
+    	objectManager.checkObjectHit(attackbox);
+    }
+
+    public void checkPotionTouched(Rectangle2D.Float hitbox) {
+    	objectManager.checkObjectTouched(hitbox);
+    }
+    
+    
+    
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -282,9 +298,6 @@ public class Playing extends State implements Statemethods {
                         player.setJump(true);
                         player.changeStamina(-GetStamina(JUMP));
                     }
-                    else{ 
-                        System.out.println("Khong du mana");
-                    }
                     break;
                 case KeyEvent.VK_ESCAPE:
                     paused = !paused;
@@ -293,9 +306,12 @@ public class Playing extends State implements Statemethods {
                     if(player.getCurrentStamina() >= GetStamina(ATTACK)){
                         player.setAttacking(true);
                         player.changeStamina(-GetStamina(ATTACK));
-                    }else{ 
+                    }else{
                         System.out.println("Khong du mana");
                     }
+                    break;
+                case KeyEvent.VK_E:
+                	objectManager.checkChestsOpen(player.getHitBox());
                     break;
             }
             // player.changeStamina(-GetStamina(GetAniFromKey(e)));
@@ -423,7 +439,7 @@ public class Playing extends State implements Statemethods {
     public boolean enoughStamina(int player_action){
         if(player.getCurrentStamina() >= GetStamina(player_action))
             return true;
-        else   
+        else
             return false;
     }
 
@@ -433,5 +449,6 @@ public class Playing extends State implements Statemethods {
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
     
+
 
 }
