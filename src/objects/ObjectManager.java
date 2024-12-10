@@ -135,10 +135,10 @@ public class ObjectManager {
         }
         
         cannonImgs = new BufferedImage[7];
-		BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.CANNON_ATLAS);
+		BufferedImage cannonSprite = LoadSave.GetSpriteAtlas(LoadSave.CANNON_ATLAS);
 
 		for (int i = 0; i < cannonImgs.length; i++)
-			cannonImgs[i] = temp.getSubimage(i * 40, 0, 40, 26);
+			cannonImgs[i] = cannonSprite.getSubimage(i * 40, 0, 40, 26);
 
 		cannonBallImg = LoadSave.GetSpriteAtlas(LoadSave.CANNON_BALL);
         
@@ -168,6 +168,13 @@ public class ObjectManager {
                 gc.update();
             }
         }
+        
+        for (Cannon c : cannons) {
+            
+                c.update();
+            
+        }
+        
         
         updateCannons(lvlData, player);
         updateProjectiles(lvlData, player);
@@ -250,8 +257,16 @@ public class ObjectManager {
         drawScrolls(g, xLvlOffset);
         drawSwords(g, xLvlOffset);
         drawCannons(g, xLvlOffset);
-        
+        drawProjectiles(g, xLvlOffset);
     }
+    
+    private void drawProjectiles(Graphics g, int xLvlOffset) {
+		for (Projectile p : projectiles)
+			if (p.isActive())
+				g.drawImage(cannonBallImg, (int) (p.getHitbox().x - xLvlOffset), (int) (p.getHitbox().y), CANNON_BALL_WIDTH, CANNON_BALL_HEIGHT, null);
+
+	}
+
     
     
     private void drawCannons(Graphics g, int xLvlOffset) {

@@ -15,7 +15,7 @@ public class Cannon extends GameObjects {
 	}
 
 	public void update() {
-		if (doAnimation)
+		// if (doAnimation)
 			updateAnimationTick();
 	}
 
