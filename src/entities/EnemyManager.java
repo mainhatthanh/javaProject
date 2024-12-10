@@ -448,13 +448,20 @@ public class EnemyManager {
         
         for (Toro t : toros)
             if (t.isActive())
-                if (t.getCurrentHealth() > 0)
+                if (t.getCurrentHealth() > 0 ) {
+
                     if (attackBox.intersects(t.getHitBox())) {
+                       
                         t.hurt(player.playerDamage, player);
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT_BOSS);
+                        if(t.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS1_DEAD);
+                        }
                         expUp = t.getExpUpdate();
                         return;
                     }
 
+                }
         for (Boss1 b : boss1)
             if (b.isActive())
                 if (b.getCurrentHealth() > 0)
@@ -468,7 +475,11 @@ public class EnemyManager {
             if (b2.isActive())
                 if (b2.getCurrentHealth() > 0)
                     if (attackBox.intersects(b2.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT_BOSS);
                         b2.hurt(player.playerDamage, player);
+                        if(b2.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS2_DEAD);
+                        }
                         expUp = b2.getExpUpdate();
                         return;
                     }
@@ -477,7 +488,11 @@ public class EnemyManager {
             if (b3.isActive())
                 if (b3.getCurrentHealth() > 0)
                     if (attackBox.intersects(b3.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT_BOSS);
                         b3.hurt(player.playerDamage, player);
+                        if(b3.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS3_DEAD);
+                        }
                         expUp = b3.getExpUpdate();
                         return;
                     }
@@ -486,7 +501,11 @@ public class EnemyManager {
             if (b4.isActive())
                 if (b4.getCurrentHealth() > 0)
                     if (attackBox.intersects(b4.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT_BOSS);
                         b4.hurt(player.playerDamage, player);
+                        if(b4.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS4_DEAD);
+                        }
                         expUp = b4.getExpUpdate();
                         return;
                     }

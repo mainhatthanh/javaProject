@@ -23,6 +23,12 @@ public class AudioPlayer {
     public static int LEVEL_UP = 7;
     public static int CLICK = 8;
     public static int HIT = 9;
+    public static int BOSS1_ATTACK1 = 10;
+    public static int BOSS1_DEAD = 11;
+    public static int HIT_BOSS = 12;
+    public static int BOSS2_DEAD = 12;
+    public static int BOSS3_DEAD = 13;
+    public static int BOSS4_DEAD = 14;
 
     private Clip[] songs,effects;
     private int currentSongId;
@@ -45,7 +51,7 @@ public class AudioPlayer {
     }
 
     private void loadEffect(){
-        String[] effectNames = {"die", "jump", "gameover", "lvlcompleted", "attack1", "attack2", "attack3","levelUp","Click","hit"};
+        String[] effectNames = {"die", "jump", "gameover", "lvlcompleted", "attack1", "attack2", "attack3","levelUp","Click","hit","boss1_attack1","boss1_dead","hit_boss","boss2_dead","boss3_dead","boss4_dead"};
         effects=new Clip[effectNames.length];
         for(int i=0;i<effects.length;i++)
             effects[i]=getClip(effectNames[i]);
@@ -152,4 +158,6 @@ public class AudioPlayer {
         }
 
     }
+
+    
 }
