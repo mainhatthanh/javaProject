@@ -494,45 +494,45 @@ public class EnemyManager {
     }
 
 
-    public boolean isCurveHitEnemy(Rectangle2D.Float curveHitBox ,Player player) {
+    public boolean isStickHitEnemy(Rectangle2D.Float stickHitBox ,Player player) {
         for (Crabby c : crabbies)
             if (c.getCurrentHealth() > 0)
-                if (curveHitBox.intersects(c.getHitBox())) {
+                if (stickHitBox.intersects(c.getHitBox())) {
                    return true;
                 }
 
         for (Shark shark : sharks)
             if (shark.isActive())
                 if (shark.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(shark.getHitBox())) {
+                    if (stickHitBox.intersects(shark.getHitBox())) {
                         return true;
                     }
 
         for (Monster_Eye1 me : moneyes)
             if (me.isActive())
                 if (me.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(me.getHitBox())) {
+                    if (stickHitBox.intersects(me.getHitBox())) {
                         return true;
                     }
 
         for (Monster2 me2 : monster2s)
             if (me2.isActive())
                 if (me2.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(me2.getHitBox())) {
+                    if (stickHitBox.intersects(me2.getHitBox())) {
                         return true;
                     }
 
         for (Spider spi : spiders)
             if (spi.isActive())
                 if (spi.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(spi.getHitBox())) {
+                    if (stickHitBox.intersects(spi.getHitBox())) {
                         return true;
                     }
 
         for (Minotaur mino : minotaurs)
             if (mino.isActive())
                 if (mino.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(mino.getHitBox())) {
+                    if (stickHitBox.intersects(mino.getHitBox())) {
                         return true;
                     }
 
@@ -540,42 +540,42 @@ public class EnemyManager {
         for (Toro t : toros)
             if (t.isActive())
                 if (t.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(t.getHitBox())) {
+                    if (stickHitBox.intersects(t.getHitBox())) {
                         return true;
                     }
 
         for (Boss1 b : boss1)
             if (b.isActive())
                 if (b.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(b.getHitBox())) {
+                    if (stickHitBox.intersects(b.getHitBox())) {
                         return true;
                     }
 
         for (Boss2 b2 : boss2)
             if (b2.isActive())
                 if (b2.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(b2.getHitBox())) {
+                    if (stickHitBox.intersects(b2.getHitBox())) {
                         return true;
                     }
 
         for (Boss3 b3 : boss3)
             if (b3.isActive())
                 if (b3.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(b3.getHitBox())) {
+                    if (stickHitBox.intersects(b3.getHitBox())) {
                         return true;
                     }
 
         for (Boss4 b4 : boss4)
             if (b4.isActive())
                 if (b4.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(b4.getHitBox())) {
+                    if (stickHitBox.intersects(b4.getHitBox())) {
                         return true;
                     }
 
         for (Boss5 b5 : boss5)
             if (b5.isActive())
                 if (b5.getCurrentHealth() > 0)
-                    if (curveHitBox.intersects(b5.getHitBox())) {
+                    if (stickHitBox.intersects(b5.getHitBox())) {
                         return true;
                     }
 

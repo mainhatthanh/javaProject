@@ -677,7 +677,7 @@ public class Player extends Entity {
         for(Stick st:sticks) {
             if (st.isActive()) {
                 st.updatePos();
-                if (playing.isCurveHitEnemy(st.getHitbox())) {
+                if (playing.isStickHitEnemy(st.getHitbox())) {
                     playing.checkEnemyHit(st.getHitbox());
                     st.setActive(false);
                 } else if (IsStickHittingLevel(st, lvlData))

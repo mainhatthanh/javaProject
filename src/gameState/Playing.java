@@ -250,8 +250,8 @@ public class Playing extends State implements Statemethods {
         enemyManager.checkEnemyHit(attackBox , player);
     }
 
-    public boolean isCurveHitEnemy(Rectangle2D.Float curveHitBox){
-      return  enemyManager.isCurveHitEnemy(curveHitBox,player);
+    public boolean isStickHitEnemy(Rectangle2D.Float curveHitBox){
+      return  enemyManager.isStickHitEnemy(curveHitBox,player);
 
     }
 
