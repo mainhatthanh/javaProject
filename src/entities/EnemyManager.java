@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import audio.AudioPlayer;
+
 import static utilz.Constants.EnemyConstants.*;
 
 public class EnemyManager {
@@ -386,6 +389,7 @@ public class EnemyManager {
         for (Crabby c : crabbies)
             if (c.getCurrentHealth() > 0)
                 if (attackBox.intersects(c.getHitBox())) {
+                    playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
                     c.hurt(player.playerDamage, player);
                     expUp = c.getExpUpdate();
                     return;
@@ -395,6 +399,7 @@ public class EnemyManager {
             if (shark.isActive())
                 if (shark.getCurrentHealth() > 0)
                     if (attackBox.intersects(shark.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
                         shark.hurt(player.playerDamage, player);
                         expUp = shark.getExpUpdate();
                         return;
@@ -404,6 +409,7 @@ public class EnemyManager {
             if (me.isActive())
                 if (me.getCurrentHealth() > 0)
                     if (attackBox.intersects(me.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
                         me.hurt(player.playerDamage, player);
                         expUp = me.getExpUpdate();
                         return;
@@ -413,6 +419,7 @@ public class EnemyManager {
             if (me2.isActive())
                 if (me2.getCurrentHealth() > 0)
                     if (attackBox.intersects(me2.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
                         me2.hurt(player.playerDamage, player);
                         expUp = me2.getExpUpdate();
                         return;
@@ -422,6 +429,7 @@ public class EnemyManager {
             if (spi.isActive())
                 if (spi.getCurrentHealth() > 0)
                     if (attackBox.intersects(spi.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
                         spi.hurt(player.playerDamage, player);
                         expUp = spi.getExpUpdate();
                         return;
@@ -431,6 +439,7 @@ public class EnemyManager {
             if (mino.isActive())
                 if (mino.getCurrentHealth() > 0)
                     if (attackBox.intersects(mino.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
                         mino.hurt(player.playerDamage, player);
                         expUp = mino.getExpUpdate();
                         return;
@@ -486,6 +495,7 @@ public class EnemyManager {
             if (b5.isActive())
                 if (b5.getCurrentHealth() > 0)
                     if (attackBox.intersects(b5.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
                         b5.hurt(player.playerDamage, player);
                         expUp = b5.getExpUpdate();
                         return;

@@ -9,9 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-
-
-
+import audio.AudioPlayer;
 import entities.Enemy;
 import entities.EnemyManager;
 import entities.Player;
@@ -317,6 +315,7 @@ public class Playing extends State implements Statemethods {
                     }
                     break;
                 case KeyEvent.VK_ESCAPE:
+                    getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
                     paused = !paused;
                     break;
                 case KeyEvent.VK_F:

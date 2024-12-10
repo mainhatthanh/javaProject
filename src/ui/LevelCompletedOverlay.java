@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import audio.AudioPlayer;
 import gameState.Gamestate;
 
 
@@ -65,10 +66,14 @@ public class LevelCompletedOverlay {
         next.setMouseOver(false);
         menu.setMouseOver(false);
 
-        if (isIn(menu, e))
+        if (isIn(menu, e)) {
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             menu.setMouseOver(true);
-        else if (isIn(next, e))
+        }
+        else if (isIn(next, e)) {
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             next.setMouseOver(true);
+        }
     }
 
     public void mouseReleased(MouseEvent e) {
