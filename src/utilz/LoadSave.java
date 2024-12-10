@@ -49,7 +49,8 @@ public class LoadSave {
     public static final String BOSS4_ATLAS = "boss4_atlas.png";
     public static final String BOSS5_ATLAS = "boss5_atlas.png";
 
-    public static final String BALL1EYE = "ball1Eye.png";
+    public static final String STICK_IMG = "stick.png";
+
 
     public static final String POTIONS_ATLAS = "potions_sprites.png";
     public static final String CONTAINER_ATLAS = "objects_sprites.png";

@@ -10,6 +10,9 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 
+
+
+import entities.Enemy;
 import entities.EnemyManager;
 import entities.Player;
 
@@ -36,6 +39,7 @@ public class Playing extends State implements Statemethods {
 	private UI ui ;
 	
     private Player player;
+    private Enemy enemy;
     private LevelManager levelManager;
     private EnemyManager enemyManager;
     private ObjectManager objectManager;
@@ -61,6 +65,8 @@ public class Playing extends State implements Statemethods {
     int[][] lvlData;
 
 
+
+
     public Playing(Game game) {
         super(game);
         initClasses();
@@ -82,7 +88,6 @@ public class Playing extends State implements Statemethods {
     private void loadStartLevel() {
         enemyManager.loadEnemies(levelManager.getCurrentLevel());
         objectManager.loadObjects(levelManager.getCurrentLevel());
-       // bulletManager.loadBullets(levelManager.getCurrentLevel());
 
     }
 
@@ -98,7 +103,8 @@ public class Playing extends State implements Statemethods {
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
         objectManager = new ObjectManager(this);
-        //bulletManager = new BulletManager(this);
+
+
 
         player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this);
         player.loadLvlData(levelManager.getCurrentLevel().getLvlData());
@@ -141,6 +147,7 @@ public class Playing extends State implements Statemethods {
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
+
             exp = enemyManager.getExpUp();
             if(exp != 0) {
             	String a ="+"+ exp;
@@ -148,7 +155,10 @@ public class Playing extends State implements Statemethods {
             	enemyManager.setExpUp(0);
             }
             objectManager.update();
-            //bulletManager.update(levelManager.getCurrentLevel().getLvlData(), player);
+
+
+
+
             checkCloseToBorder();
         }
 
@@ -179,8 +189,12 @@ public class Playing extends State implements Statemethods {
         
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
+        player.drawSticks(g,xLvlOffset);
         enemyManager.draw(g, xLvlOffset);
         objectManager.draw(g, xLvlOffset);
+
+
+
 
        //draw lvlUp khi len cap
         if(player.getIsShowLvlUp()){
@@ -218,8 +232,13 @@ public class Playing extends State implements Statemethods {
         lvlCompleted = false;
         playerDying = false;
         player.resetAll();
+
         enemyManager.resetAllEnemies();
-       // bulletManager.resetBullets();
+         /*if(player.isCurving())
+            curveManager.resetCurve(player);*/
+
+
+
 
     }
 
@@ -230,6 +249,14 @@ public class Playing extends State implements Statemethods {
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
         enemyManager.checkEnemyHit(attackBox , player);
     }
+
+    public boolean isCurveHitEnemy(Rectangle2D.Float curveHitBox){
+      return  enemyManager.isCurveHitEnemy(curveHitBox,player);
+
+    }
+
+
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -262,6 +289,9 @@ public class Playing extends State implements Statemethods {
                 case KeyEvent.VK_D:
                     player.setRight(true);
                     break;
+                case KeyEvent.VK_W:
+                    player.shootStick();
+                            break;
                 case KeyEvent.VK_LEFT:
                     player.setLeft(true);
                     break;

@@ -26,13 +26,13 @@ public class Constants {
         }
     }
 
-    public static class Bullet{
-        public static final int BALL_1EYE_DEFAULT_WIDTH = 20;
-        public static final int BALL_1EYE_DEFAULT_HEIGHT = 15;
+    public static class Curve{
+        public static final int STICK_WIDTH_DEFAULT = 80;
+        public static final int STICK_HEIGHT_DEFAULT = 50;
 
-        public static final int BALL_1EYE_WIDTH = (int)(Game.SCALE*BALL_1EYE_DEFAULT_WIDTH);
-        public static final int BALL_1EYE_HEIGHT = (int)(Game.SCALE*BALL_1EYE_DEFAULT_HEIGHT);
-        public static final float SPEED = 0.4f*Game.SCALE;
+        public static final int STICK_WIDTH = (int)(Game.SCALE*STICK_WIDTH_DEFAULT);
+        public static final int STICK_HEIGHT = (int)(Game.SCALE*STICK_HEIGHT_DEFAULT);
+        public static final float SPEED = 1.5f*Game.SCALE;
 
 
 

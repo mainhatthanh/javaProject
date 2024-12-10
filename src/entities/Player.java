@@ -7,11 +7,15 @@ import utilz.LoadSave;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static utilz.Constants.ANI_SPEED;
+
+import static utilz.Constants.Curve.STICK_HEIGHT;
+import static utilz.Constants.Curve.STICK_WIDTH;
 import static utilz.Constants.GRAVITY;
 import static utilz.Constants.PlayerConstants.*;
 import static utilz.HelpMethods.*;
@@ -87,11 +91,22 @@ public class Player extends Entity {
 
     private int tileY=0;
 
-
+  //Chieu luot
     private boolean powerAttackActive;
     private int powerAttackTick;
     private int powerGrowSpeed=15;
     private int powerGrowTick;
+
+    //Chieu ban
+   private boolean sticking;
+   private BufferedImage stickImg;
+   private ArrayList<Stick> sticks=new ArrayList<>();
+   private int stickDir =1;
+
+
+
+
+
 
     public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, width, height);
@@ -108,6 +123,7 @@ public class Player extends Entity {
         this.levelUpTime = 0;
         this.levelUp=false;
         loadAnimations();
+        loadImgs();
 
         initHitbox(15, 27);
 
@@ -134,6 +150,8 @@ public class Player extends Entity {
         playerUpdateLevel(levelUp);
         //updateIsShowLvlUp(isShowLevelUp);
         //System.out.println(maxHealth + " " + maxStamina + " "+ playerDamage);
+
+            updateDirCurve();
 
         if (currentHealth <= 0) {
             if (state != DEAD) {
@@ -165,7 +183,11 @@ public class Player extends Entity {
 
         updateExpBar();
 
+
         updateAttackBox();
+        updateStick(lvlData);
+        updatePlayerShoot(this);
+
             if (state == HIT) {
                 if (aniIndex <= GetSpriteAmount(state) - 3)
                     pushBack(pushBackDir, lvlData, 1.25f);
@@ -183,7 +205,12 @@ public class Player extends Entity {
                     }
                 }
 
+
+
             }
+
+
+
 
         if (attacking||powerAttackActive)
             checkAttack();
@@ -193,13 +220,7 @@ public class Player extends Entity {
 
     }
 
-    /*private void updateIsShowLvlUp(boolean isShowLevelUp) {
-        if(isShowLevelUp){
-            g.drawImage(levelUpImg, (int) (hitbox.x - 30)- xlvlOffset, (int) (hitbox.y - 60), lvlUpWidth, lvlUpHeight, null);
-            resetIsShowLevelUp();
 
-        }
-    }*/
 
 
     public void playerUpdateLevel(boolean levelUp){
@@ -220,6 +241,9 @@ public class Player extends Entity {
 
         if(powerAttackActive)
             attackChecked=false;
+
+        /*if(curveAttackActive)
+            attackChecked=false;*/
 
         playing.checkEnemyHit(attackBox);
         playing.getGame().getAudioPlayer().playAttackSound();
@@ -250,6 +274,12 @@ public class Player extends Entity {
         if(powerGrowTick>=powerGrowSpeed){
             powerGrowTick=0;
         }
+
+       /* curveGrowTick++;
+        if(curveGrowTick>=curveGrowSpeed){
+            curveGrowTick=0;
+        }*/
+
     }
 
     private void updateExpBar(){
@@ -259,6 +289,10 @@ public class Player extends Entity {
     public void render(Graphics g, int xlvlOffset) {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
+
+
+        /*if(curveAttackActive)
+            curveManager.drawCurves(g,xlvlOffset);*/
 
         drawUI(g);
 
@@ -275,6 +309,8 @@ public class Player extends Entity {
             resetIsShowLevelUp();
         }
     }
+
+
 
 
 
@@ -434,6 +470,14 @@ public class Player extends Entity {
             aniTick=0;
             return;
         }
+
+        if(sticking){
+            state=ATTACK;
+            aniIndex=1;
+            aniTick=0;
+            return;
+        }
+
         if (attacking) {
             state = ATTACK;
             if (startAni != ATTACK) {
@@ -476,7 +520,7 @@ public class Player extends Entity {
     }
 
     public boolean isLeft() {
-        return left;
+        return this.left;
     }
 
     public void setRight(boolean right) {
@@ -604,6 +648,76 @@ public class Player extends Entity {
         }
     }
 
+
+
+    ////////Ban STICK
+
+    public void shootStick(){
+        if(sticking)
+            return;
+        if(currentStamina>=40) {
+            sticking = true;
+            this.setAttacking(true);
+            changeStamina(-40);
+        }
+    }
+    private void loadImgs() {
+        stickImg= LoadSave.GetSpriteAtlas(LoadSave.STICK_IMG);
+    }
+
+    public void drawSticks(Graphics g,int xLvlOffset){
+        for(Stick st:sticks)
+            if(st.isActive())
+                g.drawImage(stickImg,(int)(st.getHitbox().x-xLvlOffset),(int)(st.getHitbox().y),STICK_WIDTH,STICK_HEIGHT,null);
+    }
+
+
+
+    public void updateStick(int[][] lvlData) {
+        for(Stick st:sticks) {
+            if (st.isActive()) {
+                st.updatePos();
+                if (playing.isCurveHitEnemy(st.getHitbox())) {
+                    playing.checkEnemyHit(st.getHitbox());
+                    st.setActive(false);
+                } else if (IsStickHittingLevel(st, lvlData))
+                    st.setActive(false);
+            }
+        }
+    }
+
+
+
+
+    private void updatePlayerShoot(Player player){
+        if(player.isCurving()) {
+            reloadStick(player);
+            player.resetCurving();
+        }
+
+    }
+
+
+    public void reloadStick(Player player){
+        sticks.add(new Stick((int) player.getHitbox().x-22,(int)player.getHitbox().y,stickDir));
+    }
+
+    private void updateDirCurve(){
+        if(this.left){
+           stickDir =-1;
+        }
+        else if(this.right){
+            stickDir=1;
+        }
+    }
+
+
+
+
+//////
+
+
+
     public void setPlayerDamage(int a){
         this.playerDamage = a;
     }
@@ -627,5 +741,12 @@ public class Player extends Entity {
 
     public boolean getIsShowLvlUp(){
         return isShowLevelUp;
+    }
+
+    public boolean isCurving(){
+        return sticking;
+    }
+    public void resetCurving(){
+        this.sticking=false;
     }
 }

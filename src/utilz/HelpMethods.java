@@ -311,9 +311,10 @@ public class HelpMethods {
         return new Point(1*Game.TILES_SIZE,1*Game.TILES_SIZE);
     }
 
-   /* public static boolean IsBulletHittingLevel(Bullet b, int[][] lvlData) {
-        return IsSolid(b.getHitbox().x + b.getHitbox().width / 2, b.getHitbox().y + b.getHitbox().height / 2, lvlData);
-    }*/
+    public static boolean IsStickHittingLevel(Stick st, int[][] lvlData) {
+        return IsSolid(st.getHitbox().x + st.getHitbox().width / 2, st.getHitbox().y + st.getHitbox().height / 2, lvlData);
+    }
+
 
     public static boolean CanMESeePlayer(int[][] lvlData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile) {
         int firstXTile = (int) (firstHitbox.x / Game.TILES_SIZE);
