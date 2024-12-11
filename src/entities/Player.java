@@ -150,7 +150,7 @@ public class Player extends Entity {
         //updateIsShowLvlUp(isShowLevelUp);
         //System.out.println(maxHealth + " " + maxStamina + " "+ playerDamage);
 
-            updateDirCurve();
+            updateDirStick();
 
         if (currentHealth <= 0) {
             if (state != DEAD) {
@@ -477,12 +477,7 @@ public class Player extends Entity {
             return;
         }
 
-        if(sticking){
-            state=ATTACK;
-            aniIndex=1;
-            aniTick=0;
-            return;
-        }
+
 
         if (attacking) {
             state = ATTACK;
@@ -505,6 +500,8 @@ public class Player extends Entity {
             resetAniTick();
 
     }
+
+
 
     public void resetExp(){
         
@@ -688,7 +685,9 @@ public class Player extends Entity {
             return;
         if(currentStamina>=40) {
             sticking = true;
-            this.setAttacking(true);
+             this.setAttacking(true);
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.THROW);
+
             changeStamina(-40);
         }
     }
@@ -733,7 +732,7 @@ public class Player extends Entity {
         sticks.add(new Stick((int) player.getHitbox().x-22,(int)player.getHitbox().y,stickDir));
     }
 
-    private void updateDirCurve(){
+    private void updateDirStick(){
         if(this.left){
            stickDir =-1;
         }
