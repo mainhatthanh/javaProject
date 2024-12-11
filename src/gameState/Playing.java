@@ -60,6 +60,7 @@ public class Playing extends State implements Statemethods {
     private boolean gameOver;
     private boolean lvlCompleted = false;
     private boolean playerDying;
+   
 
     int[][] lvlData;
 
@@ -70,7 +71,21 @@ public class Playing extends State implements Statemethods {
         super(game);
         initClasses();
 
-        backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BACKGROUND_IMG);
+        if ((getLevelManager().getLevelIndex()) == 0) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_1_BACKGROUND);
+        }
+        if ((getLevelManager().getLevelIndex()) == 1) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_2_BACKGROUND);
+        }
+        if ((getLevelManager().getLevelIndex()) == 2) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_3_BACKGROUND);
+        }
+        if ((getLevelManager().getLevelIndex()) == 3) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_4_BACKGROUND);
+        }
+        if ((getLevelManager().getLevelIndex())== 4) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_5_BACKGROUND);
+        }
 
 
         caclcLvlOffset();
