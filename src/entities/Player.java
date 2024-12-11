@@ -734,7 +734,6 @@ public class Player extends Entity {
         }, 2, TimeUnit.SECONDS); // 3 giây
     }
 
-
     private void resetBooleanLevelUp(){
         this.levelUp=false;
     }

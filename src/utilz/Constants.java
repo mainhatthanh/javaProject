@@ -450,6 +450,7 @@ public class Constants {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_SPACE:
                 case KeyEvent.VK_F:
+                case KeyEvent.VK_W:
                     return true;
                 default: 
                     return false;
