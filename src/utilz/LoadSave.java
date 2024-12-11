@@ -12,6 +12,7 @@ import java.net.URL;
 public class LoadSave {
     // public static final String PLAYER_ATLAS = "players_sprites.png";
     public static final String PLAYER_ATLAS = "playersprites.png";
+    public static final String PLAYER_ULTI = "playerulti_sprite.png";
     public static final String LEVEL_ATLAS = "tiletest.png";
     public static final String MENU_BACKGROUND = "menu_background.png";
     public static final String MENU_BACKGROUND_IMG = "baner.png";

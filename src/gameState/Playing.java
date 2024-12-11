@@ -23,11 +23,9 @@ import ui.PauseOverlay;
 import ui.UI;
 import utilz.LoadSave;
 
-import static utilz.Constants.PlayerConstants.ATTACK;
-import static utilz.Constants.PlayerConstants.GetStamina;
-import static utilz.Constants.PlayerConstants.JUMP;
 import static entities.Player.expThatChange;
 import static entities.Player.levelUpTime;
+import static utilz.Constants.PlayerConstants.*;
 
 public class Playing extends State implements Statemethods {
 	
@@ -245,7 +243,7 @@ public class Playing extends State implements Statemethods {
     }
 
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
-        enemyManager.checkEnemyHit(attackBox , player);
+            enemyManager.checkEnemyHit(attackBox , player);
     }
 
     public boolean isStickHitEnemy(Rectangle2D.Float curveHitBox){
@@ -262,6 +260,8 @@ public class Playing extends State implements Statemethods {
             if (e.getButton() == MouseEvent.BUTTON1) {
                 if (player.getCurrentStamina() >= GetStamina(ATTACK)) {
                     player.setAttacking(true);
+                    player.setUltiSkill(false);
+                    player.setPlayerDamage(10);
                     player.changeStamina(-GetStamina(ATTACK));
                 }
             }
@@ -288,8 +288,8 @@ public class Playing extends State implements Statemethods {
                     player.setRight(true);
                     break;
                 case KeyEvent.VK_W:
-                    player.shootStick();
-                            break;
+                        player.shootStick();
+                    break;
                 case KeyEvent.VK_LEFT:
                     player.setLeft(true);
                     break;
@@ -319,13 +319,27 @@ public class Playing extends State implements Statemethods {
                     paused = !paused;
                     break;
                 case KeyEvent.VK_F:
-                    if(player.getCurrentStamina() >= GetStamina(ATTACK)){
-                        player.setAttacking(true);
-                        player.changeStamina(-GetStamina(ATTACK));
-                    }else{ 
-                        System.out.println("Khong du mana");
-                    }
-                    break;
+                    if(e.getKeyCode()!=KeyEvent.VK_G)
+                        if(player.getCurrentStamina() >= GetStamina(ATTACK)){
+                            player.setAttacking(true);
+                            player.setPlayerDamage(10);
+                            player.setUltiSkill(false);
+                            player.changeStamina(-GetStamina(ATTACK));
+                        }else{ 
+                            System.out.println("Khong du mana");
+                        }
+                        break;
+                case KeyEvent.VK_G:
+                    if(e.getKeyCode()!=KeyEvent.VK_F)
+                        if(player.getCurrentStamina() >= GetStamina(ULTI)){
+                            player.setUltiSkill(true);
+                            player.setPlayerDamage(50);
+                            player.setAttacking(false);
+                            player.changeStamina(-GetStamina(ULTI));
+                        }else{ 
+                            System.out.println("Khong du mana");
+                        }
+                        break;
             }
             // player.changeStamina(-GetStamina(GetAniFromKey(e)));
         }

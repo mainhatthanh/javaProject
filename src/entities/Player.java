@@ -103,9 +103,9 @@ public class Player extends Entity {
    private ArrayList<Stick> sticks=new ArrayList<>();
    private int stickDir =1;
 
-
-
-
+    //Ulti
+    private boolean ultiSkill = false;
+    private int ultiAniSpeed = 10;
 
 
     public Player(float x, float y, int width, int height, Playing playing) {
@@ -119,14 +119,11 @@ public class Player extends Entity {
         this.currentExp = 0;
         this.maxExp = 100;
         this.walkSpeed = Game.SCALE * 1.0f;
-        this.playerDamage = 10;
-        this.levelUpTime = 0;
+        // this.playerDamage = 10;
         this.levelUp=false;
         loadAnimations();
         loadImgs();
-
         initHitbox(15, 27);
-
         initAttackBox();
         expThatChange = 0;
     }
@@ -212,7 +209,7 @@ public class Player extends Entity {
 
 
 
-        if (attacking||powerAttackActive)
+        if (attacking||powerAttackActive||ultiSkill)
             checkAttack();
 
         updateAnimationTick();
@@ -235,18 +232,25 @@ public class Player extends Entity {
     }
 
     private void checkAttack() {
-        if (attackChecked || aniIndex != 1)
-            return;
-        attackChecked = true;
-
-        if(powerAttackActive)
-            attackChecked=false;
-
-        /*if(curveAttackActive)
-            attackChecked=false;*/
-
-        playing.checkEnemyHit(attackBox);
-        playing.getGame().getAudioPlayer().playAttackSound();
+        if(!(isUltiSkill())){
+            if (attackChecked || aniIndex != 1 )
+                return;
+            attackChecked = true;
+    
+            if(powerAttackActive)
+                attackChecked=false;
+    
+            /*if(curveAttackActive)
+                attackChecked=false;*/
+    
+            playing.checkEnemyHit(attackBox);
+            playing.getGame().getAudioPlayer().playAttackSound();
+        } else {
+            if(aniIndex>=6 && !attackChecked){
+                playing.checkEnemyHit(attackBox);
+                playing.getGame().getAudioPlayer().playAttackSound();
+            }
+        }
     }
 
     private void updateAttackBox() {
@@ -290,17 +294,9 @@ public class Player extends Entity {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
-
-        /*if(curveAttackActive)
-            curveManager.drawCurves(g,xlvlOffset);*/
-
         drawUI(g);
-
-
 //         drawAttackHitbox(g, xlvlOffset);
 //         drawHitbox(g, xlvlOffset);
-
-
     }
 
     public void drawLvlUp(Graphics g,int xlvlOffset){
@@ -482,6 +478,20 @@ public class Player extends Entity {
 
             }
         }
+        if (ultiSkill){
+            state = ULTI;
+            if(startAni != ULTI){
+                aniIndex = 1;
+                aniTick = 0;
+                return;
+            }
+        }
+
+
+
+
+
+
         if (startAni != state)
             resetAniTick();
 
@@ -500,15 +510,31 @@ public class Player extends Entity {
 
     private void updateAnimationTick() {
         aniTick++;
-        if (aniTick >= ANI_SPEED) {
-            aniTick = 0;
-            aniIndex++;
-            if (aniIndex >= GetSpriteAmount(state)) {
-                aniIndex = 0;
-                attacking = false;
-                attackChecked = false;
+        if(isUltiSkill()==true){
+            if (aniTick >= ultiAniSpeed) {
+                aniTick = 0;
+                aniIndex++;
+                if (aniIndex >= GetSpriteAmount(state)) {
+                    aniIndex = 0;
+                    attacking = false;
+                    sticking=false;
+                    ultiSkill = false;
+                    attackChecked = false;
+                }
             }
-
+        } else {
+            if (aniTick >= ANI_SPEED) {
+                aniTick = 0;
+                aniIndex++;
+                if (aniIndex >= GetSpriteAmount(state)) {
+                    aniIndex = 0;
+                    attacking = false;
+                    sticking=false;
+                    ultiSkill = false;
+                    attackChecked = false;
+                }
+    
+            }
         }
     }
 
@@ -536,12 +562,14 @@ public class Player extends Entity {
     }
 
     public void setAttacking(boolean attacking) {
+        if(attacking == true)
+            this.ultiSkill = false;
         this.attacking = attacking;
     }
 
     private void loadAnimations() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
-        animations = new BufferedImage[7][8];
+        animations = new BufferedImage[8][8];
         for (int j = 0; j < animations.length; j++)
             for (int i = 0; i < animations[j].length; i++)
                 animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
@@ -565,6 +593,8 @@ public class Player extends Entity {
         resetDirBooleans();
         inAir = false;
         attacking = false;
+        ultiSkill = false;
+        sticking=false;
         moving = false;
         state = IDLE;
         currentHealth = maxHealth;
@@ -652,12 +682,11 @@ public class Player extends Entity {
     public void shootStick(){
         if(sticking)
             return;
-        if(currentStamina>=30) {
+        if(currentStamina>=GetStamina(THROW)) {
             sticking = true;
-             this.setAttacking(true);
+            this.attacking=true;
             playing.getGame().getAudioPlayer().playEffect(AudioPlayer.THROW);
-
-            changeStamina(-30);
+            changeStamina(-GetStamina(THROW));
         }
     }
     private void loadImgs() {
@@ -686,8 +715,6 @@ public class Player extends Entity {
     }
 
 
-
-
     private void updatePlayerShoot(Player player){
         if(player.isCurving()) {
             reloadStick(player);
@@ -703,7 +730,7 @@ public class Player extends Entity {
 
     private void updateDirStick(){
         if(this.left){
-           stickDir =-1;
+            stickDir =-1;
         }
         else if(this.right){
             stickDir=1;
@@ -728,9 +755,9 @@ public class Player extends Entity {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.schedule(() -> {
             isShowLevelUp = false;
-            System.out.println("Level up Img has been reset!");
+            //System.out.println("Level up Img has been reset!");
             scheduler.shutdown(); // Dừng Scheduler sau khi thực hiện
-        }, 2, TimeUnit.SECONDS); // 3 giây
+        }, 2, TimeUnit.SECONDS); // 2 giây
     }
 
     private void resetBooleanLevelUp(){
@@ -747,4 +774,16 @@ public class Player extends Entity {
     public void resetCurving(){
         this.sticking=false;
     }
+
+    public void setUltiSkill(boolean ulti){
+        if(ulti == true){
+            attacking = false;
+        } 
+        this.ultiSkill = ulti;
+    }
+
+    public boolean isUltiSkill(){
+        return ultiSkill;
+    }
+
 }
