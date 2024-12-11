@@ -402,6 +402,7 @@ public class Constants {
         
         public static final int HIT = 5;
         public static final int DEAD = 6;
+        public static final int ULTI = 7;
 
         public static int GetSpriteAmount(int player_action) {
             switch (player_action) {
@@ -416,6 +417,8 @@ public class Constants {
                 case JUMP:
                 case ATTACK:
                     return 3;
+                case ULTI:
+                    return 8;
                 case FALLING:
                 default:
                     return 1;
@@ -429,6 +432,8 @@ public class Constants {
                     return 5;
                 case ATTACK:
                     return 3;
+                case ULTI :
+                    return 20;
                 default: 
                     return 0;
             }
@@ -441,6 +446,8 @@ public class Constants {
                 
                 case KeyEvent.VK_F:
                     return ATTACK;
+                case KeyEvent.VK_G:
+                    return ULTI;
                 default: 
                     return IDLE;
             }
@@ -451,6 +458,7 @@ public class Constants {
                 case KeyEvent.VK_SPACE:
                 case KeyEvent.VK_F:
                 case KeyEvent.VK_W:
+                case KeyEvent.VK_G:
                     return true;
                 default: 
                     return false;
