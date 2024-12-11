@@ -15,7 +15,7 @@ public class LoadSave {
     public static final String PLAYER_ULTI = "playerulti_sprite.png";
     public static final String LEVEL_ATLAS = "tiletest.png";
     public static final String MENU_BACKGROUND = "menu_background.png";
-    public static final String MENU_BACKGROUND_IMG = "baner.png";
+    public static final String MENU_BACKGROUND_IMG = "background.png";
     public static final String LEVEL_1_BACKGROUND = "background1.png";
     public static final String LEVEL_2_BACKGROUND = "background2.png";
     public static final String LEVEL_3_BACKGROUND = "background3.png";
