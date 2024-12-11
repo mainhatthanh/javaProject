@@ -269,6 +269,8 @@ public class Player extends Entity {
     }
 
     private void updateHealthBar() {
+        if(healthWidth > healthBarWith)
+            healthWidth = healthBarWith;
         healthWidth = (int) ((currentHealth / (float) maxHealth) * healthBarWith);
     }
 
@@ -323,6 +325,8 @@ public class Player extends Entity {
     private void drawUI(Graphics g) {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
         g.setColor(Color.red);
+        if(healthWidth > healthBarWith)
+            healthWidth = healthBarWith;    
         g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeigth);
         g.setColor(Color.YELLOW);
         g.fillRect(staminaBarXStart + statusBarX, staminaBarYStart + statusBarY, staminaWidth, staminaBarHeight);
