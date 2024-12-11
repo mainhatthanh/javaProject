@@ -652,12 +652,12 @@ public class Player extends Entity {
     public void shootStick(){
         if(sticking)
             return;
-        if(currentStamina>=40) {
+        if(currentStamina>=30) {
             sticking = true;
              this.setAttacking(true);
             playing.getGame().getAudioPlayer().playEffect(AudioPlayer.THROW);
 
-            changeStamina(-40);
+            changeStamina(-30);
         }
     }
     private void loadImgs() {
