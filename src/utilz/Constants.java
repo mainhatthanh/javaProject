@@ -9,7 +9,23 @@ public class Constants {
     public static final float GRAVITY = 0.04f*Game.SCALE;
     public static final int ANI_SPEED=25;
 
+    public static class Dialogue {
+        public static final int QUESTION = 0;
+        public static final int EXCLAMATION = 1;
 
+        public static final int DIALOGUE_WIDTH = (int) (14 * Game.SCALE);
+        public static final int DIALOGUE_HEIGHT = (int) (12 * Game.SCALE);
+
+        public static int GetSpriteAmount(int type) {
+            switch (type) {
+                case QUESTION, EXCLAMATION:
+                    return 5;
+            }
+
+            return 0;
+        }
+    }
+    
 
     public static class Curve{
         public static final int STICK_WIDTH_DEFAULT = 80;
@@ -22,32 +38,117 @@ public class Constants {
 
 
     }
+    
+    public static class Projectiles{
+		public static final int CANNON_BALL_DEFAULT_WIDTH = 15;
+		public static final int CANNON_BALL_DEFAULT_HEIGHT = 15;
+		
+		public static final int CANNON_BALL_WIDTH = (int)(Game.SCALE * CANNON_BALL_DEFAULT_WIDTH);
+		public static final int CANNON_BALL_HEIGHT = (int)(Game.SCALE * CANNON_BALL_DEFAULT_HEIGHT);
+		public static final float SPEED = 0.75f * Game.SCALE;
+	}
+
+    public static class Arrows{
+        public static final int ARROW_DEFAULT_WIDTH = 30;
+        public static final int ARROW_DEFAULT_HEIGHT = 10;
+
+        public static final int ARROW_WIDTH = (int)(Game.SCALE*ARROW_DEFAULT_WIDTH);
+        public static final int ARROW_HEIGHT = (int)(Game.SCALE*ARROW_DEFAULT_HEIGHT);
+        public static final float SPEED = 0.4f*Game.SCALE;
+
+
+
+    }
 
     public static class ObjectsConstants {
         public static final int RED_POTION = 0;
         public static final int BLUE_POTION = 1;
         public static final int BARREL = 2;
         public static final int BOX = 3;
+        public static final int TRAP1 = 4;
+        public static final int CHEST = 5;
+        public static final int SCROLL = 6;
+        public static final int SWORD = 7;
+        public static final int CANNON_LEFT = 8;
+        public static final int CANNON_RIGHT = 9;
+        public static final int ARROW_TRAP = 10;
+        public static final int TRAP2_LEFT = 11;
+        public static final int TRAP2_RIGHT = 12;
+        public static final int PEACH = 13;
+        public static final int FLAG = 14;
 
         public static final int RED_POTION_VALUE = 15;
-        public static final int BLUE_POTION_VALUE = 10;
+        public static final int BLUE_POTION_VALUE = 100;
+        public static final int TRAP1_VALUE = 20;
+        public static final int SWORD_VALUE = 20;
+        
+        public static final int PEACH_WIDTH_DEFAULT = 15;
+        public static final int PEACH_HEIGHT_DEFAULT = 15;
+        public static final int PEACH_WIDTH = (int) (PEACH_WIDTH_DEFAULT * Game.SCALE);
+        public static final int PEACH_HEIGHT = (int) (PEACH_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int FLAG_WIDTH_DEFAULT = 35;
+        public static final int FLAG_HEIGHT_DEFAULT = 35;
+        public static final int FLAG_WIDTH = (int) (FLAG_WIDTH_DEFAULT * Game.SCALE);
+        public static final int FLAG_HEIGHT = (int) (FLAG_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int TRAP2_WIDTH_DEFAULT = 90;
+        public static final int TRAP2_HEIGHT_DEFAULT = 30;
+        public static final int TRAP2_WIDTH = (int) (TRAP2_WIDTH_DEFAULT * Game.SCALE);
+        public static final int TRAP2_HEIGHT = (int) (TRAP2_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int ARROW_TRAP_WIDTH_DEFAULT = 90;
+		public static final int ARROW_TRAP_HEIGHT_DEFAULT = 30;
+		public static final int ARROW_TRAP_WIDTH = (int) (ARROW_TRAP_WIDTH_DEFAULT * Game.SCALE);
+		public static final int ARROW_TRAP_HEIGHT = (int) (ARROW_TRAP_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int CANNON_WIDTH_DEFAULT = 40;
+		public static final int CANNON_HEIGHT_DEFAULT = 26;
+		public static final int CANNON_WIDTH = (int) (CANNON_WIDTH_DEFAULT * Game.SCALE);
+		public static final int CANNON_HEIGHT = (int) (CANNON_HEIGHT_DEFAULT * Game.SCALE);
 
-        public static final int CONTAINER_WIDTH_DEFAULT = 50;
+        public static final int CONTAINER_WIDTH_DEFAULT = 40;
         public static final int CONTAINER_HEIGHT_DEFAULT = 30;
         public static final int CONTAINER_WIDTH = (int) (CONTAINER_WIDTH_DEFAULT * Game.SCALE);
         public static final int CONTAINER_HEIGHT = (int) (CONTAINER_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int CHEST_WIDTH_DEFAULT = 48;
+        public static final int CHEST_HEIGHT_DEFAULT = 48;
+        public static final int CHEST_WIDTH = (int) (CHEST_WIDTH_DEFAULT * Game.SCALE);
+        public static final int CHEST_HEIGHT = (int) (CHEST_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int SWORD_WIDTH_DEFAULT = 15;
+        public static final int SWORD_HEIGHT_DEFAULT = 15;
+        public static final int SWORD_WIDTH = (int) (SWORD_WIDTH_DEFAULT * Game.SCALE);
+        public static final int SWORD_HEIGHT = (int) (SWORD_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int SCROLL_WIDTH_DEFAULT = 13;
+        public static final int SCROLL_HEIGHT_DEFAULT = 13;
+        public static final int SCROLL_WIDTH = (int) (SCROLL_WIDTH_DEFAULT * Game.SCALE);
+        public static final int SCROLL_HEIGHT = (int) (SCROLL_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int TRAP1_WIDTH_DEFAULT = 32;
+        public static final int TRAP1_HEIGHT_DEFAULT = 32;
+        public static final int TRAP1_WIDTH = (int) (TRAP1_WIDTH_DEFAULT * Game.SCALE);
+        public static final int TRAP1_HEIGHT = (int) (TRAP1_HEIGHT_DEFAULT * Game.SCALE);
 
-        public static final int POTION_WIDTH_DEFAULT = 20;
-        public static final int POTION_HEIGHT_DEFAULT = 26;
+        public static final int POTION_WIDTH_DEFAULT = 12;
+        public static final int POTION_HEIGHT_DEFAULT = 16;
         public static final int POTION_WIDTH = (int) (POTION_WIDTH_DEFAULT * Game.SCALE);
         public static final int POTION_HEIGHT = (int) (POTION_HEIGHT_DEFAULT * Game.SCALE);
 
         public static int getSpriteAmount(int objType) {
             switch (objType) {
-                case RED_POTION, BLUE_POTION:
+            	case TRAP2_LEFT, TRAP2_RIGHT:
+            		return 10;
+            	case ARROW_TRAP:
+            		return 15;
+                case RED_POTION, BLUE_POTION, CANNON_LEFT, CANNON_RIGHT:
                     return 7;
                 case BARREL, BOX:
                     return 8;
+                case CHEST:
+                	return 3;
             }
 
             return 1;
@@ -389,6 +490,9 @@ public class Constants {
         public static final int HIT = 5;
         public static final int DEAD = 6;
         public static final int ULTI = 7;
+        public static final int THROW = 8;
+
+
 
 
         public static int GetSpriteAmount(int player_action) {
@@ -400,7 +504,8 @@ public class Constants {
                 case IDLE:
                     return 5;
                 case HIT:
-                    return 4;
+                case THROW:
+                  return 4;
                 case ATTACK:
                     return 3;
                 case ULTI:
@@ -420,10 +525,26 @@ public class Constants {
                     return 3;
                 case ULTI :
                     return 20;
+                case THROW:
+                    return 25;
                 default: 
                     return 0;
             }
         }
+        public static int GetPlayerDamage(int player_action){
+            switch(player_action){
+                case ATTACK:
+                    return 10;
+                case ULTI :
+                    return 40;
+                case THROW:
+                    return 25;
+                default:
+                    return 0;
+            }
+        }
+
+
 
         public static int GetAniFromKey(KeyEvent e) {
             switch (e.getKeyCode()) {

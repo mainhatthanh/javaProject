@@ -99,6 +99,7 @@ public class Player extends Entity {
     private int powerGrowTick;
 
     //Chieu ban
+    private boolean isThrow;
    private boolean sticking;
    private BufferedImage stickImg;
    private ArrayList<Stick> sticks=new ArrayList<>();
@@ -127,9 +128,7 @@ public class Player extends Entity {
         this.levelUp=false;
         loadAnimations();
         loadImgs();
-
         initHitbox(15, 27);
-
         initAttackBox();
         expThatChange = 0;
     }
@@ -148,6 +147,7 @@ public class Player extends Entity {
     }
 
     public void update() {
+        System.out.println(this.getPlayerDamage());
         updateHealthBar();
         updateStaminaBar();
         playerUpdateLevel(levelUp);
@@ -157,34 +157,40 @@ public class Player extends Entity {
             updateDirStick();
 
         if (currentHealth <= 0) {
-            if (state != DEAD) {
-                state = DEAD;
-                aniTick = 0;
-                aniIndex = 0;
-                playing.setPlayerDying(true);
-                playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
-            } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
-                playing.setGameOver(true);
-                playing.getGame().getAudioPlayer().stopSong();
-                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
-            } else {
-                updateAnimationTick();
-
-                //fall if in air
-                if (inAir)
-                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
-                        hitbox.y += airSpeed;
-                        airSpeed += GRAVITY;
-                    } else
-                        inAir = false;
-
-            }
-
-            return;
+        	if (playing.TouchFlag() == false || playing.CountRev() == 0) {
+        	
+	            if (state != DEAD) {
+	                state = DEAD;
+	                aniTick = 0;
+	                aniIndex = 0;
+	                playing.setPlayerDying(true);
+	                playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
+	            } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
+	                playing.setGameOver(true);
+	                playing.getGame().getAudioPlayer().stopSong();
+	                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
+	            } else {
+	                updateAnimationTick();
+	
+	                //fall if in air
+	                if (inAir)
+	                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
+	                        hitbox.y += airSpeed;
+	                        airSpeed += GRAVITY;
+	                    } else
+	                        inAir = false;
+	
+	            }
+        	}
+        	else {
+            		playing.setSpawn();
+            		playing.setCountRev(playing.CountRev() - 1);
+        	}
+	
+	            return;
         }
-            updateAttackBox();
-
-        updateExpBar();
+           	updateAttackBox();
+            updateExpBar();
 
 
         updateAttackBox();
@@ -253,6 +259,9 @@ public class Player extends Entity {
             playing.getGame().getAudioPlayer().playAttackSound();
         } else {
             if(aniIndex>=6 && !attackChecked){
+                attackChecked = true;
+                if(powerAttackActive)
+                    attackChecked=false;
                 playing.checkEnemyHit(attackBox);
                 playing.getGame().getAudioPlayer().playAttackSound();
             }
@@ -300,17 +309,9 @@ public class Player extends Entity {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
-
-        /*if(curveAttackActive)
-            curveManager.drawCurves(g,xlvlOffset);*/
-
         drawUI(g);
-
-
 //         drawAttackHitbox(g, xlvlOffset);
 //         drawHitbox(g, xlvlOffset);
-
-
     }
 
     public void drawLvlUp(Graphics g,int xlvlOffset){
@@ -468,6 +469,16 @@ public class Player extends Entity {
             currentHealth = maxHealth;
         }
     }
+    
+    public void kill(int value) {
+    	 currentHealth -= value;
+         if (currentHealth <= 0) {
+             currentHealth = 0;
+             // gameOver();
+         } else if (currentHealth >= maxHealth) {
+             currentHealth = maxHealth;
+         }
+    }
 
     public void changeStamina(int value) {
         // thay đổi stamina
@@ -529,6 +540,16 @@ public class Player extends Entity {
 
             }
         }
+
+        if (isThrow) {
+            state = THROW;
+            if (startAni != THROW) {
+                aniIndex = 1;
+                aniTick = 0;
+                return;
+
+            }
+        }
         if (ultiSkill){
             state = ULTI;
             if(startAni != ULTI){
@@ -537,6 +558,12 @@ public class Player extends Entity {
                 return;
             }
         }
+
+
+
+
+
+
         if (startAni != state)
             resetAniTick();
 
@@ -562,6 +589,8 @@ public class Player extends Entity {
                 if (aniIndex >= GetSpriteAmount(state)) {
                     aniIndex = 0;
                     attacking = false;
+                    isThrow=false;
+                    sticking=false;
                     ultiSkill = false;
                     attackChecked = false;
                 }
@@ -573,6 +602,8 @@ public class Player extends Entity {
                 if (aniIndex >= GetSpriteAmount(state)) {
                     aniIndex = 0;
                     attacking = false;
+                    isThrow=false;
+                    sticking=false;
                     ultiSkill = false;
                     attackChecked = false;
                 }
@@ -612,7 +643,7 @@ public class Player extends Entity {
 
     private void loadAnimations() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
-        animations = new BufferedImage[8][8];
+        animations = new BufferedImage[9][8];
         for (int j = 0; j < animations.length; j++)
             for (int i = 0; i < animations[j].length; i++)
                 animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
@@ -621,7 +652,7 @@ public class Player extends Entity {
         levelUpImg=LoadSave.GetSpriteAtlas(LoadSave.LEVEL_UP_IMG);
 
     }
-
+    
     public void loadLvlData(int[][] lvlData) {
         this.lvlData = lvlData;
         if (!IsEntityOnFloor(hitbox, lvlData))
@@ -637,6 +668,7 @@ public class Player extends Entity {
         inAir = false;
         attacking = false;
         ultiSkill = false;
+        sticking=false;
         moving = false;
         state = IDLE;
         currentHealth = maxHealth;
@@ -724,12 +756,12 @@ public class Player extends Entity {
     public void shootStick(){
         if(sticking)
             return;
-        if(currentStamina>=40) {
-            sticking = true;
-             this.setAttacking(true);
+        if(currentStamina>=GetStamina(THROW)) {
+            this.setIsThrow(true);
+            this.setPlayerDamage(GetPlayerDamage(THROW));
+            sticking=true;
             playing.getGame().getAudioPlayer().playEffect(AudioPlayer.THROW);
-
-            changeStamina(-40);
+            changeStamina(-GetStamina(THROW));
         }
     }
     private void loadImgs() {
@@ -758,12 +790,10 @@ public class Player extends Entity {
     }
 
 
-
-
     private void updatePlayerShoot(Player player){
-        if(player.isCurving()) {
+        if(player.isSticking()) {
             reloadStick(player);
-            player.resetCurving();
+            player.resetSticking();
         }
 
     }
@@ -775,12 +805,22 @@ public class Player extends Entity {
 
     private void updateDirStick(){
         if(this.left){
-           stickDir =-1;
+            stickDir =-1;
         }
         else if(this.right){
             stickDir=1;
         }
     }
+
+    public void setIsThrow(boolean throwing) {
+        if(attacking==true||isUltiSkill()) {
+            isThrow = false;
+        }
+        else isThrow=throwing;
+    }
+
+
+
 
 
 
@@ -800,9 +840,9 @@ public class Player extends Entity {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.schedule(() -> {
             isShowLevelUp = false;
-            System.out.println("Level up Img has been reset!");
+            //System.out.println("Level up Img has been reset!");
             scheduler.shutdown(); // Dừng Scheduler sau khi thực hiện
-        }, 2, TimeUnit.SECONDS); // 3 giây
+        }, 2, TimeUnit.SECONDS); // 2 giây
     }
 
     private void resetBooleanLevelUp(){
@@ -813,10 +853,10 @@ public class Player extends Entity {
         return isShowLevelUp;
     }
 
-    public boolean isCurving(){
+    public boolean isSticking(){
         return sticking;
     }
-    public void resetCurving(){
+    public void resetSticking(){
         this.sticking=false;
     }
 

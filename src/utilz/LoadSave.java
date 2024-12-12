@@ -11,7 +11,7 @@ import java.net.URL;
 
 public class LoadSave {
     // public static final String PLAYER_ATLAS = "players_sprites.png";
-    public static final String PLAYER_ATLAS = "playersprites.png";
+    public static final String PLAYER_ATLAS = "player_spritess.png";
     public static final String PLAYER_ULTI = "playerulti_sprite.png";
     public static final String LEVEL_ATLAS = "tiletest.png";
     public static final String MENU_BACKGROUND = "menu_background.png";
@@ -53,6 +53,17 @@ public class LoadSave {
 
     public static final String POTIONS_ATLAS = "potions_sprites.png";
     public static final String CONTAINER_ATLAS = "objects_sprites.png";
+    public static final String TRAP1_ATLAS = "trap1_atlas.png";
+    public static final String CHEST_ATLAS = "chest.png";
+    public static final String TOXICTRAP_ATLAS = "ToxicTrap.png";
+    public static final String SCROLL_ATLAS = "scroll_atlas.png";
+    public static final String SWORD_ATLAS = "sword_atlas.png";
+    public static final String CANNON_ATLAS = "cannon_atlas.png";
+	public static final String CANNON_BALL = "ball.png";
+	public static final String ARROWTRAP_ATLAS = "arrowtrap.png";
+	public static final String ARROW_ATLAS = "arrow.png";
+	public static final String TRAP2_ATLAS = "trap2.png";
+	public static final String FLAG_ATLAS = "flag.png";
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage img = null;

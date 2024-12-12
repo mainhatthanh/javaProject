@@ -23,12 +23,9 @@ import ui.PauseOverlay;
 import ui.UI;
 import utilz.LoadSave;
 
-import static utilz.Constants.PlayerConstants.ATTACK;
-import static utilz.Constants.PlayerConstants.GetStamina;
-import static utilz.Constants.PlayerConstants.JUMP;
-import static utilz.Constants.PlayerConstants.ULTI;
 import static entities.Player.expThatChange;
 import static entities.Player.levelUpTime;
+import static utilz.Constants.PlayerConstants.*;
 
 public class Playing extends State implements Statemethods {
 	
@@ -49,6 +46,7 @@ public class Playing extends State implements Statemethods {
     private boolean paused = false;
 
     private int xLvlOffset;
+    private int countRev = 0;
 
     private int leftBorder = (int) (0.5 * Game.GAME_WIDTH);
     private int rightBorder = (int) (0.5 * Game.GAME_WIDTH);
@@ -57,12 +55,16 @@ public class Playing extends State implements Statemethods {
 
     private BufferedImage backgroundImg, groundImg;
 
+    private boolean touchFlag = false;
     private boolean gameOver;
     private boolean lvlCompleted = false;
     private boolean playerDying;
    
 
     int[][] lvlData;
+
+    /*private int DamageNormalAttack = 10;
+    private int DamageUltiAttack = 40;*/
 
 
 
@@ -155,6 +157,7 @@ public class Playing extends State implements Statemethods {
             levelUpTime = 0;
         } else if (gameOver) {
             gameOverOverlay.update();
+        	
         }
         else if(enemyManager.checkBoss) {
         	ui.setText(enemyManager.messBoss, 3);
@@ -172,7 +175,7 @@ public class Playing extends State implements Statemethods {
             	ui.showMessage(a);
             	enemyManager.setExpUp(0);
             }
-            objectManager.update();
+            objectManager.update(levelManager.getCurrentLevel().getLvlData(), player);
 
 
 
@@ -250,6 +253,8 @@ public class Playing extends State implements Statemethods {
             expThatChange = 0;
             levelUpTime = 0;
         }
+        touchFlag = false;
+        countRev = 0;
         textIndex =0;
         lvlCompleted = false;
         playerDying = false;
@@ -287,7 +292,7 @@ public class Playing extends State implements Statemethods {
                 if (player.getCurrentStamina() >= GetStamina(ATTACK)) {
                     player.setAttacking(true);
                     player.setUltiSkill(false);
-                    player.setPlayerDamage(10);
+                    player.setPlayerDamage(GetPlayerDamage(ATTACK));
                     player.changeStamina(-GetStamina(ATTACK));
                 }
             }
@@ -314,8 +319,8 @@ public class Playing extends State implements Statemethods {
                     player.setRight(true);
                     break;
                 case KeyEvent.VK_W:
-                    player.shootStick();
-                            break;
+                        player.shootStick();
+                    break;
                 case KeyEvent.VK_LEFT:
                     player.setLeft(true);
                     break;
@@ -348,7 +353,7 @@ public class Playing extends State implements Statemethods {
                     if(e.getKeyCode()!=KeyEvent.VK_G)
                         if(player.getCurrentStamina() >= GetStamina(ATTACK)){
                             player.setAttacking(true);
-                            player.setPlayerDamage(10);
+                            player.setPlayerDamage(GetPlayerDamage(ATTACK));
                             player.setUltiSkill(false);
                             player.changeStamina(-GetStamina(ATTACK));
                         }else{ 
@@ -359,7 +364,7 @@ public class Playing extends State implements Statemethods {
                     if(e.getKeyCode()!=KeyEvent.VK_F)
                         if(player.getCurrentStamina() >= GetStamina(ULTI)){
                             player.setUltiSkill(true);
-                            player.setPlayerDamage(50);
+                            player.setPlayerDamage(GetPlayerDamage(ULTI));
                             player.setAttacking(false);
                             player.changeStamina(-GetStamina(ULTI));
                         }else{ 
@@ -483,6 +488,19 @@ public class Playing extends State implements Statemethods {
     public void setPlayerDying(boolean playerDying) {
         this.playerDying = playerDying;
     }
+    public void setCountRev(int countRev) {
+    	this.countRev = countRev;
+    }
+    public void setTouchFlag(boolean touchFlag) {
+    	this.touchFlag = touchFlag;
+    }
+    
+    public int CountRev() {
+    	return countRev;
+    }
+    public boolean TouchFlag() {
+    	return touchFlag;
+    }
 
     /*public BulletManager getBulletManager(){
         return bulletManager;
@@ -501,6 +519,9 @@ public class Playing extends State implements Statemethods {
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
+     public void setSpawn() {
+    	 player.setSpawn(levelManager.getCurrentLevel().getFlag1());
+     }
     
 
 }
