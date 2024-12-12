@@ -93,6 +93,9 @@ public class Constants {
         public static final int ATTACK = 2;
         public static final int HIT = 3;
         public static final int DEAD = 4;
+        public static final int IDLE_2 = 5;
+        public static final int ATTACK2 = 6;
+        
         
         
         public static final int	BOSSFINAL_WIDTH_DEFAULT = 64;
@@ -197,7 +200,7 @@ public class Constants {
                         return 8;
                     else if(enemy_type == MINOTAUR)
                         return 9;
-                    else if( enemy_type == TORO || enemy_type == SPIDER)
+                    else if( enemy_type == TORO || enemy_type == SPIDER || enemy_type == BOSSFINAL)
                     	return 5;
                     else if( enemy_type == BOSS1 || enemy_type == BOSS4 )
                     	return 6;
@@ -218,6 +221,8 @@ public class Constants {
                     	return 5;
                 	else if(enemy_type == BOSS2 || enemy_type == BOSS3)
                     	return 7;
+                	else if(enemy_type == BOSSFINAL)
+                		return 6;
                     return 6;
                 case ATTACK:
                     if (enemy_type == SHARK || enemy_type == BOSS5)
@@ -234,11 +239,13 @@ public class Constants {
                     	return 4;
                     else if(enemy_type == BOSS4)
                     	return 15;
+                    else if(enemy_type == BOSSFINAL)
+                    	return 3;
                     return 7;
                 case HIT:
                     if(enemy_type==MINOTAUR || enemy_type == BOSS4)
                         return 5;
-                    else if (enemy_type == TORO || enemy_type == BOSS1 || enemy_type == SPIDER || enemy_type == BOSS3)
+                    else if (enemy_type == TORO || enemy_type == BOSS1 || enemy_type == SPIDER || enemy_type == BOSS3 || enemy_type == BOSSFINAL)
                     	return 3;
                     else if(enemy_type == MONSTER_EYE1)
                     	return 6;
@@ -253,11 +260,15 @@ public class Constants {
                     	return 4;
                     else if(enemy_type == MONSTER_EYE1 || enemy_type == SPIDER)
                     	return 9;
-                    else if(enemy_type == BOSS3)
+                    else if(enemy_type == BOSS3 || enemy_type == BOSSFINAL)
                     	return 7;
                     else if(enemy_type == BOSS4)
                     	return 19;
                     return 5;
+                case ATTACK2:
+                if(enemy_type == TORO)
+                	return 4;
+                return 0;
             }
 
             return 0;
@@ -319,7 +330,7 @@ public class Constants {
                case SHARK:
               	return 2;
                 case TORO:
-               	return 2;
+               	return 10;
                 case BOSS1:
                	return 2;
                case BOSS2:
@@ -335,7 +346,7 @@ public class Constants {
                 case SPIDER :
                 	return 2;
                 default:
-                	return 10;
+                	return 0;
             }
         }
         

@@ -164,7 +164,6 @@ public class Playing extends State implements Statemethods {
         else if(check() && count ==0) {
         	player.updateIDLE();
         	enemyManager.updateIDLE();
-        	//System.out.println(Arrays.toString(GetMessageEnemy(10) ) );
         	ui.setText(GetMessageEnemy(enemyManager.getEnemyCheck()), enemyManager.getEnemyCheck());
         }
         else if (playerDying) {

@@ -216,6 +216,18 @@ public class HelpMethods {
         return list;
     }
     
+    public static ArrayList<BossFinal> GetBossFinal(BufferedImage img) {
+        ArrayList<BossFinal> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == BOSSFINAL)
+                    list.add(new BossFinal(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
     public static ArrayList<Boss4> GetBoss4(BufferedImage img) {
         ArrayList<Boss4> list = new ArrayList<>();
         for (int j = 0; j < img.getHeight(); j++)

@@ -1,10 +1,13 @@
 package entities;
 
+import static utilz.Constants.ANI_SPEED;
 import static utilz.Constants.Directions.RIGHT;
 import static utilz.Constants.EnemyConstants.ATTACK;
-import static utilz.Constants.EnemyConstants.BOSS2;
-import static utilz.Constants.EnemyConstants.BOSS2_HEIGHT;
-import static utilz.Constants.EnemyConstants.BOSS2_WIDTH;
+import static utilz.Constants.EnemyConstants.BOSSFINAL;
+import static utilz.Constants.EnemyConstants.BOSSFINAL_HEIGHT;
+import static utilz.Constants.EnemyConstants.BOSSFINAL_WIDTH;
+import static utilz.Constants.EnemyConstants.DEAD;
+import static utilz.Constants.EnemyConstants.GetSpriteAmount;
 import static utilz.Constants.EnemyConstants.HIT;
 import static utilz.Constants.EnemyConstants.IDLE;
 import static utilz.Constants.EnemyConstants.RUNNING;
@@ -20,18 +23,17 @@ public class BossFinal extends Enemy {
 		private int attackBoxOffsetX;
 
 	    public BossFinal(float x, float y) {
-	        super(x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2);
-	        initHitbox(20,30);
-	        this.enemyHealthBarWidth = (int)(35* Game.SCALE);
-	        this.enemyHealthBarHeight = (int)(3* Game.SCALE);
+	        super(x, y, BOSSFINAL_WIDTH, BOSSFINAL_HEIGHT, BOSSFINAL);
+	        initHitbox(25,30);
+	        this.enemyHealthBarWidth = (int)(40* Game.SCALE);
+	        this.enemyHealthBarHeight = (int)(4* Game.SCALE);
 	        this.enemyHealthWidth = enemyHealthBarWidth;
-	        this.walkSpeed = 0.4f * Game.SCALE;
-	        this.setDialogue();
+	        this.walkSpeed = 0.5f * Game.SCALE;
 	        initAttackBox();
 	    }
 	    private void initAttackBox(){
-	        attackBox=new Rectangle2D.Float(x,y,(int)(35*Game.SCALE),(int)(30*Game.SCALE));
-	        attackBoxOffsetX = (int)(Game.SCALE*35);
+	        attackBox=new Rectangle2D.Float(x,y,(int)(25*Game.SCALE),(int)(20*Game.SCALE));
+	        attackBoxOffsetX = (int)(Game.SCALE*25);
 	    }
 
 	    public void update(int[][] lvlData,Player player){
@@ -42,13 +44,41 @@ public class BossFinal extends Enemy {
 
 	    }
 	    
+	    protected void updateAnimationTick() {
+	        aniTick++;
+	        if (aniTick >= ANI_SPEED) {
+	            aniTick = 0;
+	            aniIndex++;
+	            
+	            if (aniIndex >= GetSpriteAmount(enemyType, state)) {
+	                aniIndex = 0;
+	                switch (state) {
+	                    case ATTACK, HIT -> state = IDLE;
+	                    case DEAD -> active = false;
+	                }
+
+	            }
+
+	        }
+	    }
+	    
+	    public void updateAnimaIDLE() {
+	        aniTick++;
+	        if (aniTick >= 40) {
+	            aniTick = 0;
+	            aniIndex++;
+	            if (aniIndex >=  4)
+	                aniIndex = 0;
+	        }
+	    }
+	    
 	    protected void updateAttackBoxFlip() {
 	        if (walkDir == RIGHT)
 	            attackBox.x = hitbox.x + hitbox.width;
 	        else
 	            attackBox.x = hitbox.x - attackBoxOffsetX;
 
-	        attackBox.y = hitbox.y + 5;
+	        attackBox.y = hitbox.y + 15;
 	    }
 
 	    protected void updateAttackBox() {
@@ -71,7 +101,6 @@ public class BossFinal extends Enemy {
 
 	                case RUNNING:
 	                    if(canSeePlayer(lvlData,player)) {
-	                    	count ++;
 	                        turnTowardsPlayer(player);
 	                        if (isPlayerCloseAttack(player))
 	                            newState(ATTACK);
@@ -82,7 +111,7 @@ public class BossFinal extends Enemy {
 	                    if(aniIndex==0)
 	                        attackChecked = false;
 
-	                    if(aniIndex== 4 &&!attackChecked)
+	                    if(aniIndex== 1 &&!attackChecked)
 	                        checkEnmyHit(attackBox,player);
 	                    break;
 	                case HIT:
@@ -96,39 +125,19 @@ public class BossFinal extends Enemy {
 		public void drawHealthBar(Graphics g, int xLvlOffset) {
 	        g.setColor(Color.red);
 	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
-	                (int) (hitbox.y + hitbox.height - attackBox.height - 15 * Game.SCALE), enemyHealthWidth,
+	                (int) (hitbox.y + hitbox.height - attackBox.height - 25 * Game.SCALE), enemyHealthWidth,
 	                enemyHealthBarHeight);
 	        g.setColor(Color.WHITE);
 	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
-	                (int) (hitbox.y + hitbox.height - attackBox.height - 15 * Game.SCALE),
+	                (int) (hitbox.y + hitbox.height - attackBox.height - 25 * Game.SCALE),
 	                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
 		}
 		private int flipHealth() {
 	    	if(walkDir == RIGHT)
-	    		return 2;
+	    		return -5;
 	    	else
 	    		return 2;
 	    }
-		
-		 public void render(Graphics g, int xlvlOffset) {
-		        
-		    	
-		    	if(left)
-		    		g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + 120 ),
-		                 (int) (hitbox.y - yDrawOffset - 30 ), (int) (width * flipW * 0.7), (int) (height *0.7 ), null);
-		    	
-		    	else if(right)
-		    		g.drawImage(animations[state][aniIndex], (int) ((hitbox.x ) - xlvlOffset - 60 ),
-		                    (int) (hitbox.y - yDrawOffset -30 ), (int) (width * flipW * 0.7), (int) (height *0.7), null);
-		    	
-		    	else 
-		    		if(attackBox.x < hitbox.x)
-		    			g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + 80 ),
-		                        (int) (hitbox.y - yDrawOffset -30), (int) (width * flipW *0.7), (int) (height* 0.7), null);
-		    		else
-		    			g.drawImage(animations[state][aniIndex], (int) ((hitbox.x ) - xlvlOffset - 30 ),
-		                        (int) (hitbox.y - yDrawOffset-30 ), (int) (width * flipW * 0.7), (int) (height* 0.7), null);
-		 }
 
 
 	    public void drawAttackBox(Graphics g,int xLvlOffset){
@@ -138,9 +147,9 @@ public class BossFinal extends Enemy {
 	    }
 	    public int flipX(){
 	        if(walkDir==RIGHT)
-	            return -25;
+	            return -10;
 	        else
-	            return  width - 14  ;
+	            return  width + 69  ;
 	    }
 	    public int flipY(){
 	          if(walkDir==RIGHT)

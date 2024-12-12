@@ -27,7 +27,6 @@ public class Boss5 extends Enemy {
 	        this.enemyHealthBarHeight = (int)(3* Game.SCALE);
 	        this.enemyHealthWidth = enemyHealthBarWidth;
 	        this.walkSpeed = 0.38f * Game.SCALE;
-	        this.setDialogue();
 	        initAttackBox();
 		
 	}
@@ -59,7 +58,6 @@ public class Boss5 extends Enemy {
 
 	                case RUNNING:
 	                    if(canSeePlayer(lvlData,player)) {
-	                    	count ++;
 	                        turnTowardsPlayer(player);
 	                        if (isPlayerCloseAttack(player))
 	                            newState(ATTACK);

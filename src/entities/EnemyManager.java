@@ -16,9 +16,6 @@ public class EnemyManager {
 	private int expUp;
 	private int enemyCheck;
 	
-	public String[] messBoss;
-
-	
     private Playing playing;
     private BufferedImage[][] crabbyArr;
     private BufferedImage[][] sharkArr;
@@ -26,26 +23,30 @@ public class EnemyManager {
     private BufferedImage[][] moneye1Arr;
     private BufferedImage[][] monster2Arr;
     private BufferedImage[][] spiderArr;
+    private BufferedImage[][] boss5Arr;
+    private BufferedImage[][] boss1Arr;
 
     private BufferedImage[][] toroArr;
-    private BufferedImage[][] boss1Arr;
     private BufferedImage[][] boss2Arr;
     private BufferedImage[][] boss3Arr;
     private BufferedImage[][] boss4Arr;
-    private BufferedImage[][] boss5Arr;
+    private BufferedImage[][] bossFinalArr;
 
+    
     private ArrayList<Crabby> crabbies = new ArrayList<>();
     private ArrayList<Shark> sharks = new ArrayList<>();
     private ArrayList<Minotaur> minotaurs = new ArrayList<>();
-    private ArrayList<Toro> toros = new ArrayList<>();
     private ArrayList<Boss1> boss1 = new ArrayList<>();
     private ArrayList<Monster_Eye1> moneyes = new ArrayList<>();
     private ArrayList<Monster2> monster2s = new ArrayList<>();
     private ArrayList<Spider> spiders = new ArrayList<>();
+    private ArrayList<Boss5> boss5 = new ArrayList<>();
+    
     private ArrayList<Boss2> boss2 = new ArrayList<>();
     private ArrayList<Boss3> boss3 = new ArrayList<>();
     private ArrayList<Boss4> boss4 = new ArrayList<>();
-    private ArrayList<Boss5> boss5 = new ArrayList<>();
+    private ArrayList<Toro> toros = new ArrayList<>();
+    private ArrayList<BossFinal> bossFinal = new ArrayList<>();
 
     public EnemyManager(Playing playing) {
         this.playing = playing;
@@ -61,8 +62,8 @@ public class EnemyManager {
         loadEnemyImgsBoss3();
         loadEnemyImgsBoss4();
         loadEnemyImgsBoss5();
-        
-        this.messBoss = new String[10];
+        loadEnemyImgsBossFinal();
+
 
     }
 
@@ -73,13 +74,16 @@ public class EnemyManager {
         moneyes = level.getMonEye1();
         monster2s = level.getMonster2();
         spiders = level.getSpider();
+        boss5 = level.getBoss5();
+        boss1 = level.getBoss1();
         
         toros = level.getToros();
-        boss1 = level.getBoss1();
         boss2 = level.getBoss2();
         boss3 = level.getBoss3();
         boss4 = level.getBoss4();
-        boss5 = level.getBoss5();
+        bossFinal = level.getBossFinal();
+        
+        
 
     }
 
@@ -92,13 +96,15 @@ public class EnemyManager {
         boolean isAnyActiveMonEye1 = false;
         boolean isAnyActiveMonster2 = false;
         boolean isAnyActiveSpider = false;
+        boolean isAnyActiveBoss1 = false;
+        boolean isAnyActiveBoss5 = false;
 
         boolean isAnyActiveToro = false;
-        boolean isAnyActiveBoss1 = false;
         boolean isAnyActiveBoss2 = false;
         boolean isAnyActiveBoss3 = false;
         boolean isAnyActiveBoss4 = false;
-        boolean isAnyActiveBoss5 = false;
+        boolean isAnyActiveBossFinal = false;
+        
 
         
         for (Shark sh : sharks) 
@@ -143,20 +149,7 @@ public class EnemyManager {
                     spi.update(lvlData, player);
                     isAnyActiveSpider = true;
                 }
-
             
-            for (Toro t : toros) 
-                if (t.isActive()) {
-                    if(t.getCheckBoss()) 
-                    	for(int i=0; i < GetNumberMessageBoss(TORO);i ++) {
-                			messBoss[i] = t.getDialogue(i);
-                    		enemyCheck = BOSS2;
-                }
-                	t.updateHealthBar();
-                    t.update(lvlData, player);
-                    isAnyActiveToro = true;
-                }
-
             for (Boss1 b : boss1)
                 if (b.isActive()) {
                     b.updateHealthBar();
@@ -164,13 +157,26 @@ public class EnemyManager {
                     isAnyActiveBoss1 = true;
                 }
             
+            for (Boss5 b5 : boss5)
+                if (b5.isActive()) {
+                	b5.updateHealthBar();
+                    b5.update(lvlData, player);
+                    isAnyActiveBoss5 = true;
+                
+                }
+
+            
+            for (Toro t : toros) 
+                if (t.isActive()) {
+                    enemyCheck = TORO;
+                	t.updateHealthBar();
+                    t.update(lvlData, player);
+                    isAnyActiveToro = true;
+                }
+
             for (Boss2 b2 : boss2)
                 if (b2.isActive()) {
-                    if(b2.getCheckBoss()) 
-                    	for(int i=0; i < GetNumberMessageBoss(BOSS2);i ++) {
-                    		messBoss[i] = b2.getDialogue(i);
-                    		enemyCheck = BOSS2;
-                    	}
+                    enemyCheck = BOSS2;
                 	b2.updateHealthBar();
                     b2.update(lvlData, player);
                     isAnyActiveBoss2 = true;
@@ -178,12 +184,7 @@ public class EnemyManager {
 
             for (Boss3 b3 : boss3)
                 if (b3.isActive()) {
-                    if(b3.getCheckBoss()) 
-                    	for(int i=0; i < GetNumberMessageBoss(BOSS3);i ++) {
-                    		messBoss[i] = b3.getDialogue(i);
-                    		enemyCheck = BOSS3;
-                    	}
-                			
+                	enemyCheck = BOSS3;		
                 	b3.updateHealthBar();
                     b3.update(lvlData, player);
                     isAnyActiveBoss3 = true;
@@ -196,19 +197,18 @@ public class EnemyManager {
                     b4.update(lvlData, player);
                     isAnyActiveBoss4 = true;
                 }
-
-            for (Boss5 b5 : boss5)
-                if (b5.isActive()) {
-                	b5.updateHealthBar();
-                    b5.update(lvlData, player);
-                    isAnyActiveBoss5 = true;
-                
+            
+            for (BossFinal bf : bossFinal)
+                if (bf.isActive()) {
+                    enemyCheck = BOSSFINAL;
+                	bf.updateHealthBar();
+                    bf.update(lvlData, player);
+                    isAnyActiveBossFinal = true;
                 }
             
             if (!isAnyActiveCrabby && !isAnyActiveShark && !isAnyActiveMinotaur && !isAnyActiveToro
-                    && !isAnyActiveMonEye1 && !isAnyActiveBoss1
-                    && !isAnyActiveMonster2 && !isAnyActiveSpider && !isAnyActiveBoss2 && !isAnyActiveBoss3
-                    && !isAnyActiveBoss4 && !isAnyActiveBoss5) {
+                    && !isAnyActiveMonEye1 && !isAnyActiveBoss1 && !isAnyActiveMonster2 && !isAnyActiveSpider && !isAnyActiveBoss2 && !isAnyActiveBoss3
+                    && !isAnyActiveBoss4 && !isAnyActiveBoss5 && !isAnyActiveBossFinal) {
 
                 playing.setFlyWukong(true);
 
@@ -230,10 +230,26 @@ public class EnemyManager {
         drawBoss3(g, xLvlOffset);
         drawBoss4(g, xLvlOffset);
         drawBoss5(g, xLvlOffset);
+        drawBossFinal(g, xLvlOffset);
 
     }
 
-    private void drawBoss5(Graphics g, int xLvlOffset) {
+    private void drawBossFinal(Graphics g, int xLvlOffset) {
+    	for (BossFinal bf : bossFinal) {
+            if (bf.isActive()) {
+                g.drawImage(bossFinalArr[bf.getState()][bf.getAniIndex()],
+                        (int) (bf.getHitBox().x - xLvlOffset - BOSSFINAL_DRAWOFFSET_X + bf.flipX()),
+                        (int) (bf.getHitBox().y - BOSSFINAL_DRAWOFFSET_Y -35),
+                        (int) (BOSSFINAL_WIDTH * bf.flipY() * 2), (int) (BOSSFINAL_HEIGHT*2), null);
+                bf.drawHitbox(g, xLvlOffset);
+                bf.drawAttackBox(g, xLvlOffset);
+                bf.drawHealthBar(g, xLvlOffset);
+            }
+        }
+		
+	}
+
+	private void drawBoss5(Graphics g, int xLvlOffset) {
         for (Boss5 b5 : boss5) {
             if (b5.isActive()) {
                 g.drawImage(boss5Arr[b5.getState()][b5.getAniIndex()],
@@ -386,8 +402,8 @@ public class EnemyManager {
                         (int) mino.getHitBox().x - xLvloffset - MINOTAUR_DRAWOFFSET_X + mino.flipX(),
                         (int) (mino.getHitBox().y - MINOTAUR_DRAWOFFSET_Y - 10),(int)(MINOTAUR_WIDTH * mino.flipY() * 1.2),
                         (int)(MINOTAUR_HEIGHT * 1.2), null);
-                mino.drawHitbox(g, xLvloffset);
-                mino.drawAttackBox(g, xLvloffset);
+//                mino.drawHitbox(g, xLvloffset);
+//                mino.drawAttackBox(g, xLvloffset);
                 mino.drawHealthBar(g, xLvloffset);
                 
             }
@@ -502,7 +518,25 @@ public class EnemyManager {
                         expUp = b5.getExpUpdate();
                         return;
                     }
+        
+        for (BossFinal bf : bossFinal)
+            if (bf.isActive())
+                if (bf.getCurrentHealth() > 0)
+                    if (attackBox.intersects(bf.getHitBox())) {
+                        bf.hurt(10, player);
+                        expUp = bf.getExpUpdate();
+                        return;
+                    }
 
+    }
+    
+    private void loadEnemyImgsBossFinal() {
+    	bossFinalArr = new BufferedImage[9][8];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSSFINAL_ATLAS);
+        for (int j = 0; j < bossFinalArr.length; j++)
+            for (int i = 0; i < bossFinalArr[j].length; i++)
+            	bossFinalArr[j][i] = temp.getSubimage(i * BOSSFINAL_WIDTH_DEFAULT, j * BOSSFINAL_HEIGHT_DEFAULT,
+                        BOSSFINAL_WIDTH_DEFAULT, BOSSFINAL_HEIGHT_DEFAULT);
     }
 
     private void loadEnemyImgSpider() {
@@ -560,7 +594,7 @@ public class EnemyManager {
     }
 
     private void loadEnemyImgsToro() {
-        toroArr = new BufferedImage[5][9];
+        toroArr = new BufferedImage[7][9];
         BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.TORO_ATLAS);
         for (int j = 0; j < toroArr.length; j++)
             for (int i = 0; i < toroArr[j].length; i++)
@@ -639,6 +673,9 @@ public class EnemyManager {
             b4.resetEnemy();
         for (Boss5 b5 : boss5)
             b5.resetEnemy();
+        
+        for (BossFinal bf : bossFinal)
+            bf.resetEnemy();
       
     }
     
@@ -658,6 +695,10 @@ public class EnemyManager {
 		for(Boss4 b4: boss4) 
 			if(b4.isActive())
 				b4.updateAnimaIDLE();
+		
+		for (BossFinal bf : bossFinal)
+			if(bf.isActive())
+				bf.updateAnimaIDLE();
 		
 	}
 
@@ -703,6 +744,16 @@ public class EnemyManager {
 //                b4.drawAttackBox(g, xLvlOffset);
                 b4.drawHealthBar(g, xLvlOffset);
             
+        }
+        
+        for (BossFinal bf : bossFinal) {
+        	 g.drawImage(bossFinalArr[6][bf.getAniIndex()],
+                     (int) (bf.getHitBox().x - xLvlOffset - BOSSFINAL_DRAWOFFSET_X + bf.flipX()),
+                     (int) (bf.getHitBox().y - BOSSFINAL_DRAWOFFSET_Y  - 40),
+                     (int) (BOSSFINAL_WIDTH * bf.flipY()*2), (int) (BOSSFINAL_HEIGHT*2), null);
+//             b4.drawHitbox(g, xLvlOffset);
+//             b4.drawAttackBox(g, xLvlOffset);
+             bf.drawHealthBar(g, xLvlOffset);
         }
 	}
 	

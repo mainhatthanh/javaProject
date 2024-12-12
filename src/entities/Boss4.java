@@ -29,7 +29,6 @@ public class Boss4 extends Enemy {
 	        this.enemyHealthBarHeight = (int)(4* Game.SCALE);
 	        this.enemyHealthWidth = enemyHealthBarWidth;
 	        this.walkSpeed = 0.4f * Game.SCALE;
-	        this.setDialogue();
 	        initAttackBox();
 		
 	}
@@ -39,7 +38,6 @@ public class Boss4 extends Enemy {
 	    }
 
 	    public void update(int[][] lvlData,Player player){
-	    	setDialogue();
 	    	updateBehaviour(lvlData,player);
 	        updateAnimationTick();
 	        updateAttackBoxFlip();
@@ -109,9 +107,7 @@ public class Boss4 extends Enemy {
 	                    break;
 
 	                case RUNNING:
-	                	
 	                    if(canSeePlayer(lvlData,player)) {
-	                    	count ++;
 	                        turnTowardsPlayer(player);
 	                        if (isPlayerCloseAttack(player))
 	                            newState(ATTACK);
@@ -151,13 +147,7 @@ public class Boss4 extends Enemy {
 	    	else
 	    		return -20;
 	    }
-
-	    public void setDialogue() {
-	    	dialogue[0] = "Khá lắm khá lắm, cuối cùng ngươi cũng đã đến được đây";
-	    	dialogue[1] = "Tôn Ngộ Không, người thật to gan, dám đến quậy phá nơi ở của ta,\n tội ngươi xứng đáng chết";
-	    	dialogue[2] = "Hôm nay ta phải dạy cho ngươi một bài học";
-	    }
-
+		
 	    public void drawAttackBox(Graphics g,int xLvlOffset){
 	        g.setColor(Color.red);
 	        g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
@@ -177,7 +167,4 @@ public class Boss4 extends Enemy {
 	          }
 	    }
 	    
-	    public String getDialogue(int textIndex) {
-	    	return dialogue[textIndex];
-	    }
 }

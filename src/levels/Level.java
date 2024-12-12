@@ -5,6 +5,7 @@ import entities.Boss2;
 import entities.Boss3;
 import entities.Boss4;
 import entities.Boss5;
+import entities.BossFinal;
 import entities.Crabby;
 import entities.Minotaur;
 import entities.Monster2;
@@ -41,19 +42,17 @@ public class Level {
     private ArrayList<Monster_Eye1> monEye1;
     private ArrayList<Monster2> monster2;
     private ArrayList<Spider> spiders;
+    private ArrayList<Boss1> boss1;
+    private ArrayList<Boss5> boss5;
     
     private ArrayList<Toro> toros;
-    private ArrayList<Boss1> boss1;
     private ArrayList<Boss2> boss2;
     private ArrayList<Boss3> boss3;
     private ArrayList<Boss4> boss4;
-    private ArrayList<Boss5> boss5;
-    
-    
-	
+    private ArrayList<BossFinal> bossFinal;
+   
     
     private Point playerSpawn;
-    
     private Point playerMeet;
 
     
@@ -98,13 +97,15 @@ public class Level {
      monEye1 = GetMonEye1(img);
      monster2 = GetMonster2(img);
      spiders = GetSpider(img);
+     boss1 = GetBoss1(img);
+     boss5 = GetBoss5(img);
      
      toros = GetToros(img);
-     boss1 = GetBoss1(img);
      boss2 = GetBoss2(img);
      boss3 = GetBoss3(img);
      boss4 = GetBoss4(img);
-     boss5 = GetBoss5(img);
+     bossFinal = GetBossFinal(img);
+     
 
     }
 
@@ -131,10 +132,6 @@ public class Level {
         return maxLvlOffsetX;
     }
 
-    public ArrayList<Crabby> getCrabs() {
-        return crabs;
-    }
-
     public ArrayList<GameContainer> getContainers() {
         return containers;
     }
@@ -142,7 +139,12 @@ public class Level {
     public ArrayList<Potion> getPotions() {
         return potions;
     }
+    
+    public ArrayList<FlyWukong> getFlyWukong() {
+  		return flyWukong;
+  	}
 
+    
     public ArrayList<Shark> getSharks() {
         return sharks;
     }
@@ -163,15 +165,25 @@ public class Level {
     	return spiders;
     }
     
-    
-    public ArrayList<Toro> getToros(){
-    	return toros;
+    public ArrayList<Crabby> getCrabs() {
+        return crabs;
     }
     
     public ArrayList<Boss1> getBoss1(){
     	return boss1;
     }
     
+    public ArrayList<Boss5> getBoss5(){
+    	return boss5;
+    }
+    
+    
+    
+    public ArrayList<Toro> getToros(){
+    	return toros;
+    }
+    
+
     public ArrayList<Boss2> getBoss2(){
     	return boss2;
     }
@@ -184,18 +196,14 @@ public class Level {
     	return boss4;
     }
     
-    public ArrayList<Boss5> getBoss5(){
-    	return boss5;
+    public ArrayList<BossFinal> getBossFinal(){
+    	return bossFinal;
     }
     
-  public ArrayList<FlyWukong> getFlyWukong() {
-		return flyWukong;
-	}
-  
+
   public Point getPlayerMeet() {
 	  return playerMeet;
   }
-
 
 public Point getPlayerSpawn(){
      return playerSpawn;

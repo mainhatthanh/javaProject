@@ -107,7 +107,6 @@ public class UI {
 		//hiển thị cuộc trò chuyện
 		if(textIndex >= textLength)
 			textIndex = textLength -1;
-		System.out.println(textIndex);
 		drawText(text1, textIndex, g2, x + 10, y + 50);
 		
 		
