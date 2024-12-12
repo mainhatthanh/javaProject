@@ -67,11 +67,10 @@ public class LevelCompletedOverlay {
         menu.setMouseOver(false);
 
         if (isIn(menu, e)) {
-            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
+            
             menu.setMouseOver(true);
         }
         else if (isIn(next, e)) {
-            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             next.setMouseOver(true);
         }
     }
@@ -92,10 +91,14 @@ public class LevelCompletedOverlay {
     }
 
     public void mousePressed(MouseEvent e) {
-        if (isIn(menu, e))
+        if (isIn(menu, e)){
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             menu.setMousePressed(true);
-        else if (isIn(next, e))
+        }
+        else if (isIn(next, e)) {
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             next.setMousePressed(true);
+        }
     }
 
 }

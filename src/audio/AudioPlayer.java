@@ -31,6 +31,9 @@ public class AudioPlayer {
     public static int BOSS4_DEAD = 15;
     public static int RUN = 16;
     public static int THROW = 17;
+    public static int BOSS4_ATTACK = 18;
+    public static int BOSS3_ATTACK = 19;
+    public static int BOSS2_ATTACK = 20;
 
     private Clip[] songs,effects;
     private int currentSongId;
@@ -53,7 +56,7 @@ public class AudioPlayer {
     }
 
     private void loadEffect(){
-        String[] effectNames = {"die", "jump", "gameover", "lvlcompleted", "attack1", "attack2", "attack3","levelUp","Click","hit","boss1_attack1","boss2_dead","boss3_dead","boss4_dead","boss1_dead","hit_boss","run","throwSound"};
+        String[] effectNames = {"die", "jump", "gameover", "lvlcompleted", "attack1", "attack2", "attack3","levelUp","Click","hit","boss1_attack1","boss1_dead","hit_boss","boss2_dead","boss3_dead","boss4_dead","run","throwSound","boss4_attack","boss3_attack","boss2_attack"};
         effects=new Clip[effectNames.length];
         for(int i=0;i<effects.length;i++)
             effects[i]=getClip(effectNames[i]);

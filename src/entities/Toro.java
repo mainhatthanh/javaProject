@@ -4,9 +4,6 @@ import static utilz.Constants.Directions.*;
 
 
 import static utilz.Constants.EnemyConstants.*;
-import static utilz.Constants.EnemyConstants.HIT;
-import static utilz.Constants.EnemyConstants.IDLE;
-import static utilz.Constants.EnemyConstants.RUNNING;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -15,7 +12,7 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Toro extends Enemy {
-	
+	private boolean isAttacking;
 	private int attackBoxOffsetX;
 
 	public Toro(float x, float y) {
@@ -75,8 +72,17 @@ public class Toro extends Enemy {
 				if(aniIndex ==0)
 					attackChecked = false;
 				
-				if(aniIndex == 3  && !attackChecked)
+				if(aniIndex == 3  && !attackChecked) {
+
+					setAttacking(false);
 					checkEnmyHit(attackBox, player);
+				}
+				if(aniIndex == 2  ) {
+					setAttacking(true);
+					
+					
+				}
+				
 				break;
 			case HIT:
 				break;
@@ -117,4 +123,12 @@ public class Toro extends Enemy {
 			return -1;
 		
 	}
+	public boolean isAttacking() {
+        return isAttacking;
+    }
+    
+    public void setAttacking(boolean isAttacking) {
+        this.isAttacking = isAttacking;
+    }
+    
 }

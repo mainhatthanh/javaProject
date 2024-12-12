@@ -106,6 +106,7 @@ public class EnemyManager {
         
         for (Shark sh : sharks) 
             if (sh.isActive()) {
+                
                 sh.updateHealthBar();
                 sh.update(lvlData, player);
                 isAnyActiveShark = true;
@@ -113,6 +114,7 @@ public class EnemyManager {
 
         for (Crabby c : crabbies)
             if (c.isActive()) {
+                
                 c.updateHealthBar();
                 c.update(lvlData, player);
                 isAnyActiveCrabby = true;
@@ -150,6 +152,9 @@ public class EnemyManager {
             
             for (Toro t : toros) 
                 if (t.isActive()) {
+                    if(t.isAttacking()) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS1_ATTACK1);
+                    }
                     t.updateHealthBar();
                     t.update(lvlData, player);
                     isAnyActiveToro = true;
@@ -164,6 +169,9 @@ public class EnemyManager {
             
             for (Boss2 b2 : boss2)
                 if (b2.isActive()) {
+                    if(b2.isAttacking()) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS2_ATTACK);
+                    }
                     b2.updateHealthBar();
                     b2.update(lvlData, player);
                     isAnyActiveBoss2 = true;
@@ -171,6 +179,9 @@ public class EnemyManager {
 
             for (Boss3 b3 : boss3)
                 if (b3.isActive()) {
+                    if(b3.isAttacking()) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS3_ATTACK);
+                    }
                     b3.updateHealthBar();
                     b3.update(lvlData, player);
                     isAnyActiveBoss3 = true;
@@ -178,6 +189,9 @@ public class EnemyManager {
 
             for (Boss4 b4 : boss4)
                 if (b4.isActive()) {
+                    if(b4.isAttacking()) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS4_ATTACK);
+                    }
                     b4.updateHealthBar();
                     b4.update(lvlData, player);
                     isAnyActiveBoss4 = true;
@@ -387,13 +401,15 @@ public class EnemyManager {
     
     public void checkEnemyHit(Rectangle2D.Float attackBox ,Player player) {
         for (Crabby c : crabbies)
-            if (c.getCurrentHealth() > 0)
+            if (c.getCurrentHealth() > 0) {
+                
                 if (attackBox.intersects(c.getHitBox())) {
-                  
+                    
                     c.hurt(player.playerDamage, player);
                     expUp = c.getExpUpdate();
                     return;
                 }
+            }
 
         for (Shark shark : sharks)
             if (shark.isActive())
@@ -409,7 +425,6 @@ public class EnemyManager {
             if (me.isActive())
                 if (me.getCurrentHealth() > 0)
                     if (attackBox.intersects(me.getHitBox())) {
-                     
                         me.hurt(player.playerDamage, player);
                         expUp = me.getExpUpdate();
                         return;
@@ -429,7 +444,6 @@ public class EnemyManager {
             if (spi.isActive())
                 if (spi.getCurrentHealth() > 0)
                     if (attackBox.intersects(spi.getHitBox())) {
-                
                         spi.hurt(player.playerDamage, player);
                         expUp = spi.getExpUpdate();
                         return;
@@ -525,15 +539,18 @@ public class EnemyManager {
 
     public boolean isStickHitEnemy(Rectangle2D.Float stickHitBox ,Player player) {
         for (Crabby c : crabbies)
-            if (c.getCurrentHealth() > 0)
-                if (stickHitBox.intersects(c.getHitBox())) {
-                   return true;
-                }
+        if (c.getCurrentHealth() > 0) {
+            if (stickHitBox.intersects(c.getHitBox())) {
+                return true;
+            }
+        }
+                
 
         for (Shark shark : sharks)
             if (shark.isActive())
                 if (shark.getCurrentHealth() > 0)
                     if (stickHitBox.intersects(shark.getHitBox())) {
+
                         return true;
                     }
 
@@ -548,6 +565,8 @@ public class EnemyManager {
             if (me2.isActive())
                 if (me2.getCurrentHealth() > 0)
                     if (stickHitBox.intersects(me2.getHitBox())) {
+                        
+                
                         return true;
                     }
 

@@ -422,7 +422,7 @@ public class Player extends Entity {
         }
     }
 
-    private void stopStepSound() {
+    public void stopStepSound() {
         if (isStepSoundPlaying ) {
             playing.getGame().getAudioPlayer().stopEffect(AudioPlayer.RUN); // Dừng âm thanh
             isStepSoundPlaying = false; // Đặt lại cờ

@@ -74,10 +74,22 @@ public class Playing extends State implements Statemethods {
         if ((getLevelManager().getLevelIndex()) == 0) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_1_BACKGROUND);
         }
-        if ((getLevelManager().getLevelIndex()) == 1) {
+        
+        
+
+        caclcLvlOffset();
+        loadStartLevel();
+        
+        resetAll();
+    }
+
+    public void loadNextLevel() {
+        resetAll();
+        levelManager.loadNextLevel();
+        if ((getLevelManager().getLevelIndex() ) == 1) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_2_BACKGROUND);
         }
-        if ((getLevelManager().getLevelIndex()) == 2) {
+        if ((getLevelManager().getLevelIndex() ) == 2) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_3_BACKGROUND);
         }
         if ((getLevelManager().getLevelIndex()) == 3) {
@@ -87,15 +99,6 @@ public class Playing extends State implements Statemethods {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_5_BACKGROUND);
         }
 
-
-        caclcLvlOffset();
-        loadStartLevel();
-        resetAll();
-    }
-
-    public void loadNextLevel() {
-        resetAll();
-        levelManager.loadNextLevel();
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
     }
 
@@ -146,6 +149,7 @@ public class Playing extends State implements Statemethods {
         if (paused) {
             pauseOverlay.update();
         } else if (lvlCompleted) {
+
             levelCompletedOverlay.update();
             expThatChange = 0;
             levelUpTime = 0;
@@ -217,16 +221,20 @@ public class Playing extends State implements Statemethods {
 
 
         if (paused) {
+            player.stopStepSound();
             g.setColor(new Color(0, 0, 0, 150));
             g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             pauseOverlay.draw(g);
-        } else if (gameOver)
+        } else if (gameOver) {
+            player.stopStepSound();
             gameOverOverlay.draw(g);
-        
+        }
         else if(enemyManager.checkBoss) {
+            player.stopStepSound();
         	ui.drawDialogueScreen(g2, textIndex);
         }
         else if (lvlCompleted){
+            player.stopStepSound();
             levelCompletedOverlay.draw(g);
             expThatChange = 0;
             levelUpTime = 0;
