@@ -2,6 +2,7 @@ package entities;
 
 import gameState.Playing;
 import levels.Level;
+import main.Game;
 import utilz.LoadSave;
 
 import java.awt.*;
@@ -13,8 +14,10 @@ import static utilz.Constants.EnemyConstants.*;
 public class EnemyManager {
 	
 	private int expUp;
-	public boolean checkBoss = false;
+	private int enemyCheck;
+	
 	public String[] messBoss;
+
 	
     private Playing playing;
     private BufferedImage[][] crabbyArr;
@@ -59,9 +62,7 @@ public class EnemyManager {
         loadEnemyImgsBoss4();
         loadEnemyImgsBoss5();
         
-        this.messBoss = new String[3];
-        
-        
+        this.messBoss = new String[10];
 
     }
 
@@ -84,7 +85,6 @@ public class EnemyManager {
 
     public void update(int[][] lvlData, Player player) {
     	
-  
     	
         boolean isAnyActiveCrabby = false;
         boolean isAnyActiveShark = false;
@@ -147,7 +147,12 @@ public class EnemyManager {
             
             for (Toro t : toros) 
                 if (t.isActive()) {
-                    t.updateHealthBar();
+                    if(t.getCheckBoss()) 
+                    	for(int i=0; i < GetNumberMessageBoss(TORO);i ++) {
+                			messBoss[i] = t.getDialogue(i);
+                    		enemyCheck = BOSS2;
+                }
+                	t.updateHealthBar();
                     t.update(lvlData, player);
                     isAnyActiveToro = true;
                 }
@@ -161,48 +166,56 @@ public class EnemyManager {
             
             for (Boss2 b2 : boss2)
                 if (b2.isActive()) {
-                    b2.updateHealthBar();
+                    if(b2.getCheckBoss()) 
+                    	for(int i=0; i < GetNumberMessageBoss(BOSS2);i ++) {
+                    		messBoss[i] = b2.getDialogue(i);
+                    		enemyCheck = BOSS2;
+                    	}
+                	b2.updateHealthBar();
                     b2.update(lvlData, player);
                     isAnyActiveBoss2 = true;
                 }
 
             for (Boss3 b3 : boss3)
                 if (b3.isActive()) {
-                    b3.updateHealthBar();
+                    if(b3.getCheckBoss()) 
+                    	for(int i=0; i < GetNumberMessageBoss(BOSS3);i ++) {
+                    		messBoss[i] = b3.getDialogue(i);
+                    		enemyCheck = BOSS3;
+                    	}
+                			
+                	b3.updateHealthBar();
                     b3.update(lvlData, player);
                     isAnyActiveBoss3 = true;
                 }
 
             for (Boss4 b4 : boss4)
                 if (b4.isActive()) {
-                    b4.updateHealthBar();
+                    enemyCheck = BOSS4;
+                	b4.updateHealthBar();
                     b4.update(lvlData, player);
                     isAnyActiveBoss4 = true;
                 }
 
             for (Boss5 b5 : boss5)
                 if (b5.isActive()) {
-                	checkBoss= b5.getCheckBoss();
-                	if(checkBoss) {
-                		for(int i=0; i < 3;i ++)
-                			messBoss[i] = b5.getDialogue(i);
-                	}
-                    b5.updateHealthBar();
+                	b5.updateHealthBar();
                     b5.update(lvlData, player);
                     isAnyActiveBoss5 = true;
+                
                 }
-
             
             if (!isAnyActiveCrabby && !isAnyActiveShark && !isAnyActiveMinotaur && !isAnyActiveToro
                     && !isAnyActiveMonEye1 && !isAnyActiveBoss1
                     && !isAnyActiveMonster2 && !isAnyActiveSpider && !isAnyActiveBoss2 && !isAnyActiveBoss3
                     && !isAnyActiveBoss4 && !isAnyActiveBoss5) {
 
-                playing.setLevelCompleted(true);
+                playing.setFlyWukong(true);
 
             }
         }
-
+    
+    
     public void draw(Graphics g, int xLvlOffset) {
         drawCrabs(g, xLvlOffset);
         drawSharks(g, xLvlOffset);
@@ -249,7 +262,7 @@ public class EnemyManager {
     }
 
     private void drawBoss3(Graphics g, int xLvlOffset) {
-        for (Boss3 b3 : boss3) {
+        for (Boss3 b3 : boss3) 
             if (b3.isActive()) {
                 g.drawImage(boss3Arr[b3.getState()][b3.getAniIndex()],
                         (int) (b3.getHitBox().x - xLvlOffset - BOSS3_DRAWOFFSET_X + b3.flipX()),
@@ -259,7 +272,6 @@ public class EnemyManager {
 //                b3.drawAttackBox(g, xLvlOffset);
                 b3.drawHealthBar(g, xLvlOffset);
             }
-        }
     }
 
     private void drawBoss2(Graphics g, int xLvlOffset) {
@@ -337,8 +349,8 @@ public class EnemyManager {
                         (int) (me.getHitBox().x - xLvlOffset - MONEYE1_DRAWOFFSET_X + me.flipX()),
                         (int) (me.getHitBox().y - MONEYE1_DRAWOFFSET_Y + 5),
                         (int) (MONEYE1_WIDTH * me.flipY()), (int) (MONEYE1_HEIGHT), null);
-                me.drawHitbox(g, xLvlOffset);
-                me.drawAttackHitbox(g, xLvlOffset);
+//                me.drawHitbox(g, xLvlOffset);
+//                me.drawAttackHitbox(g, xLvlOffset);
                 me.drawHealthBar(g, xLvlOffset);
             }
     }
@@ -374,8 +386,8 @@ public class EnemyManager {
                         (int) mino.getHitBox().x - xLvloffset - MINOTAUR_DRAWOFFSET_X + mino.flipX(),
                         (int) (mino.getHitBox().y - MINOTAUR_DRAWOFFSET_Y - 10),(int)(MINOTAUR_WIDTH * mino.flipY() * 1.2),
                         (int)(MINOTAUR_HEIGHT * 1.2), null);
-//                mino.drawHitbox(g, xLvloffset);
-//                mino.drawAttackBox(g, xLvloffset);
+                mino.drawHitbox(g, xLvloffset);
+                mino.drawAttackBox(g, xLvloffset);
                 mino.drawHealthBar(g, xLvloffset);
                 
             }
@@ -627,10 +639,77 @@ public class EnemyManager {
             b4.resetEnemy();
         for (Boss5 b5 : boss5)
             b5.resetEnemy();
-       checkBoss = false;
+      
     }
     
-    
+	public void updateIDLE() {
+		for(Toro t: toros) 
+			if(t.isActive())
+				t.updateAnimaIDLE();
+		
+		for(Boss2 b2: boss2) 
+			if(b2.isActive())
+				b2.updateAnimaIDLE();
+		
+		for(Boss3 b3: boss3) 
+			if(b3.isActive())
+				b3.updateAnimaIDLE();
+		
+		for(Boss4 b4: boss4) 
+			if(b4.isActive())
+				b4.updateAnimaIDLE();
+		
+	}
+
+	public void drawIDLE(Graphics g, int xLvlOffset) {
+		
+		for (Toro t : toros){
+                g.drawImage(toroArr[IDLE][t.getAniIndex()],
+                        (int) (t.getHitBox().x - xLvlOffset - TORO_DRAWOFFSET_X + t.flipX()),
+                        (int) (t.getHitBox().y - TORO_DRAWOFFSET_Y  ),
+                        (int) (TORO_WIDTH * t.flipY() * 1.2), (int) (TORO_HEIGHT * 1.2), null);
+//                t.drawAttackHitbox(g, xLvlOffset);
+//                t.drawHitbox(g, xLvlOffset);
+                t.drawHealthBar(g, xLvlOffset);
+
+            } 
+		
+		for (Boss2 b2 : boss2){
+                g.drawImage(boss2Arr[IDLE][b2.getAniIndex()],
+                        (int) (b2.getHitBox().x - xLvlOffset - BOSS2_DRAWOFFSET_X + b2.flipX()),
+                        (int) (b2.getHitBox().y - BOSS2_DRAWOFFSET_Y - 45),
+                        (int) (BOSS2_WIDTH * b2.flipY()), (int) (BOSS2_HEIGHT), null);
+//            b2.drawHitbox(g, xLvlOffset);
+//            b2.drawAttackBox(g, xLvlOffset);
+            b2.drawHealthBar(g, xLvlOffset);
+        }
+		
+		for (Boss3 b3 : boss3) { 
+                g.drawImage(boss3Arr[IDLE][b3.getAniIndex()],
+                        (int) (b3.getHitBox().x - xLvlOffset - BOSS3_DRAWOFFSET_X + b3.flipX()),
+                        (int) (b3.getHitBox().y - BOSS3_DRAWOFFSET_Y  - 15),
+                        (int) (BOSS3_WIDTH * b3.flipY()), (int) (BOSS3_HEIGHT), null);
+//                b3.drawHitbox(g, xLvlOffset);
+//                b3.drawAttackBox(g, xLvlOffset);
+                b3.drawHealthBar(g, xLvlOffset);
+		}    
+		
+        for (Boss4 b4 : boss4) {
+                g.drawImage(boss4Arr[0][b4.getAniIndex()],
+                        (int) (b4.getHitBox().x - xLvlOffset - BOSS4_DRAWOFFSET_X + b4.flipX()),
+                        (int) (b4.getHitBox().y - BOSS4_DRAWOFFSET_Y - 100),
+                        (int) (BOSS4_WIDTH * b4.flipY()), (int) (BOSS4_HEIGHT), null);
+//                b4.drawHitbox(g, xLvlOffset);
+//                b4.drawAttackBox(g, xLvlOffset);
+                b4.drawHealthBar(g, xLvlOffset);
+            
+        }
+	}
+	
+	public int getEnemyCheck() {
+		return enemyCheck;
+	}
+	
     public int getExpUp() {
     	return expUp;
     }
@@ -638,5 +717,7 @@ public class EnemyManager {
     public void setExpUp(int expUp) {
     	this.expUp = expUp;
     }
+    
+	
 
 }

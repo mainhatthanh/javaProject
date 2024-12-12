@@ -97,6 +97,7 @@ public class AudioPlayer {
             playSong(LEVEL_2);
     }
     public void lvlCompleted(){
+
         stopSong();
         playEffect(LVL_COMPLETED);
     }

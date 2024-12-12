@@ -13,6 +13,7 @@ import entities.Shark;
 import entities.Spider;
 import entities.Toro;
 import main.Game;
+import objects.FlyWukong;
 import objects.GameContainer;
 import objects.Potion;
 import utilz.HelpMethods;
@@ -30,10 +31,11 @@ public class Level {
     private int maxLvlOffsetX;
     private int[][] lvlData;
     
-    
-    private ArrayList<Crabby> crabs;
     private ArrayList<GameContainer> containers;
     private ArrayList<Potion> potions;
+    private ArrayList<FlyWukong> flyWukong ;
+    
+    private ArrayList<Crabby> crabs;
     private ArrayList<Shark> sharks;
     private ArrayList<Minotaur> minotaurs;
     private ArrayList<Monster_Eye1> monEye1;
@@ -46,9 +48,13 @@ public class Level {
     private ArrayList<Boss3> boss3;
     private ArrayList<Boss4> boss4;
     private ArrayList<Boss5> boss5;
-
+    
+    
+	
     
     private Point playerSpawn;
+    
+    private Point playerMeet;
 
     
  public Level(BufferedImage img){
@@ -56,15 +62,27 @@ public class Level {
      createLevelData();
      createEnemies();
      createContainers();
-     createPotions();
+     createPotions();   
+     createFlyWukong();
+     
+     
      calcLvlOffsets();
      calcPlayerSpawn();
+     calcPlayerMeet();
  }
 
     private void calcPlayerSpawn() {
         playerSpawn = GetPlayerSpawn(img);
     }
+    
+    private void calcPlayerMeet() {
+        playerMeet = GetPlayerMeet(img);
+    }
 
+    private void createFlyWukong() {
+    	flyWukong = HelpMethods.GetFlyWukong(img);
+    }
+    
     private void createContainers() {
         containers = HelpMethods.GetContainers(img);
     }
@@ -170,7 +188,16 @@ public class Level {
     	return boss5;
     }
     
-  public Point getPlayerSpawn(){
+  public ArrayList<FlyWukong> getFlyWukong() {
+		return flyWukong;
+	}
+  
+  public Point getPlayerMeet() {
+	  return playerMeet;
+  }
+
+
+public Point getPlayerSpawn(){
      return playerSpawn;
   }
     public int getMapHeight() {

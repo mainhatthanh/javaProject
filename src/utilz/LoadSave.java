@@ -17,6 +17,8 @@ import java.net.URL;
 public class LoadSave {
     public static final String PLAYER_ATLAS ="players_sprites.png";
     
+    public static final String WUKONG_FLY  = "p2.png";
+    
     
     public static final String LEVEL_ATLAS ="tiletest.png";
     public static final String MENU_BACKGROUND ="menu_background.png";

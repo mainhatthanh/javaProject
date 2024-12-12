@@ -35,6 +35,13 @@ public class Toro extends Enemy {
 		attackBoxOffsetX = (int)(Game.SCALE *40);
 		
 	}
+	
+    public void setDialogue() {
+    	dialogue[0] = "Khá lắm khá lắm, cuối cùng ngươi cũng đã đến được đây";
+    	dialogue[1] = "Tôn Ngộ Không, người thật to gan, dám đến quậy phá nơi ở của ta,\n tội ngươi xứng đáng chết";
+    	dialogue[2] = "Hôm nay ta phải dạy cho ngươi một bài học";
+    }
+    
 
 	public void update(int[][] lvlData, Player player) {
 		updateBehaviour(lvlData,player);

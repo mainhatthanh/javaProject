@@ -20,7 +20,7 @@ public class Player extends Entity {
 
     private int[][] lvlData;
     private float xDrawOffset = 38 * Game.SCALE;
-    private float yDrawOffset = 15 * Game.SCALE;
+    private float yDrawOffset =  15* Game.SCALE;
     // jumping / gravity
 
     private float jumpSpeed = -2.35f * Game.SCALE;
@@ -134,7 +134,6 @@ public class Player extends Entity {
                         airSpeed += GRAVITY;
                     } else
                         inAir = false;
-
             }
 
             return;
@@ -215,15 +214,17 @@ public class Player extends Entity {
     }
 
     public void render(Graphics g, int xlvlOffset) {
-        g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
+    
+    	g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
         drawUI(g);
-
+//
 //         drawAttackHitbox(g, xlvlOffset);
 //         drawHitbox(g, xlvlOffset);
-
+    	
 
     }
+    
 
     private void drawUI(Graphics g) {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
@@ -442,7 +443,7 @@ public class Player extends Entity {
 
     private void loadAnimations() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
-        animations = new BufferedImage[7][8];
+        animations = new BufferedImage[7][7];
         for (int j = 0; j < animations.length; j++)
             for (int i = 0; i < animations[j].length; i++)
                 animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
@@ -537,4 +538,25 @@ public class Player extends Entity {
             changeStamina(-40);
         }
     }
+
+	public void renderIDLE(Graphics g, int xLvlOffset) {
+		g.drawImage(animations[IDLE][aniIndex], (int) ((hitbox.x - xDrawOffset) - xLvlOffset + flipX),
+                (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
+        drawUI(g);
+		
+	}
+	
+    public void updateIDLE() {
+   	 aniTick++;
+        if (aniTick >= ANI_SPEED) {
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >= GetSpriteAmount(IDLE)) {
+                aniIndex = 0;
+                attacking = false;
+                attackChecked = false;
+            }
+
+        }
+   }
 }

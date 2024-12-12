@@ -2,9 +2,9 @@ package entities;
 
 import static utilz.Constants.Directions.RIGHT;
 import static utilz.Constants.EnemyConstants.ATTACK;
-import static utilz.Constants.EnemyConstants.BOSS5;
-import static utilz.Constants.EnemyConstants.BOSS5_HEIGHT;
-import static utilz.Constants.EnemyConstants.BOSS5_WIDTH;
+import static utilz.Constants.EnemyConstants.BOSS2;
+import static utilz.Constants.EnemyConstants.BOSS2_HEIGHT;
+import static utilz.Constants.EnemyConstants.BOSS2_WIDTH;
 import static utilz.Constants.EnemyConstants.HIT;
 import static utilz.Constants.EnemyConstants.IDLE;
 import static utilz.Constants.EnemyConstants.RUNNING;
@@ -15,25 +15,23 @@ import java.awt.geom.Rectangle2D;
 
 import main.Game;
 
-public class Boss5 extends Enemy {
+public class BossFinal extends Enemy {
 	
-	
-	private boolean check ;
+		private int attackBoxOffsetX;
 
-	public Boss5(float x, float y) {
-		 super(x, y, BOSS5_WIDTH, BOSS5_HEIGHT, BOSS5);
-	        initHitbox(30,25);
+	    public BossFinal(float x, float y) {
+	        super(x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2);
+	        initHitbox(20,30);
 	        this.enemyHealthBarWidth = (int)(35* Game.SCALE);
 	        this.enemyHealthBarHeight = (int)(3* Game.SCALE);
 	        this.enemyHealthWidth = enemyHealthBarWidth;
-	        this.walkSpeed = 0.38f * Game.SCALE;
+	        this.walkSpeed = 0.4f * Game.SCALE;
 	        this.setDialogue();
 	        initAttackBox();
-		
-	}
-	 private void initAttackBox(){
-	        attackBox=new Rectangle2D.Float(x,y,(int)(40*Game.SCALE),(int)(25*Game.SCALE));
-	        attackBoxOffsetX = (int)(Game.SCALE*40);
+	    }
+	    private void initAttackBox(){
+	        attackBox=new Rectangle2D.Float(x,y,(int)(35*Game.SCALE),(int)(30*Game.SCALE));
+	        attackBoxOffsetX = (int)(Game.SCALE*35);
 	    }
 
 	    public void update(int[][] lvlData,Player player){
@@ -41,7 +39,21 @@ public class Boss5 extends Enemy {
 	        updateAnimationTick();
 	        updateAttackBoxFlip();
 	        updateHealthBar();
-	        
+
+	    }
+	    
+	    protected void updateAttackBoxFlip() {
+	        if (walkDir == RIGHT)
+	            attackBox.x = hitbox.x + hitbox.width;
+	        else
+	            attackBox.x = hitbox.x - attackBoxOffsetX;
+
+	        attackBox.y = hitbox.y + 5;
+	    }
+
+	    protected void updateAttackBox() {
+	        attackBox.x= hitbox.x-attackBoxOffsetX;
+	        attackBox.y=hitbox.y;
 	    }
 
 	    private void updateBehaviour(int[][] lvlData,Player player) {
@@ -70,7 +82,7 @@ public class Boss5 extends Enemy {
 	                    if(aniIndex==0)
 	                        attackChecked = false;
 
-	                    if(aniIndex== 2 &&!attackChecked)
+	                    if(aniIndex== 4 &&!attackChecked)
 	                        checkEnmyHit(attackBox,player);
 	                    break;
 	                case HIT:
@@ -81,22 +93,42 @@ public class Boss5 extends Enemy {
 
 	    }
 
-	    public void drawHealthBar(Graphics g, int xLvlOffset) {
+		public void drawHealthBar(Graphics g, int xLvlOffset) {
 	        g.setColor(Color.red);
 	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
-	                (int) (hitbox.y + hitbox.height - attackBox.height - 25 * Game.SCALE), enemyHealthWidth,
+	                (int) (hitbox.y + hitbox.height - attackBox.height - 15 * Game.SCALE), enemyHealthWidth,
 	                enemyHealthBarHeight);
 	        g.setColor(Color.WHITE);
 	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
-	                (int) (hitbox.y + hitbox.height - attackBox.height - 25 * Game.SCALE),
+	                (int) (hitbox.y + hitbox.height - attackBox.height - 15 * Game.SCALE),
 	                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
 		}
 		private int flipHealth() {
 	    	if(walkDir == RIGHT)
 	    		return 2;
 	    	else
-	    		return -2;
+	    		return 2;
 	    }
+		
+		 public void render(Graphics g, int xlvlOffset) {
+		        
+		    	
+		    	if(left)
+		    		g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + 120 ),
+		                 (int) (hitbox.y - yDrawOffset - 30 ), (int) (width * flipW * 0.7), (int) (height *0.7 ), null);
+		    	
+		    	else if(right)
+		    		g.drawImage(animations[state][aniIndex], (int) ((hitbox.x ) - xlvlOffset - 60 ),
+		                    (int) (hitbox.y - yDrawOffset -30 ), (int) (width * flipW * 0.7), (int) (height *0.7), null);
+		    	
+		    	else 
+		    		if(attackBox.x < hitbox.x)
+		    			g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + 80 ),
+		                        (int) (hitbox.y - yDrawOffset -30), (int) (width * flipW *0.7), (int) (height* 0.7), null);
+		    		else
+		    			g.drawImage(animations[state][aniIndex], (int) ((hitbox.x ) - xlvlOffset - 30 ),
+		                        (int) (hitbox.y - yDrawOffset-30 ), (int) (width * flipW * 0.7), (int) (height* 0.7), null);
+		 }
 
 
 	    public void drawAttackBox(Graphics g,int xLvlOffset){
@@ -106,9 +138,9 @@ public class Boss5 extends Enemy {
 	    }
 	    public int flipX(){
 	        if(walkDir==RIGHT)
-	            return -40;
+	            return -25;
 	        else
-	            return  width - 20;
+	            return  width - 14  ;
 	    }
 	    public int flipY(){
 	          if(walkDir==RIGHT)
@@ -117,8 +149,7 @@ public class Boss5 extends Enemy {
 	              return -1;
 	          }
 	    }
-	    
-	    
-	  
-	    
-}
+	}
+
+
+

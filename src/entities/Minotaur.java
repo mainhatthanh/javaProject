@@ -66,9 +66,11 @@ public class Minotaur extends Enemy {
             aniIndex++;
             if(state == DEAD && aniIndex == 15) {
             	if(walkDir ==RIGHT)
-            		checkEnmyHit(new Rectangle2D.Float(hitbox.x - attackBox.width, attackBox.y, attackBox.width * 2 + hitbox.width, hitbox.height), player);
+            		checkEnmyHit(new Rectangle2D.Float(hitbox.x - attackBox.width, attackBox.y, (attackBox.width * 2 + hitbox.width), hitbox.height), player);
             	else if(walkDir == LEFT)
-            		checkEnmyHit(new Rectangle2D.Float(hitbox.x + attackBox.width, attackBox.y, attackBox.width * 2 + hitbox.width, hitbox.height), player);
+//            		checkEnmyHit(new Rectangle2D.Float(hitbox.x + attackBox.width, attackBox.y, (attackBox.width * 2 + hitbox.width), hitbox.height), player);
+            		checkEnmyHit(new Rectangle2D.Float(attackBox.x - attackBox.width, attackBox.y, 60, hitbox.height), player);
+            		
             }
             	
             if (aniIndex >= GetSpriteAmount(enemyType, state)) {
@@ -115,6 +117,23 @@ public class Minotaur extends Enemy {
             }
 
         }
+    }
+    
+    public void drawHealthBar(Graphics g, int xLvlOffset) {
+        g.setColor(Color.red);
+        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
+                (int) (hitbox.y + hitbox.height - attackBox.height - 5 * Game.SCALE), enemyHealthWidth,
+                enemyHealthBarHeight);
+        g.setColor(Color.WHITE);
+        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
+                (int) (hitbox.y + hitbox.height - attackBox.height - 5 * Game.SCALE),
+                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
+	}
+	private int flipHealth() {
+    	if(walkDir == RIGHT)
+    		return -10;
+    	else
+    		return 10;
     }
     
     public void checkEnmyHit(Rectangle2D.Float attackBox,  Player player) {

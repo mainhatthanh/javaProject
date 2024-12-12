@@ -43,6 +43,7 @@ public class Constants {
         public static final int BLUE_POTION = 1;
         public static final int BARREL = 2;
         public static final int BOX = 3;
+        public static final int FLYWUKONG = 4;
 
         public static final int RED_POTION_VALUE = 15;
         public static final int BLUE_POTION_VALUE = 10;
@@ -76,13 +77,15 @@ public class Constants {
         public static final int MONSTER_EYE1 = 3;
         public static final int MONSTER2 = 4;
         public static final int SPIDER = 5;
+        public static final int BOSS1 = 7;
+        public static final int BOSS5 = 11;
         
         public static final int TORO = 6;
-        public static final int BOSS1 = 7;
         public static final int BOSS2 = 8;
         public static final int BOSS3 = 9;
         public static final int BOSS4 = 10;
-        public static final int BOSS5 = 11;
+        public static final int BOSSFINAL = 12;
+       
         
         
         public static final int IDLE = 0;
@@ -90,6 +93,14 @@ public class Constants {
         public static final int ATTACK = 2;
         public static final int HIT = 3;
         public static final int DEAD = 4;
+        
+        
+        public static final int	BOSSFINAL_WIDTH_DEFAULT = 64;
+        public static final int BOSSFINAL_HEIGHT_DEFAULT = 40;
+        public static final int BOSSFINAL_WIDTH = (int) (BOSSFINAL_WIDTH_DEFAULT * Game.SCALE);
+        public static final int BOSSFINAL_HEIGHT = (int) (BOSSFINAL_HEIGHT_DEFAULT * Game.SCALE);
+        public static final int BOSSFINAL_DRAWOFFSET_X = (int) (38 * Game.SCALE);
+        public static final int BOSSFINAL_DRAWOFFSET_Y = (int) (15 * Game.SCALE);
         
         
         public static final int	BOSS5_WIDTH_DEFAULT = 96;
@@ -318,7 +329,7 @@ public class Constants {
                 case BOSS4:
                 	return 2;
                 case BOSS5:
-               	return 2;
+                	return 2;
                 case MONSTER_EYE1:
                 	return 2;
                 case SPIDER :
@@ -331,13 +342,24 @@ public class Constants {
         
         public static int GetNumberMessageBoss(int enemy_type) {
         	switch(enemy_type) {
-//        	case TORO:
-//        	case BOSS2:
-//        	case BOSS3:
-//        	case BOSS4:
-//        	case BOSS5:
+        	case TORO:
+        	case BOSS2:
+        	case BOSS3:
+        	case BOSS4:
+        		return 3;
+        	case BOSS5:
         	default:
         		return 3;
+        	}
+        }
+        
+        public static String[] GetMessageEnemy(int enemy_type) {
+        	switch(enemy_type) {
+        	
+        	default:
+        		return new String[] {"Khá lắm khá lắm, cuối cùng ngươi cũng đã đến được đây",
+        				"Tôn Ngộ Không, người thật to gan, dám đến quậy phá nơi ở của ta,\n tội ngươi xứng đáng chết"
+        				,"Hôm nay ta phải dạy cho ngươi một bài học"};
         	}
         }
     }
@@ -403,20 +425,22 @@ public class Constants {
 
         public static int GetSpriteAmount(int player_action) {
             switch (player_action) {
-                case DEAD:
-                    return 8;
-                case RUNNING:
-                    return 6;
+                
+                
                 case IDLE:
                     return 5;
-                case HIT:
-                    return 4;
+                case RUNNING:
+                    return 6;
                 case JUMP:
-                case ATTACK:
+                	return 3;
+                case ATTACK, HIT:
                     return 3;
                 case FALLING:
+                	return 1;
+                case DEAD:
+                    return 7;
                 default:
-                    return 1;
+                    return 3;
             }
         }
 
