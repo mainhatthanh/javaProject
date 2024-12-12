@@ -99,6 +99,7 @@ public class Player extends Entity {
     private int powerGrowTick;
 
     //Chieu ban
+    private Stick stick;
     private boolean isThrow;
    private boolean sticking;
    private BufferedImage stickImg;
@@ -309,8 +310,8 @@ public class Player extends Entity {
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
         drawUI(g);
-//         drawAttackHitbox(g, xlvlOffset);
-//         drawHitbox(g, xlvlOffset);
+   //      drawAttackHitbox(g, xlvlOffset);
+    //   drawHitbox(g, xlvlOffset);
     }
 
     public void drawLvlUp(Graphics g,int xlvlOffset){
@@ -768,9 +769,12 @@ public class Player extends Entity {
     }
 
     public void drawSticks(Graphics g,int xLvlOffset){
-        for(Stick st:sticks)
-            if(st.isActive())
-                g.drawImage(stickImg,(int)(st.getHitbox().x-xLvlOffset),(int)(st.getHitbox().y),STICK_WIDTH,STICK_HEIGHT,null);
+        for(Stick st:sticks) {
+            if (st.isActive())
+                g.drawImage(stickImg, (int) (st.getHitbox().x - xLvlOffset), (int) (st.getHitbox().y), STICK_WIDTH, STICK_HEIGHT, null);
+            //st.drawStickHitbox(g,xLvlOffset);
+        }
+
     }
 
 
@@ -779,6 +783,7 @@ public class Player extends Entity {
         for(Stick st:sticks) {
             if (st.isActive()) {
                 st.updatePos();
+
                 if (playing.isStickHitEnemy(st.getHitbox())) {
                     playing.checkEnemyHit(st.getHitbox());
                     st.setActive(false);
@@ -799,7 +804,7 @@ public class Player extends Entity {
 
 
     public void reloadStick(Player player){
-        sticks.add(new Stick((int) player.getHitbox().x-22,(int)player.getHitbox().y,stickDir));
+        sticks.add(new Stick((int) player.getHitbox().x,(int)player.getHitbox().y,stickDir));
     }
 
     private void updateDirStick(){
@@ -868,6 +873,9 @@ public class Player extends Entity {
 
     public boolean isUltiSkill(){
         return ultiSkill;
+    }
+    public Stick getStick(){
+        return stick;
     }
 
 }

@@ -28,8 +28,8 @@ public class Constants {
     
 
     public static class Curve{
-        public static final int STICK_WIDTH_DEFAULT = 80;
-        public static final int STICK_HEIGHT_DEFAULT = 50;
+        public static final int STICK_WIDTH_DEFAULT = 40;
+        public static final int STICK_HEIGHT_DEFAULT = 4;
 
         public static final int STICK_WIDTH = (int)(Game.SCALE*STICK_WIDTH_DEFAULT);
         public static final int STICK_HEIGHT = (int)(Game.SCALE*STICK_HEIGHT_DEFAULT);

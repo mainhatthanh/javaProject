@@ -328,7 +328,7 @@ public class EnemyManager {
                         (int) (spi.getHitBox().y - SPIDER_DRAWOFFSET_Y - 100),
                         (int) (SPIDER_WIDTH * spi.flipY() * 3), (int) (SPIDER_HEIGHT * 3), null);
 //            spi.drawAttackHitbox(g, xLvlOffset);
-//            spi.drawHitbox(g, xLvlOffset);
+           spi.drawHitbox(g, xLvlOffset);
             spi.drawHealthBar(g, xLvlOffset);
             }
         }
@@ -402,9 +402,7 @@ public class EnemyManager {
     public void checkEnemyHit(Rectangle2D.Float attackBox ,Player player) {
         for (Crabby c : crabbies)
             if (c.getCurrentHealth() > 0) {
-                
                 if (attackBox.intersects(c.getHitBox())) {
-                    
                     c.hurt(player.playerDamage, player);
                     expUp = c.getExpUpdate();
                     return;
