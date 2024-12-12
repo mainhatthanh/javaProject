@@ -17,10 +17,7 @@ import entities.Player;
 import levels.LevelManager;
 import main.Game;
 import objects.ObjectManager;
-import ui.GameOverOverlay; 
-import ui.LevelCompletedOverlay;
-import ui.PauseOverlay;
-import ui.UI;
+import ui.*;
 import utilz.LoadSave;
 
 import static entities.Player.expThatChange;
@@ -42,6 +39,7 @@ public class Playing extends State implements Statemethods {
     private PauseOverlay pauseOverlay;
     private GameOverOverlay gameOverOverlay;
     private LevelCompletedOverlay levelCompletedOverlay;
+
     //private BulletManager bulletManager;
     private boolean paused = false;
 
@@ -59,7 +57,10 @@ public class Playing extends State implements Statemethods {
     private boolean gameOver;
     private boolean lvlCompleted = false;
     private boolean playerDying;
-   
+
+    //Tutorial paper
+
+   private Tutorial tutorial;
 
     int[][] lvlData;
 
@@ -132,6 +133,8 @@ public class Playing extends State implements Statemethods {
         pauseOverlay = new PauseOverlay(this); 
         gameOverOverlay = new GameOverOverlay(this);
         levelCompletedOverlay = new LevelCompletedOverlay(this);
+        tutorial = new Tutorial(this);
+
         // Căn chỉnh camera theo vị trí nhân vật
         caclcLvlOffset(); // Tính maxLvlOffsetX và maxLvlOffsetY trước
 
@@ -163,7 +166,11 @@ public class Playing extends State implements Statemethods {
         }
         else if (playerDying) {
             player.update();
-        } else {
+        }
+        else if(tutorial.isShowTutorial()){
+            pauseOverlay.update();
+        }
+                else {
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
@@ -241,6 +248,9 @@ public class Playing extends State implements Statemethods {
             expThatChange = 0;
             levelUpTime = 0;
         }
+        else if(tutorial.isShowTutorial()){
+            tutorial.draw(g);
+        }
     }
 
 
@@ -248,6 +258,7 @@ public class Playing extends State implements Statemethods {
     public void resetAll() {
         gameOver = false;
         paused = false;
+
         if(lvlCompleted == true){
             expThatChange = 0;
             levelUpTime = 0;
@@ -326,13 +337,16 @@ public class Playing extends State implements Statemethods {
                 case KeyEvent.VK_RIGHT:
                     player.setRight(true);
                     break;
-                    
                 case KeyEvent.VK_ENTER:
                 	textIndex += 1;
                 	break;
                 case KeyEvent.VK_Q:
                 	enemyManager.checkBoss = false;
                 	break;
+                case KeyEvent.VK_R:
+                    tutorial.toggleShowTutorial();
+                   // paused = !paused;
+                   break;
                 	
                 	
                 case KeyEvent.VK_SPACE:
@@ -521,6 +535,8 @@ public class Playing extends State implements Statemethods {
      public void setSpawn() {
     	 player.setSpawn(levelManager.getCurrentLevel().getFlag1());
      }
+
+
     
 
 }

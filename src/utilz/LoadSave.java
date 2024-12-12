@@ -65,6 +65,8 @@ public class LoadSave {
 	public static final String TRAP2_ATLAS = "trap2.png";
 	public static final String FLAG_ATLAS = "flag.png";
 
+    public static final String TUTORIAL_PAPER = "testPaper.png";
+
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage img = null;
         InputStream is = LoadSave.class.getResourceAsStream("/" + fileName);
