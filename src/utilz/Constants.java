@@ -403,6 +403,7 @@ public class Constants {
                 case IDLE:
                     return 5;
                 case HIT:
+                case THROW:
                   return 4;
                 case ATTACK:
                     return 3;

@@ -288,6 +288,8 @@ public class Playing extends State implements Statemethods {
                     player.setRight(true);
                     break;
                 case KeyEvent.VK_W:
+                    //player.setIsThrow(true);
+                    //player.resetThrow();
                         player.shootStick();
                     break;
                 case KeyEvent.VK_LEFT:

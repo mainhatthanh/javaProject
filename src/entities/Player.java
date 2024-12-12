@@ -98,6 +98,7 @@ public class Player extends Entity {
     private int powerGrowTick;
 
     //Chieu ban
+    private boolean isThrow;
    private boolean sticking;
    private BufferedImage stickImg;
    private ArrayList<Stick> sticks=new ArrayList<>();
@@ -471,7 +472,19 @@ public class Player extends Entity {
 
         if (attacking) {
             state = ATTACK;
+            System.out.println("dang danh thg");
             if (startAni != ATTACK) {
+                aniIndex = 1;
+                aniTick = 0;
+                return;
+
+            }
+        }
+
+        if (isThrow) {
+            state = THROW;
+            System.out.println("dang nem");
+            if (startAni != THROW) {
                 aniIndex = 1;
                 aniTick = 0;
                 return;
@@ -517,7 +530,7 @@ public class Player extends Entity {
                 if (aniIndex >= GetSpriteAmount(state)) {
                     aniIndex = 0;
                     attacking = false;
-                    sticking=false;
+                    isThrow=false;
                     ultiSkill = false;
                     attackChecked = false;
                 }
@@ -529,7 +542,7 @@ public class Player extends Entity {
                 if (aniIndex >= GetSpriteAmount(state)) {
                     aniIndex = 0;
                     attacking = false;
-                    sticking=false;
+                    isThrow=false;
                     ultiSkill = false;
                     attackChecked = false;
                 }
@@ -569,7 +582,7 @@ public class Player extends Entity {
 
     private void loadAnimations() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
-        animations = new BufferedImage[8][8];
+        animations = new BufferedImage[9][8];
         for (int j = 0; j < animations.length; j++)
             for (int i = 0; i < animations[j].length; i++)
                 animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
@@ -683,8 +696,8 @@ public class Player extends Entity {
         if(sticking)
             return;
         if(currentStamina>=GetStamina(THROW)) {
-            sticking = true;
-            this.attacking=true;
+            this.setIsThrow(true);
+            sticking=true;
             playing.getGame().getAudioPlayer().playEffect(AudioPlayer.THROW);
             changeStamina(-GetStamina(THROW));
         }
@@ -716,7 +729,7 @@ public class Player extends Entity {
 
 
     private void updatePlayerShoot(Player player){
-        if(player.isCurving()) {
+        if(player.isSticking()) {
             reloadStick(player);
             player.resetCurving();
         }
@@ -736,6 +749,15 @@ public class Player extends Entity {
             stickDir=1;
         }
     }
+
+    public void setIsThrow(boolean throwing) {
+        if(attacking==true||isUltiSkill())
+            this.sticking=false;
+        else isThrow=throwing;
+    }
+
+
+
 
 
 
@@ -768,7 +790,7 @@ public class Player extends Entity {
         return isShowLevelUp;
     }
 
-    public boolean isCurving(){
+    public boolean isSticking(){
         return sticking;
     }
     public void resetCurving(){
