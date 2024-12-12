@@ -26,13 +26,14 @@ public class Constants {
         }
     }
     
+
     public static class Curve{
         public static final int STICK_WIDTH_DEFAULT = 80;
         public static final int STICK_HEIGHT_DEFAULT = 50;
 
         public static final int STICK_WIDTH = (int)(Game.SCALE*STICK_WIDTH_DEFAULT);
         public static final int STICK_HEIGHT = (int)(Game.SCALE*STICK_HEIGHT_DEFAULT);
-        public static final float SPEED = 1.5f*Game.SCALE;
+        public static final float SPEED = 1.75f*Game.SCALE;
 
 
 
@@ -484,9 +485,15 @@ public class Constants {
         public static final int JUMP = 2;
         public static final int FALLING = 3;
         public static final int ATTACK = 4;
-        
+
+
         public static final int HIT = 5;
         public static final int DEAD = 6;
+        public static final int ULTI = 7;
+        public static final int THROW = 8;
+
+
+
 
         public static int GetSpriteAmount(int player_action) {
             switch (player_action) {
@@ -497,10 +504,12 @@ public class Constants {
                 case IDLE:
                     return 5;
                 case HIT:
-                    return 4;
-                case JUMP:
+                case THROW:
+                  return 4;
                 case ATTACK:
                     return 3;
+                case ULTI:
+                    return 8;
                 case FALLING:
                 default:
                     return 1;
@@ -514,10 +523,28 @@ public class Constants {
                     return 5;
                 case ATTACK:
                     return 3;
+                case ULTI :
+                    return 20;
+                case THROW:
+                    return 25;
                 default: 
                     return 0;
             }
         }
+        public static int GetPlayerDamage(int player_action){
+            switch(player_action){
+                case ATTACK:
+                    return 10;
+                case ULTI :
+                    return 40;
+                case THROW:
+                    return 25;
+                default:
+                    return 0;
+            }
+        }
+
+
 
         public static int GetAniFromKey(KeyEvent e) {
             switch (e.getKeyCode()) {
@@ -526,6 +553,8 @@ public class Constants {
                 
                 case KeyEvent.VK_F:
                     return ATTACK;
+                case KeyEvent.VK_G:
+                    return ULTI;
                 default: 
                     return IDLE;
             }
@@ -535,6 +564,8 @@ public class Constants {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_SPACE:
                 case KeyEvent.VK_F:
+                case KeyEvent.VK_W:
+                case KeyEvent.VK_G:
                     return true;
                 default: 
                     return false;

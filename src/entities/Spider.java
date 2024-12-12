@@ -19,7 +19,7 @@ public class Spider extends Enemy{
         initHitbox(40,12);
         initAttackBox();
         this.enemyHealthBarWidth = (int)(20 * Game.SCALE);
-        this.enemyHealthBarHeight = (int)(1.5 * Game.SCALE);
+        this.enemyHealthBarHeight = (int)(2 * Game.SCALE);
         this.enemyHealthWidth = enemyHealthBarWidth;
         this.walkSpeed = 0.3f * Game.SCALE;
         
