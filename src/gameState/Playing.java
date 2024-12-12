@@ -81,23 +81,22 @@ public class Playing extends State implements Statemethods {
 
         caclcLvlOffset();
         loadStartLevel();
-        
         resetAll();
     }
 
     public void loadNextLevel() {
         resetAll();
         levelManager.loadNextLevel();
-        if ((getLevelManager().getLevelIndex() ) == 1) {
+        if ((levelManager.getLevelIndex() ) == 1) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_2_BACKGROUND);
         }
-        if ((getLevelManager().getLevelIndex() ) == 2) {
+        if ((levelManager.getLevelIndex() ) == 2) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_3_BACKGROUND);
         }
-        if ((getLevelManager().getLevelIndex()) == 3) {
+        if ((levelManager.getLevelIndex()) == 3) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_4_BACKGROUND);
         }
-        if ((getLevelManager().getLevelIndex())== 4) {
+        if ((levelManager.getLevelIndex())== 4) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_5_BACKGROUND);
         }
 
@@ -515,7 +514,7 @@ public class Playing extends State implements Statemethods {
     }
 
     public void restoreStaminaDefault(){
-        player.changeStamina(5);
+        player.changeStamina(100);
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }

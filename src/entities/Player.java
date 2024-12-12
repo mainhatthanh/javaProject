@@ -147,7 +147,6 @@ public class Player extends Entity {
     }
 
     public void update() {
-        System.out.println(this.getPlayerDamage());
         updateHealthBar();
         updateStaminaBar();
         playerUpdateLevel(levelUp);
@@ -157,7 +156,7 @@ public class Player extends Entity {
             updateDirStick();
 
         if (currentHealth <= 0) {
-        	if (playing.TouchFlag() == false || playing.CountRev() == 0) {
+        	if ( playing.CountRev() == 0) {
         	
 	            if (state != DEAD) {
 	                state = DEAD;
