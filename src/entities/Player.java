@@ -253,6 +253,9 @@ public class Player extends Entity {
             playing.getGame().getAudioPlayer().playAttackSound();
         } else {
             if(aniIndex>=6 && !attackChecked){
+                attackChecked = true;
+                if(powerAttackActive)
+                    attackChecked=false;
                 playing.checkEnemyHit(attackBox);
                 playing.getGame().getAudioPlayer().playAttackSound();
             }

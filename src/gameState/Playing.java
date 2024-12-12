@@ -64,6 +64,9 @@ public class Playing extends State implements Statemethods {
 
     int[][] lvlData;
 
+    private int DamageNormalAttack = 10;
+    private int DamageUltiAttack = 40;
+
 
 
 
@@ -279,7 +282,7 @@ public class Playing extends State implements Statemethods {
                 if (player.getCurrentStamina() >= GetStamina(ATTACK)) {
                     player.setAttacking(true);
                     player.setUltiSkill(false);
-                    player.setPlayerDamage(10);
+                    player.setPlayerDamage(DamageNormalAttack);
                     player.changeStamina(-GetStamina(ATTACK));
                 }
             }
@@ -340,7 +343,7 @@ public class Playing extends State implements Statemethods {
                     if(e.getKeyCode()!=KeyEvent.VK_G)
                         if(player.getCurrentStamina() >= GetStamina(ATTACK)){
                             player.setAttacking(true);
-                            player.setPlayerDamage(10);
+                            player.setPlayerDamage(DamageNormalAttack);
                             player.setUltiSkill(false);
                             player.changeStamina(-GetStamina(ATTACK));
                         }else{ 
@@ -351,7 +354,7 @@ public class Playing extends State implements Statemethods {
                     if(e.getKeyCode()!=KeyEvent.VK_F)
                         if(player.getCurrentStamina() >= GetStamina(ULTI)){
                             player.setUltiSkill(true);
-                            player.setPlayerDamage(50);
+                            player.setPlayerDamage(DamageUltiAttack);
                             player.setAttacking(false);
                             player.changeStamina(-GetStamina(ULTI));
                         }else{ 
