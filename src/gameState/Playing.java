@@ -57,8 +57,12 @@ public class Playing extends State implements Statemethods {
     private boolean gameOver;
     private boolean lvlCompleted = false;
     private boolean playerDying;
+   
 
     int[][] lvlData;
+
+    /*private int DamageNormalAttack = 10;
+    private int DamageUltiAttack = 40;*/
 
 
 
@@ -67,7 +71,21 @@ public class Playing extends State implements Statemethods {
         super(game);
         initClasses();
 
-        backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BACKGROUND_IMG);
+        if ((getLevelManager().getLevelIndex()) == 0) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_1_BACKGROUND);
+        }
+        if ((getLevelManager().getLevelIndex()) == 1) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_2_BACKGROUND);
+        }
+        if ((getLevelManager().getLevelIndex()) == 2) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_3_BACKGROUND);
+        }
+        if ((getLevelManager().getLevelIndex()) == 3) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_4_BACKGROUND);
+        }
+        if ((getLevelManager().getLevelIndex())== 4) {
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_5_BACKGROUND);
+        }
 
 
         caclcLvlOffset();
@@ -261,7 +279,7 @@ public class Playing extends State implements Statemethods {
                 if (player.getCurrentStamina() >= GetStamina(ATTACK)) {
                     player.setAttacking(true);
                     player.setUltiSkill(false);
-                    player.setPlayerDamage(10);
+                    player.setPlayerDamage(GetPlayerDamage(ATTACK));
                     player.changeStamina(-GetStamina(ATTACK));
                 }
             }
@@ -288,8 +306,6 @@ public class Playing extends State implements Statemethods {
                     player.setRight(true);
                     break;
                 case KeyEvent.VK_W:
-                    //player.setIsThrow(true);
-                    //player.resetThrow();
                         player.shootStick();
                     break;
                 case KeyEvent.VK_LEFT:
@@ -324,7 +340,7 @@ public class Playing extends State implements Statemethods {
                     if(e.getKeyCode()!=KeyEvent.VK_G)
                         if(player.getCurrentStamina() >= GetStamina(ATTACK)){
                             player.setAttacking(true);
-                            player.setPlayerDamage(10);
+                            player.setPlayerDamage(GetPlayerDamage(ATTACK));
                             player.setUltiSkill(false);
                             player.changeStamina(-GetStamina(ATTACK));
                         }else{ 
@@ -335,7 +351,7 @@ public class Playing extends State implements Statemethods {
                     if(e.getKeyCode()!=KeyEvent.VK_F)
                         if(player.getCurrentStamina() >= GetStamina(ULTI)){
                             player.setUltiSkill(true);
-                            player.setPlayerDamage(50);
+                            player.setPlayerDamage(GetPlayerDamage(ULTI));
                             player.setAttacking(false);
                             player.changeStamina(-GetStamina(ULTI));
                         }else{ 

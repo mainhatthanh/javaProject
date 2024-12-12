@@ -425,11 +425,25 @@ public class Constants {
                 case ULTI :
                     return 20;
                 case THROW:
-                    return 15;
+                    return 25;
                 default: 
                     return 0;
             }
         }
+        public static int GetPlayerDamage(int player_action){
+            switch(player_action){
+                case ATTACK:
+                    return 10;
+                case ULTI :
+                    return 40;
+                case THROW:
+                    return 25;
+                default:
+                    return 0;
+            }
+        }
+
+
 
         public static int GetAniFromKey(KeyEvent e) {
             switch (e.getKeyCode()) {

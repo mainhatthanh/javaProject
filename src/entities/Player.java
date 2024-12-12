@@ -1,6 +1,7 @@
 package entities;
 
 import audio.AudioPlayer;
+import gameState.Gamestate;
 import gameState.Playing;
 import main.Game;
 import utilz.LoadSave;
@@ -108,7 +109,9 @@ public class Player extends Entity {
     private boolean ultiSkill = false;
     private int ultiAniSpeed = 10;
 
-
+    //Run sound
+    private boolean isStepSoundPlaying = false;
+    
     public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, width, height);
         this.playing = playing;
@@ -120,6 +123,7 @@ public class Player extends Entity {
         this.currentExp = 0;
         this.maxExp = 100;
         this.walkSpeed = Game.SCALE * 1.0f;
+
         // this.playerDamage = 10;
         this.levelUp=false;
         loadAnimations();
@@ -143,6 +147,7 @@ public class Player extends Entity {
     }
 
     public void update() {
+        System.out.println(this.getPlayerDamage());
         updateHealthBar();
         updateStaminaBar();
         playerUpdateLevel(levelUp);
@@ -248,6 +253,9 @@ public class Player extends Entity {
             playing.getGame().getAudioPlayer().playAttackSound();
         } else {
             if(aniIndex>=6 && !attackChecked){
+                attackChecked = true;
+                if(powerAttackActive)
+                    attackChecked=false;
                 playing.checkEnemyHit(attackBox);
                 playing.getGame().getAudioPlayer().playAttackSound();
             }
@@ -331,30 +339,40 @@ public class Player extends Entity {
 
         if (jump)
             jump();
-        if (!inAir)
-            if(!powerAttackActive)
-            if ((!left && !right) || (right && left))
-                return;
+        if (!inAir) {
+            if(!powerAttackActive) {
+                if ((!left && !right) || (right && left)) {
+                    stopStepSound();
+                    return;
+                }
 
+            }
+        }
         float xSpeed = 0;
 
 	if(left&&!right) {
 	
 			xSpeed -= walkSpeed;
+            
 			 flipX = (int)(width*1.5);
 			 flipW = -1;
 	}
 	
 	 if(right&&!left) {
+        
 		 xSpeed += walkSpeed;
+        
 	     flipX = 0;
 	     flipW = 1;
 	 }
 
      if(powerAttackActive){
          if((!left&&!right)||(left&&right)){
-             if(flipW==-1)
+             if(flipW==-1){
+
+             
                  xSpeed=-walkSpeed;
+             }
              else
                  xSpeed=walkSpeed;
          }
@@ -377,15 +395,39 @@ public class Player extends Entity {
                     airSpeed = fallSpeedAfterCollision;
                 updateXPos(xSpeed);
             }
-        } else
+        } else {
+                    
             updateXPos(xSpeed);
+        }
         moving = true;
+        if (!inAir && (xSpeed != 0)) {
+            playStepSound(); // Gọi phương thức phát âm thanh lặp
+        } else if (xSpeed == 0){
+            stopStepSound(); // Nếu không di chuyển, dừng âm thanh
+        }
+        
+        
 
+    }
+
+    private void playStepSound() {
+        if (!isStepSoundPlaying) {
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.RUN); // Gọi phương thức loop
+            isStepSoundPlaying = true; // Đặt cờ
+        }
+    }
+
+    private void stopStepSound() {
+        if (isStepSoundPlaying ) {
+            playing.getGame().getAudioPlayer().stopEffect(AudioPlayer.RUN); // Dừng âm thanh
+            isStepSoundPlaying = false; // Đặt lại cờ
+        }
     }
 
     private void jump() {
         if (inAir)
             return;
+        stopStepSound();
         playing.getGame().getAudioPlayer().playEffect(AudioPlayer.JUMP);
         inAir = true;
         airSpeed = jumpSpeed;
@@ -398,9 +440,11 @@ public class Player extends Entity {
 
     private void updateXPos(float xSpeed) {
         if (CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)) {
+            
             hitbox.x += xSpeed;
         } else {
             hitbox.x = GetEntityXPosNextToWall(hitbox, xSpeed);
+            
             if(powerAttackActive){
                 powerAttackActive=false;
                 powerAttackTick=0;
@@ -410,6 +454,7 @@ public class Player extends Entity {
     }
 
     public void changeHealth(int value) {
+        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
         currentHealth += value;
         if (currentHealth <= 0) {
             currentHealth = 0;
@@ -472,7 +517,6 @@ public class Player extends Entity {
 
         if (attacking) {
             state = ATTACK;
-            System.out.println("dang danh thg");
             if (startAni != ATTACK) {
                 aniIndex = 1;
                 aniTick = 0;
@@ -483,7 +527,6 @@ public class Player extends Entity {
 
         if (isThrow) {
             state = THROW;
-            System.out.println("dang nem");
             if (startAni != THROW) {
                 aniIndex = 1;
                 aniTick = 0;
@@ -531,6 +574,7 @@ public class Player extends Entity {
                     aniIndex = 0;
                     attacking = false;
                     isThrow=false;
+                    sticking=false;
                     ultiSkill = false;
                     attackChecked = false;
                 }
@@ -543,6 +587,7 @@ public class Player extends Entity {
                     aniIndex = 0;
                     attacking = false;
                     isThrow=false;
+                    sticking=false;
                     ultiSkill = false;
                     attackChecked = false;
                 }
@@ -697,6 +742,7 @@ public class Player extends Entity {
             return;
         if(currentStamina>=GetStamina(THROW)) {
             this.setIsThrow(true);
+            this.setPlayerDamage(GetPlayerDamage(THROW));
             sticking=true;
             playing.getGame().getAudioPlayer().playEffect(AudioPlayer.THROW);
             changeStamina(-GetStamina(THROW));
@@ -731,7 +777,7 @@ public class Player extends Entity {
     private void updatePlayerShoot(Player player){
         if(player.isSticking()) {
             reloadStick(player);
-            player.resetCurving();
+            player.resetSticking();
         }
 
     }
@@ -751,8 +797,9 @@ public class Player extends Entity {
     }
 
     public void setIsThrow(boolean throwing) {
-        if(attacking==true||isUltiSkill())
-            this.sticking=false;
+        if(attacking==true||isUltiSkill()) {
+            isThrow = false;
+        }
         else isThrow=throwing;
     }
 
@@ -793,7 +840,7 @@ public class Player extends Entity {
     public boolean isSticking(){
         return sticking;
     }
-    public void resetCurving(){
+    public void resetSticking(){
         this.sticking=false;
     }
 
