@@ -16,13 +16,14 @@ import entities.Player;
 import static utilz.Constants.ObjectsConstants.*;
 import static utilz.HelpMethods.*;
 import static utilz.Constants.Projectiles.*;
+import static utilz.Constants.Arrows.*;
 
 public class ObjectManager {
 
     Playing playing;
     private BufferedImage[][] potionImgs, containerImgs;
-    private BufferedImage trap1Img, scrollImg, swordImg, cannonBallImg;
-    private BufferedImage[] chestImgs, cannonImgs;
+    private BufferedImage trap1Img, scrollImg, swordImg, cannonBallImg, arrowImg;
+    private BufferedImage[] chestImgs, cannonImgs, arrowTrapImgs, trap2Imgs, flagImgs;
     private ArrayList<Potion> potions;
     private ArrayList<GameContainer> containers;
     private ArrayList<Trap1> trap1;
@@ -30,7 +31,11 @@ public class ObjectManager {
     private ArrayList<Scroll> scrolls;
     private ArrayList<Sword> swords;
     private ArrayList<Cannon> cannons;
+    private ArrayList<ArrowTrap> arrowTraps;
+    private ArrayList<Trap2> trap2;
+    private ArrayList<Flag> flags;
     private ArrayList<Projectile> projectiles = new ArrayList<>();
+    private ArrayList<Arrow> arrows = new ArrayList<>();
 
     public ObjectManager(Playing playing) {
         this.playing = playing;
@@ -62,9 +67,18 @@ public class ObjectManager {
 				}
 			}
 		}
+		for (Flag f : flags) {
+			if (f.isActive()) {
+				if (hitbox.intersects(f.getHitbox())) {
+					if (playing.TouchFlag() ==  false) {
+						playing.setTouchFlag(true);
+						playing.setCountRev(3);
+					}
+				}
+			}
+		}
 		
 	}
-    
     
     public void applyEffectToPlayer(GameObjects go) {
 		if (go.getObjType() == RED_POTION)
@@ -114,7 +128,11 @@ public class ObjectManager {
         scrolls = new ArrayList<>(newLevel.getScrolls());
         swords = new ArrayList<>(newLevel.getSwords());
         cannons = new ArrayList<>(newLevel.getCannons());
+        arrowTraps = new ArrayList<>(newLevel.getArrowTraps());
+        trap2 = new ArrayList<>(newLevel.getTrap2());
+        flags = new ArrayList<>(newLevel.getFlag());
         projectiles.clear();
+        arrows.clear();
         
     }
 
@@ -139,8 +157,23 @@ public class ObjectManager {
 
 		for (int i = 0; i < cannonImgs.length; i++)
 			cannonImgs[i] = cannonSprite.getSubimage(i * 40, 0, 40, 26);
+		
+		flagImgs = new BufferedImage[5];
+		BufferedImage flagSprite = LoadSave.GetSpriteAtlas(LoadSave.FLAG_ATLAS);
+
+		for (int i = 0; i < flagImgs.length; i++)
+			flagImgs[i] = flagSprite.getSubimage(i * 60, 0, 60, 56);
+		
+		arrowTrapImgs = new BufferedImage[15];
+		BufferedImage arrowTrapSprite = LoadSave.GetSpriteAtlas(LoadSave.ARROWTRAP_ATLAS);
+
+		for (int i = 0; i < arrowTrapImgs.length; i++)
+			if (i < 8)
+			arrowTrapImgs[i] = arrowTrapSprite.getSubimage(i * 95, 0, 95, 30);
+			else arrowTrapImgs[i] = arrowTrapSprite.getSubimage((i+2) * 95, 0, 95, 30);
 
 		cannonBallImg = LoadSave.GetSpriteAtlas(LoadSave.CANNON_BALL);
+		arrowImg = LoadSave.GetSpriteAtlas(LoadSave.ARROW_ATLAS);
         
         
         
@@ -155,6 +188,11 @@ public class ObjectManager {
         scrollImg = LoadSave.GetSpriteAtlas(LoadSave.SCROLL_ATLAS);
         
         trap1Img = LoadSave.GetSpriteAtlas(LoadSave.TRAP1_ATLAS);
+        BufferedImage trap2Sprite = LoadSave.GetSpriteAtlas(LoadSave.TRAP2_ATLAS);
+        trap2Imgs = new BufferedImage[10];
+        for (int i = 0; i < 10 ; i++) {
+        	trap2Imgs[i] = trap2Sprite;
+        }
     }
 
     public void update(int[][] lvlData, Player player){
@@ -168,16 +206,18 @@ public class ObjectManager {
                 gc.update();
             }
         }
-        
-        for (Cannon c : cannons) {
-            
-                c.update();
-            
-        }
-        
+        updateArrowTrap();
+        updateArrows(lvlData, player);
+        updateTrap2(lvlData, player);
         
         updateCannons(lvlData, player);
         updateProjectiles(lvlData, player);
+        
+        for (Flag f : flags) {
+        	if (f.active) {
+        		f.update();
+        	}
+        }
         
         for (Chest c : chests) {
         	if(c.active) {
@@ -197,7 +237,63 @@ public class ObjectManager {
         
     }
     
-    private void updateProjectiles(int[][] lvlData, Player player) {
+    private void updateTrap2(int[][] lvlData, Player player) {
+    	for (Trap2 t2 : trap2) {
+			if (!t2.doAnimation)
+				if (t2.getTileY() == player.getTileY())
+					if (isPlayerInRange(t2, player))
+						if (isPlayerInfrontOfCannon(t2, player))
+							if (CanCannonSeePlayer(lvlData, player.getHitBox(), t2.getHitbox(), t2.getTileY()))
+								t2.setAnimation(true);
+			t2.update();
+			if (t2.getAniTick() == 0 && t2.getAniIndex() == 1)
+				shootArrow2(t2);
+
+		}
+		
+	}
+
+	private void shootArrow2(Trap2 t2) {
+		int dir = 1;
+		if (t2.getObjType() == TRAP2_LEFT)
+			dir = -1;
+
+		arrows.add(new Arrow((int) t2.getHitbox().x, (int) t2.getHitbox().y, dir));
+		
+	}
+
+	private void updateArrows(int[][] lvlData, Player player) {
+    	for (Arrow a : arrows)
+			if (a.isActive()) {
+				a.updatePos();
+				if (a.getHitbox().intersects(player.getHitBox())) {
+					player.changeHealth(-25);
+					a.setActive(false);
+				} else if (IsArrowHittingLevel(a, lvlData))
+					a.setActive(false);
+			}
+		
+	}
+
+	private void updateArrowTrap() {
+		for (ArrowTrap at : arrowTraps) {
+			if (at.active) {
+				at.update();
+				if (at.getAniIndex() == 8 && at.getAniTick() == 0)
+					shootArrow(at);
+			}
+		}
+		
+	}
+
+	private void shootArrow(ArrowTrap at) {
+		int dir = -1;
+
+		arrows.add(new Arrow((int) at.getHitbox().x, (int) at.getHitbox().y, dir));
+		
+	}
+
+	private void updateProjectiles(int[][] lvlData, Player player) {
 		for (Projectile p : projectiles)
 			if (p.isActive()) {
 				p.updatePos();
@@ -209,13 +305,13 @@ public class ObjectManager {
 			}
 	}
     
-    private boolean isPlayerInRange(Cannon c, Player player) {
+    private boolean isPlayerInRange(GameObjects c, Player player) {
 		int absValue = (int) Math.abs(player.getHitBox().x - c.getHitbox().x);
 		return absValue <= Game.TILES_SIZE * 5;
 	}
 
-	private boolean isPlayerInfrontOfCannon(Cannon c, Player player) {
-		if (c.getObjType() == CANNON_LEFT) {
+	private boolean isPlayerInfrontOfCannon(GameObjects c, Player player) {
+		if (c.getObjType() == CANNON_LEFT || c.getObjType() == TRAP2_LEFT) {
 			if (c.getHitbox().x > player.getHitBox().x)
 				return true;
 
@@ -257,10 +353,61 @@ public class ObjectManager {
         drawScrolls(g, xLvlOffset);
         drawSwords(g, xLvlOffset);
         drawCannons(g, xLvlOffset);
+        drawArrowTraps(g, xLvlOffset);
+        drawArrow(g, xLvlOffset);
+        drawTrap2(g, xLvlOffset);
+        drawFlag(g, xLvlOffset);
         drawProjectiles(g, xLvlOffset);
     }
     
-    private void drawProjectiles(Graphics g, int xLvlOffset) {
+    private void drawFlag(Graphics g, int xLvlOffset) {
+    	for (Flag f : flags) {
+    		if (f.isActive()) {
+			g.drawImage(flagImgs[f.getAniIndex()],
+					    (int) (f.getHitbox().x - xLvlOffset),
+					    (int) (f.getHitbox().y - f.getyDrawOffset()),
+						FLAG_WIDTH,
+						FLAG_HEIGHT, null);
+			f.drawHitbox(g, xLvlOffset);
+    		}
+		
+    	}
+    }
+
+	private void drawTrap2(Graphics g, int xLvlOffset) {
+    	for (Trap2 t2 : trap2) {
+			int x = (int) (t2.getHitbox().x - xLvlOffset - (int) (15*Game.SCALE));
+			int width = TRAP2_WIDTH;
+
+			if (t2.getObjType() == TRAP2_RIGHT) {
+				x += width;
+				width *= -1;
+			}
+
+			g.drawImage(trap2Imgs[t2.getAniIndex()], x, (int) (t2.getHitbox().y), width, TRAP2_HEIGHT, null);
+			t2.drawHitbox(g, xLvlOffset);
+		}
+	}
+
+	private void drawArrow(Graphics g, int xLvlOffset) {
+    	for (Arrow a : arrows)
+			if (a.isActive())
+				g.drawImage(arrowImg, (int) (a.getHitbox().x - xLvlOffset), (int) (a.getHitbox().y), ARROW_WIDTH, ARROW_HEIGHT, null);
+
+		
+	}
+
+	private void drawArrowTraps(Graphics g, int xLvlOffset) {
+    	for (ArrowTrap at : arrowTraps) {
+			int x = (int) (at.getHitbox().x - at.xDrawOffset - xLvlOffset - (20*Game.SCALE));
+			int width = ARROW_TRAP_WIDTH;
+
+			g.drawImage(arrowTrapImgs[at.getAniIndex()], x, (int) (at.getHitbox().y - at.yDrawOffset + (int) (5*Game.SCALE)), width, ARROW_TRAP_HEIGHT, null);
+		}
+		
+	}
+
+	private void drawProjectiles(Graphics g, int xLvlOffset) {
 		for (Projectile p : projectiles)
 			if (p.isActive())
 				g.drawImage(cannonBallImg, (int) (p.getHitbox().x - xLvlOffset), (int) (p.getHitbox().y), CANNON_BALL_WIDTH, CANNON_BALL_HEIGHT, null);
@@ -381,6 +528,10 @@ public class ObjectManager {
     	
     	loadObjects(playing.getLevelManager().getCurrentLevel());
     	
+    	for (Flag f : flags) {
+    		f.reset();
+    	}
+    	
     	for (Chest c : chests) {
     		c.reset();
     	}
@@ -393,6 +544,9 @@ public class ObjectManager {
     		sw.reset();
     	}
     	
+    	for (Trap2 t2 : trap2) {
+    		t2.reset();
+    	}
     	
     	for (Potion p : potions)
     		p.reset();
@@ -400,6 +554,8 @@ public class ObjectManager {
     		gc.reset();
     	for (Cannon c : cannons)
 			c.reset();
+    	for (ArrowTrap at : arrowTraps)
+    		at.reset();
     }
     
     

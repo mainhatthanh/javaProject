@@ -18,19 +18,17 @@ public class GameContainer extends GameObjects {
             yDrawOffset = (int) (12 * Game.SCALE);
         }
         else {
-            initHitbox(22, 22);
+            initHitbox(22, 19);
             xDrawOffset = (int) (8 * Game.SCALE);
             yDrawOffset = (int) (5 * Game.SCALE);
         }
 
-        hitbox.y += yDrawOffset + (int) (Game.SCALE * 4) + 12;
-        hitbox.x += (int) (xDrawOffset / 2);
+        // hitbox.y += yDrawOffset + (int) (Game.SCALE * 2);
+       // hitbox.x += (int) (xDrawOffset / 2);
     }
 
     public void update() {
         if (doAnimation)
             updateAnimationTick();
     }
-
-	
 }

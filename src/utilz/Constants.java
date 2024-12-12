@@ -26,6 +26,18 @@ public class Constants {
         }
     }
     
+    public static class Curve{
+        public static final int STICK_WIDTH_DEFAULT = 80;
+        public static final int STICK_HEIGHT_DEFAULT = 50;
+
+        public static final int STICK_WIDTH = (int)(Game.SCALE*STICK_WIDTH_DEFAULT);
+        public static final int STICK_HEIGHT = (int)(Game.SCALE*STICK_HEIGHT_DEFAULT);
+        public static final float SPEED = 1.5f*Game.SCALE;
+
+
+
+    }
+    
     public static class Projectiles{
 		public static final int CANNON_BALL_DEFAULT_WIDTH = 15;
 		public static final int CANNON_BALL_DEFAULT_HEIGHT = 15;
@@ -35,12 +47,12 @@ public class Constants {
 		public static final float SPEED = 0.75f * Game.SCALE;
 	}
 
-    public static class Bullet{
-        public static final int BALL_1EYE_DEFAULT_WIDTH = 20;
-        public static final int BALL_1EYE_DEFAULT_HEIGHT = 15;
+    public static class Arrows{
+        public static final int ARROW_DEFAULT_WIDTH = 30;
+        public static final int ARROW_DEFAULT_HEIGHT = 10;
 
-        public static final int BALL_1EYE_WIDTH = (int)(Game.SCALE*BALL_1EYE_DEFAULT_WIDTH);
-        public static final int BALL_1EYE_HEIGHT = (int)(Game.SCALE*BALL_1EYE_DEFAULT_HEIGHT);
+        public static final int ARROW_WIDTH = (int)(Game.SCALE*ARROW_DEFAULT_WIDTH);
+        public static final int ARROW_HEIGHT = (int)(Game.SCALE*ARROW_DEFAULT_HEIGHT);
         public static final float SPEED = 0.4f*Game.SCALE;
 
 
@@ -58,11 +70,36 @@ public class Constants {
         public static final int SWORD = 7;
         public static final int CANNON_LEFT = 8;
         public static final int CANNON_RIGHT = 9;
+        public static final int ARROW_TRAP = 10;
+        public static final int TRAP2_LEFT = 11;
+        public static final int TRAP2_RIGHT = 12;
+        public static final int PEACH = 13;
+        public static final int FLAG = 14;
 
         public static final int RED_POTION_VALUE = 15;
         public static final int BLUE_POTION_VALUE = 100;
         public static final int TRAP1_VALUE = 20;
         public static final int SWORD_VALUE = 20;
+        
+        public static final int PEACH_WIDTH_DEFAULT = 15;
+        public static final int PEACH_HEIGHT_DEFAULT = 15;
+        public static final int PEACH_WIDTH = (int) (PEACH_WIDTH_DEFAULT * Game.SCALE);
+        public static final int PEACH_HEIGHT = (int) (PEACH_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int FLAG_WIDTH_DEFAULT = 35;
+        public static final int FLAG_HEIGHT_DEFAULT = 35;
+        public static final int FLAG_WIDTH = (int) (FLAG_WIDTH_DEFAULT * Game.SCALE);
+        public static final int FLAG_HEIGHT = (int) (FLAG_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int TRAP2_WIDTH_DEFAULT = 90;
+        public static final int TRAP2_HEIGHT_DEFAULT = 30;
+        public static final int TRAP2_WIDTH = (int) (TRAP2_WIDTH_DEFAULT * Game.SCALE);
+        public static final int TRAP2_HEIGHT = (int) (TRAP2_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int ARROW_TRAP_WIDTH_DEFAULT = 90;
+		public static final int ARROW_TRAP_HEIGHT_DEFAULT = 30;
+		public static final int ARROW_TRAP_WIDTH = (int) (ARROW_TRAP_WIDTH_DEFAULT * Game.SCALE);
+		public static final int ARROW_TRAP_HEIGHT = (int) (ARROW_TRAP_HEIGHT_DEFAULT * Game.SCALE);
         
         public static final int CANNON_WIDTH_DEFAULT = 40;
 		public static final int CANNON_HEIGHT_DEFAULT = 26;
@@ -101,7 +138,11 @@ public class Constants {
 
         public static int getSpriteAmount(int objType) {
             switch (objType) {
-                case RED_POTION, BLUE_POTION:
+            	case TRAP2_LEFT, TRAP2_RIGHT:
+            		return 10;
+            	case ARROW_TRAP:
+            		return 15;
+                case RED_POTION, BLUE_POTION, CANNON_LEFT, CANNON_RIGHT:
                     return 7;
                 case BARREL, BOX:
                     return 8;

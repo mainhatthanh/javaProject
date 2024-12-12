@@ -33,7 +33,7 @@ public class AudioPlayer {
 
     }
     private void loadSongs(){
-        String[] names = {"menu1","level11","level22"};
+        String[] names = {"menu1","level22","level11"};
         songs =new Clip[names.length];
         for(int i=0;i<songs.length;i++)
             songs[i]=getClip(names[i]);

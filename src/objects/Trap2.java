@@ -2,16 +2,16 @@ package objects;
 
 import main.Game;
 
-public class Cannon extends GameObjects {
+public class Trap2 extends GameObjects {
 
 	private int tileY;
 
-	public Cannon(int x, int y, int objType) {
+	public Trap2(int x, int y, int objType) {
 		super(x, y, objType);
 		tileY = y / Game.TILES_SIZE;
-		initHitbox(40, 26);
+		initHitbox(35, 24);
 		hitbox.x -= (int) (4 * Game.SCALE);
-		hitbox.y += (int) (6 * Game.SCALE);
+		hitbox.y += (int) (14 * Game.SCALE);
 	}
 
 	public void update() {

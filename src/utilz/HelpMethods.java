@@ -6,14 +6,18 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import entities.*;
-
+import gameState.Playing;
 import main.Game;
 import objects.GameContainer;
 import objects.Potion;
 import objects.Projectile;
 import objects.Trap1;
+import objects.Trap2;
+import objects.Arrow;
+import objects.ArrowTrap;
 import objects.Cannon;
 import objects.Chest;
+import objects.Flag;
 import objects.Scroll;
 import objects.Sword;
 
@@ -45,6 +49,11 @@ public class HelpMethods {
     
     public static boolean IsProjectileHittingLevel(Projectile p, int[][] lvlData) {
 		return IsSolid(p.getHitbox().x + p.getHitbox().width / 2, p.getHitbox().y + p.getHitbox().height / 2, lvlData);
+
+	}
+    
+    public static boolean IsArrowHittingLevel(Arrow a, int[][] lvlData) {
+		return IsSolid(a.getHitbox().x + a.getHitbox().width / 2, a.getHitbox().y + a.getHitbox().height / 2, lvlData);
 
 	}
 
@@ -79,6 +88,10 @@ public class HelpMethods {
             // Jumping
             return currentTile * Game.TILES_SIZE;
 
+    }
+    
+    public static boolean IsStickHittingLevel(Stick st, int[][] lvlData) {
+        return IsSolid(st.getHitbox().x + st.getHitbox().width / 2, st.getHitbox().y + st.getHitbox().height / 2, lvlData);
     }
 
     public static boolean IsEntityOnFloor(Rectangle2D.Float hitbox, int[][] lvlData) {
@@ -232,6 +245,34 @@ public class HelpMethods {
 		return list;
 	}
     
+    public static ArrayList<Trap2> GetTrap2(BufferedImage img) {
+		ArrayList<Trap2> list = new ArrayList<>();
+
+		for (int j = 0; j < img.getHeight(); j++)
+			for (int i = 0; i < img.getWidth(); i++) {
+				Color color = new Color(img.getRGB(i, j));
+				int value = color.getBlue();
+				if (value == TRAP2_LEFT || value == TRAP2_RIGHT)
+					list.add(new Trap2(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+			}
+
+		return list;
+	}
+    
+    public static ArrayList<ArrowTrap> GetArrowTraps(BufferedImage img) {
+		ArrayList<ArrowTrap> list = new ArrayList<>();
+
+		for (int j = 0; j < img.getHeight(); j++)
+			for (int i = 0; i < img.getWidth(); i++) {
+				Color color = new Color(img.getRGB(i, j));
+				int value = color.getBlue();
+				if (value == ARROW_TRAP)
+					list.add(new ArrowTrap(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+			}
+
+		return list;
+	}
+    
     public static ArrayList<Chest> GetChests(BufferedImage img) {
         ArrayList<Chest> list = new ArrayList<>();
         for (int j = 0; j < img.getHeight(); j++)
@@ -240,6 +281,19 @@ public class HelpMethods {
                 int value = color.getBlue();
                 if (value == CHEST)
                     list.add(new Chest(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+    
+    public static ArrayList<Flag> GetFlags(BufferedImage img) {
+        ArrayList<Flag> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == FLAG)
+                    list.add(new Flag(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
             }
         return list;
 
@@ -402,12 +456,14 @@ public class HelpMethods {
         for (int j = 0; j < img.getHeight(); j++)
             for (int i = 0; i < img.getWidth(); i++) {
                 Color color = new Color(img.getRGB(i, j));
-                int value = color.getGreen();
-                if (value == 100)
-                   return new Point(i*Game.TILES_SIZE,j*Game.TILES_SIZE);
+                	int value = color.getGreen();
+                	if (value == 100)
+                		return new Point(i*Game.TILES_SIZE,j*Game.TILES_SIZE);
+               
             }
         return new Point(1*Game.TILES_SIZE,1*Game.TILES_SIZE);
     }
+    
 
    /* public static boolean IsBulletHittingLevel(Bullet b, int[][] lvlData) {
         return IsSolid(b.getHitbox().x + b.getHitbox().width / 2, b.getHitbox().y + b.getHitbox().height / 2, lvlData);

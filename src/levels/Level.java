@@ -12,20 +12,26 @@ import entities.Monster_Eye1;
 import entities.Shark;
 import entities.Spider;
 import entities.Toro;
+import gameState.Playing;
 import main.Game;
 import objects.GameContainer;
 import objects.Potion;
 import objects.Scroll;
 import objects.Sword;
 import objects.Trap1;
+import objects.Trap2;
+import objects.ArrowTrap;
 import objects.Cannon;
 import objects.Chest;
+import objects.Flag;
 import utilz.HelpMethods;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import static utilz.Constants.ObjectsConstants.CANNON_LEFT;
+import static utilz.Constants.ObjectsConstants.CANNON_RIGHT;
 import static utilz.HelpMethods.*;
 
 public class Level {
@@ -44,6 +50,9 @@ public class Level {
     private ArrayList<Scroll> scrolls;
     private ArrayList<Sword> swords;
     private ArrayList<Cannon> cannons;
+    private ArrayList<ArrowTrap> arrowTraps;
+    private ArrayList<Trap2> trap2;
+    private ArrayList<Flag> flags;
     
     private ArrayList<Shark> sharks;
     private ArrayList<Minotaur> minotaurs;
@@ -73,12 +82,30 @@ public class Level {
      createScroll();
      createSword();
      createCannons();
+     createArrowTraps();
+     createTrap2();
+     createFlags();
      
      calcLvlOffsets();
      calcPlayerSpawn();
  }
  
- 	private void createCannons() {
+ 	private void createFlags() {
+ 		flags = HelpMethods.GetFlags(img);
+	
+}
+
+	private void createTrap2() {
+ 		trap2 = HelpMethods.GetTrap2(img);
+	
+}
+
+	private void createArrowTraps() {
+ 		arrowTraps = HelpMethods.GetArrowTraps(img);
+	
+}
+
+	private void createCannons() {
 		cannons = HelpMethods.GetCannons(img);
 	}
 
@@ -109,8 +136,7 @@ public class Level {
 }
 
 	private void calcPlayerSpawn() {
-     playerSpawn = GetPlayerSpawn(img);
-
+		playerSpawn = GetPlayerSpawn(img);
     }
 
     private void createContainers() {
@@ -180,15 +206,25 @@ public class Level {
     public ArrayList<Potion> getPotions() {
         return potions;
     }
+    
+    public ArrayList<Flag> getFlag() {
+    	return flags;
+    }
     public ArrayList<Scroll> getScrolls() {
     	return scrolls;
     }
+    public ArrayList<Trap2> getTrap2() {
+    	return trap2;
+    }
     public ArrayList<Trap1> getTrap1() {
-        return trap1;
+    	return trap1;
     }
     public ArrayList<Cannon> getCannons(){
 		return cannons;
 	}
+    public ArrayList<ArrowTrap> getArrowTraps() {
+    	return arrowTraps;
+    }
     public ArrayList<Shark> getSharks(){return  sharks;}
 
     public ArrayList<Minotaur> getMinotaurs() {
@@ -230,10 +266,19 @@ public class Level {
     
     public ArrayList<Boss5> getBoss5(){
     	return boss5;
-    }
+    }		
     
   public Point getPlayerSpawn(){
      return playerSpawn;
+  }
+  
+  public Point getFlag1() {
+	  for (Flag f : flags) {
+		  return new Point((int) f.getHitbox().x, (int) f.getHitbox().y);
+	  }
+	  return new Point(1*Game.TILES_SIZE,1*Game.TILES_SIZE);
+	  
+	  
   }
     public int getMapHeight() {
         return lvlData.length; // Số hàng trong mảng 2D là chiều cao của bản đồ (theo số tile)

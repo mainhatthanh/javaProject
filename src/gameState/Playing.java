@@ -10,6 +10,9 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 
+
+
+import entities.Enemy;
 import entities.EnemyManager;
 import entities.Player;
 
@@ -36,6 +39,7 @@ public class Playing extends State implements Statemethods {
 	private UI ui ;
 	
     private Player player;
+    private Enemy enemy;
     private LevelManager levelManager;
     private EnemyManager enemyManager;
     private ObjectManager objectManager;
@@ -46,6 +50,7 @@ public class Playing extends State implements Statemethods {
     private boolean paused = false;
 
     private int xLvlOffset;
+    private int countRev = 0;
 
     private int leftBorder = (int) (0.5 * Game.GAME_WIDTH);
     private int rightBorder = (int) (0.5 * Game.GAME_WIDTH);
@@ -54,11 +59,14 @@ public class Playing extends State implements Statemethods {
 
     private BufferedImage backgroundImg, groundImg;
 
+    private boolean touchFlag = false;
     private boolean gameOver;
     private boolean lvlCompleted = false;
     private boolean playerDying;
 
     int[][] lvlData;
+
+
 
 
     public Playing(Game game) {
@@ -82,7 +90,6 @@ public class Playing extends State implements Statemethods {
     private void loadStartLevel() {
         enemyManager.loadEnemies(levelManager.getCurrentLevel());
         objectManager.loadObjects(levelManager.getCurrentLevel());
-       // bulletManager.loadBullets(levelManager.getCurrentLevel());
 
     }
 
@@ -98,12 +105,12 @@ public class Playing extends State implements Statemethods {
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
         objectManager = new ObjectManager(this);
-        //bulletManager = new BulletManager(this);
+
+
 
         player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this);
         player.loadLvlData(levelManager.getCurrentLevel().getLvlData());
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
-
 
         ui = new UI(this);
         pauseOverlay = new PauseOverlay(this); 
@@ -132,6 +139,7 @@ public class Playing extends State implements Statemethods {
             levelUpTime = 0;
         } else if (gameOver) {
             gameOverOverlay.update();
+        	
         }
         else if(enemyManager.checkBoss) {
         	ui.setText(enemyManager.messBoss, 3);
@@ -142,6 +150,7 @@ public class Playing extends State implements Statemethods {
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
+
             exp = enemyManager.getExpUp();
             if(exp != 0) {
             	String a ="+"+ exp;
@@ -149,7 +158,10 @@ public class Playing extends State implements Statemethods {
             	enemyManager.setExpUp(0);
             }
             objectManager.update(levelManager.getCurrentLevel().getLvlData(), player);
-            //bulletManager.update(levelManager.getCurrentLevel().getLvlData(), player);
+
+
+
+
             checkCloseToBorder();
         }
 
@@ -180,8 +192,12 @@ public class Playing extends State implements Statemethods {
         
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
+        player.drawSticks(g,xLvlOffset);
         enemyManager.draw(g, xLvlOffset);
         objectManager.draw(g, xLvlOffset);
+
+
+
 
        //draw lvlUp khi len cap
         if(player.getIsShowLvlUp()){
@@ -206,6 +222,8 @@ public class Playing extends State implements Statemethods {
         }
     }
 
+
+
     public void resetAll() {
         gameOver = false;
         paused = false;
@@ -213,14 +231,19 @@ public class Playing extends State implements Statemethods {
             expThatChange = 0;
             levelUpTime = 0;
         }
+        touchFlag = false;
+        countRev = 0;
         textIndex =0;
         lvlCompleted = false;
         playerDying = false;
         player.resetAll();
-        enemyManager.resetAllEnemies();
 
-        objectManager.resetAllObjects();
-       // bulletManager.resetBullets();
+        enemyManager.resetAllEnemies();
+         /*if(player.isCurving())
+            curveManager.resetCurve(player);*/
+
+
+
 
     }
 
@@ -232,20 +255,13 @@ public class Playing extends State implements Statemethods {
         enemyManager.checkEnemyHit(attackBox , player);
     }
 
-    public void checkTrapTouched(Player p) {
-    	objectManager.checkTrapTouched(p);
+    public boolean isStickHitEnemy(Rectangle2D.Float curveHitBox){
+      return  enemyManager.isStickHitEnemy(curveHitBox,player);
+
     }
 
-    public void checkObjectHit(Rectangle2D.Float attackbox) {
-    	objectManager.checkObjectHit(attackbox);
-    }
 
-    public void checkPotionTouched(Rectangle2D.Float hitbox) {
-    	objectManager.checkObjectTouched(hitbox);
-    }
-    
-    
-    
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -278,6 +294,9 @@ public class Playing extends State implements Statemethods {
                 case KeyEvent.VK_D:
                     player.setRight(true);
                     break;
+                case KeyEvent.VK_W:
+                    player.shootStick();
+                            break;
                 case KeyEvent.VK_LEFT:
                     player.setLeft(true);
                     break;
@@ -298,6 +317,9 @@ public class Playing extends State implements Statemethods {
                         player.setJump(true);
                         player.changeStamina(-GetStamina(JUMP));
                     }
+                    else{ 
+                        System.out.println("Khong du mana");
+                    }
                     break;
                 case KeyEvent.VK_ESCAPE:
                     paused = !paused;
@@ -306,12 +328,9 @@ public class Playing extends State implements Statemethods {
                     if(player.getCurrentStamina() >= GetStamina(ATTACK)){
                         player.setAttacking(true);
                         player.changeStamina(-GetStamina(ATTACK));
-                    }else{
+                    }else{ 
                         System.out.println("Khong du mana");
                     }
-                    break;
-                case KeyEvent.VK_E:
-                	objectManager.checkChestsOpen(player.getHitBox());
                     break;
             }
             // player.changeStamina(-GetStamina(GetAniFromKey(e)));
@@ -430,6 +449,19 @@ public class Playing extends State implements Statemethods {
     public void setPlayerDying(boolean playerDying) {
         this.playerDying = playerDying;
     }
+    public void setCountRev(int countRev) {
+    	this.countRev = countRev;
+    }
+    public void setTouchFlag(boolean touchFlag) {
+    	this.touchFlag = touchFlag;
+    }
+    
+    public int CountRev() {
+    	return countRev;
+    }
+    public boolean TouchFlag() {
+    	return touchFlag;
+    }
 
     /*public BulletManager getBulletManager(){
         return bulletManager;
@@ -439,7 +471,7 @@ public class Playing extends State implements Statemethods {
     public boolean enoughStamina(int player_action){
         if(player.getCurrentStamina() >= GetStamina(player_action))
             return true;
-        else
+        else   
             return false;
     }
 
@@ -448,7 +480,9 @@ public class Playing extends State implements Statemethods {
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
+     public void setSpawn() {
+    	 player.setSpawn(levelManager.getCurrentLevel().getFlag1());
+     }
     
-
 
 }

@@ -7,11 +7,15 @@ import utilz.LoadSave;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static utilz.Constants.ANI_SPEED;
+
+import static utilz.Constants.Curve.STICK_HEIGHT;
+import static utilz.Constants.Curve.STICK_WIDTH;
 import static utilz.Constants.GRAVITY;
 import static utilz.Constants.PlayerConstants.*;
 import static utilz.HelpMethods.*;
@@ -81,18 +85,28 @@ public class Player extends Entity {
 
     private int flipX = 0;
     private int flipW = 1;
-    
-    private int tileY = 0;
 
     private boolean attackChecked;
     private Playing playing;
 
+    private int tileY=0;
 
-
+  //Chieu luot
     private boolean powerAttackActive;
     private int powerAttackTick;
     private int powerGrowSpeed=15;
     private int powerGrowTick;
+
+    //Chieu ban
+   private boolean sticking;
+   private BufferedImage stickImg;
+   private ArrayList<Stick> sticks=new ArrayList<>();
+   private int stickDir =1;
+
+
+
+
+
 
     public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, width, height);
@@ -109,6 +123,7 @@ public class Player extends Entity {
         this.levelUpTime = 0;
         this.levelUp=false;
         loadAnimations();
+        loadImgs();
 
         initHitbox(15, 27);
 
@@ -136,37 +151,49 @@ public class Player extends Entity {
         //updateIsShowLvlUp(isShowLevelUp);
         //System.out.println(maxHealth + " " + maxStamina + " "+ playerDamage);
 
+            updateDirCurve();
+
         if (currentHealth <= 0) {
-            if (state != DEAD) {
-                state = DEAD;
-                aniTick = 0;
-                aniIndex = 0;
-                playing.setPlayerDying(true);
-                playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
-            } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
-                playing.setGameOver(true);
-                playing.getGame().getAudioPlayer().stopSong();
-                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
-            } else {
-                updateAnimationTick();
-
-                //fall if in air
-                if (inAir)
-                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
-                        hitbox.y += airSpeed;
-                        airSpeed += GRAVITY;
-                    } else
-                        inAir = false;
-
-            }
-
-            return;
+        	if (playing.TouchFlag() == false || playing.CountRev() == 0) {
+        	
+	            if (state != DEAD) {
+	                state = DEAD;
+	                aniTick = 0;
+	                aniIndex = 0;
+	                playing.setPlayerDying(true);
+	                playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
+	            } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
+	                playing.setGameOver(true);
+	                playing.getGame().getAudioPlayer().stopSong();
+	                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
+	            } else {
+	                updateAnimationTick();
+	
+	                //fall if in air
+	                if (inAir)
+	                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
+	                        hitbox.y += airSpeed;
+	                        airSpeed += GRAVITY;
+	                    } else
+	                        inAir = false;
+	
+	            }
+        	}
+        	else {
+            		playing.setSpawn();
+            		playing.setCountRev(playing.CountRev() - 1);
+        	}
+	
+	            return;
         }
-            updateAttackBox();
+           	updateAttackBox();
+            updateExpBar();
 
-        updateExpBar();
 
         updateAttackBox();
+        updateStick(lvlData);
+        updatePlayerShoot(this);
+
             if (state == HIT) {
                 if (aniIndex <= GetSpriteAmount(state) - 3)
                     pushBack(pushBackDir, lvlData, 1.25f);
@@ -175,8 +202,6 @@ public class Player extends Entity {
                 updatePos();
 
             if(moving) {
-            	checkPotionTouched();
-            	checkTrapTouched();
                 tileY = (int) (hitbox.y / Game.TILES_SIZE);
                 if(powerAttackActive){
                     powerAttackTick++;
@@ -186,7 +211,12 @@ public class Player extends Entity {
                     }
                 }
 
+
+
             }
+
+
+
 
         if (attacking||powerAttackActive)
             checkAttack();
@@ -197,22 +227,6 @@ public class Player extends Entity {
     }
 
 
-	private void checkTrapTouched() {
-		playing.checkTrapTouched(this);
-
-	}
-
-	private void checkPotionTouched() {
-    	playing.checkPotionTouched(hitbox);
-    }
-
-    /*private void updateIsShowLvlUp(boolean isShowLevelUp) {
-        if(isShowLevelUp){
-            g.drawImage(levelUpImg, (int) (hitbox.x - 30)- xlvlOffset, (int) (hitbox.y - 60), lvlUpWidth, lvlUpHeight, null);
-            resetIsShowLevelUp();
-
-        }
-    }*/
 
 
     public void playerUpdateLevel(boolean levelUp){
@@ -226,7 +240,6 @@ public class Player extends Entity {
 
     }
 
-
     private void checkAttack() {
         if (attackChecked || aniIndex != 1)
             return;
@@ -235,9 +248,11 @@ public class Player extends Entity {
         if(powerAttackActive)
             attackChecked=false;
 
+        /*if(curveAttackActive)
+            attackChecked=false;*/
+
         playing.checkEnemyHit(attackBox);
         playing.getGame().getAudioPlayer().playAttackSound();
-        playing.checkObjectHit(attackBox);
     }
 
     private void updateAttackBox() {
@@ -265,6 +280,12 @@ public class Player extends Entity {
         if(powerGrowTick>=powerGrowSpeed){
             powerGrowTick=0;
         }
+
+       /* curveGrowTick++;
+        if(curveGrowTick>=curveGrowSpeed){
+            curveGrowTick=0;
+        }*/
+
     }
 
     private void updateExpBar(){
@@ -275,8 +296,11 @@ public class Player extends Entity {
         g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
-        drawUI(g);
 
+        /*if(curveAttackActive)
+            curveManager.drawCurves(g,xlvlOffset);*/
+
+        drawUI(g);
 
 
 //         drawAttackHitbox(g, xlvlOffset);
@@ -291,6 +315,8 @@ public class Player extends Entity {
             resetIsShowLevelUp();
         }
     }
+
+
 
 
 
@@ -321,13 +347,12 @@ public class Player extends Entity {
 
         float xSpeed = 0;
 
-
 	if(left&&!right) {
+	
 			xSpeed -= walkSpeed;
 			 flipX = (int)(width*1.5);
 			 flipW = -1;
 	}
-
 	
 	 if(right&&!left) {
 		 xSpeed += walkSpeed;
@@ -402,15 +427,16 @@ public class Player extends Entity {
             currentHealth = maxHealth;
         }
     }
-
+    
     public void kill(int value) {
-    	currentHealth = 0;
+    	 currentHealth -= value;
+         if (currentHealth <= 0) {
+             currentHealth = 0;
+             // gameOver();
+         } else if (currentHealth >= maxHealth) {
+             currentHealth = maxHealth;
+         }
     }
-
-    private void gameOver() {
-		// TODO Auto-generated method stub
-
-	}
 
     public void changeStamina(int value) {
         // thay đổi stamina
@@ -460,6 +486,14 @@ public class Player extends Entity {
             aniTick=0;
             return;
         }
+
+        if(sticking){
+            state=ATTACK;
+            aniIndex=1;
+            aniTick=0;
+            return;
+        }
+
         if (attacking) {
             state = ATTACK;
             if (startAni != ATTACK) {
@@ -502,7 +536,7 @@ public class Player extends Entity {
     }
 
     public boolean isLeft() {
-        return left;
+        return this.left;
     }
 
     public void setRight(boolean right) {
@@ -535,7 +569,7 @@ public class Player extends Entity {
         levelUpImg=LoadSave.GetSpriteAtlas(LoadSave.LEVEL_UP_IMG);
 
     }
-
+    
     public void loadLvlData(int[][] lvlData) {
         this.lvlData = lvlData;
         if (!IsEntityOnFloor(hitbox, lvlData))
@@ -581,11 +615,9 @@ public class Player extends Entity {
 
     }
 
-
-
     public int getMaxHealth() {
         return maxHealth;
-    }
+    }   
 
     public void setCurrentStamina(int x){
         this.currentStamina = x;
@@ -632,6 +664,76 @@ public class Player extends Entity {
         }
     }
 
+
+
+    ////////Ban STICK
+
+    public void shootStick(){
+        if(sticking)
+            return;
+        if(currentStamina>=40) {
+            sticking = true;
+            this.setAttacking(true);
+            changeStamina(-40);
+        }
+    }
+    private void loadImgs() {
+        stickImg= LoadSave.GetSpriteAtlas(LoadSave.STICK_IMG);
+    }
+
+    public void drawSticks(Graphics g,int xLvlOffset){
+        for(Stick st:sticks)
+            if(st.isActive())
+                g.drawImage(stickImg,(int)(st.getHitbox().x-xLvlOffset),(int)(st.getHitbox().y),STICK_WIDTH,STICK_HEIGHT,null);
+    }
+
+
+
+    public void updateStick(int[][] lvlData) {
+        for(Stick st:sticks) {
+            if (st.isActive()) {
+                st.updatePos();
+                if (playing.isStickHitEnemy(st.getHitbox())) {
+                    playing.checkEnemyHit(st.getHitbox());
+                    st.setActive(false);
+                } else if (IsStickHittingLevel(st, lvlData))
+                    st.setActive(false);
+            }
+        }
+    }
+
+
+
+
+    private void updatePlayerShoot(Player player){
+        if(player.isCurving()) {
+            reloadStick(player);
+            player.resetCurving();
+        }
+
+    }
+
+
+    public void reloadStick(Player player){
+        sticks.add(new Stick((int) player.getHitbox().x-22,(int)player.getHitbox().y,stickDir));
+    }
+
+    private void updateDirCurve(){
+        if(this.left){
+           stickDir =-1;
+        }
+        else if(this.right){
+            stickDir=1;
+        }
+    }
+
+
+
+
+//////
+
+
+
     public void setPlayerDamage(int a){
         this.playerDamage = a;
     }
@@ -655,5 +757,12 @@ public class Player extends Entity {
 
     public boolean getIsShowLvlUp(){
         return isShowLevelUp;
+    }
+
+    public boolean isCurving(){
+        return sticking;
+    }
+    public void resetCurving(){
+        this.sticking=false;
     }
 }
