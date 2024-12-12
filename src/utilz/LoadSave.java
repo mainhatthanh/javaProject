@@ -16,7 +16,11 @@ public class LoadSave {
     public static final String LEVEL_ATLAS = "tiletest.png";
     public static final String MENU_BACKGROUND = "menu_background.png";
     public static final String MENU_BACKGROUND_IMG = "background.png";
-    public static final String PLAYING_BACKGROUND_IMG = "forest_background.png";
+    public static final String LEVEL_1_BACKGROUND = "background1.png";
+    public static final String LEVEL_2_BACKGROUND = "background2.png";
+    public static final String LEVEL_3_BACKGROUND = "background3.png";
+    public static final String LEVEL_4_BACKGROUND = "background4.png";
+    public static final String LEVEL_5_BACKGROUND = "background5.png";
     public static final String COMPLETED_IMG = "completed_sprite.png";
     public static final String DEATH_SCREEN = "death_screen.png";
     public static final String LEVEL_UP_IMG = "levelUp.png";
