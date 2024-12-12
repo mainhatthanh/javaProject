@@ -3,6 +3,7 @@ package entities;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
+import gameState.Playing;
 import main.Game;
 
 import static utilz.Constants.ANI_SPEED;
@@ -12,7 +13,7 @@ import static utilz.Constants.EnemyConstants.*;
 
 public class Minotaur extends Enemy {
 
-
+    
     private int attackBoxOffsetX;
 
     public Minotaur(float x, float y) {

@@ -157,34 +157,40 @@ public class Player extends Entity {
             updateDirStick();
 
         if (currentHealth <= 0) {
-            if (state != DEAD) {
-                state = DEAD;
-                aniTick = 0;
-                aniIndex = 0;
-                playing.setPlayerDying(true);
-                playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
-            } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
-                playing.setGameOver(true);
-                playing.getGame().getAudioPlayer().stopSong();
-                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
-            } else {
-                updateAnimationTick();
-
-                //fall if in air
-                if (inAir)
-                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
-                        hitbox.y += airSpeed;
-                        airSpeed += GRAVITY;
-                    } else
-                        inAir = false;
-
-            }
-
-            return;
+        	if (playing.TouchFlag() == false || playing.CountRev() == 0) {
+        	
+	            if (state != DEAD) {
+	                state = DEAD;
+	                aniTick = 0;
+	                aniIndex = 0;
+	                playing.setPlayerDying(true);
+	                playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
+	            } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
+	                playing.setGameOver(true);
+	                playing.getGame().getAudioPlayer().stopSong();
+	                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
+	            } else {
+	                updateAnimationTick();
+	
+	                //fall if in air
+	                if (inAir)
+	                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
+	                        hitbox.y += airSpeed;
+	                        airSpeed += GRAVITY;
+	                    } else
+	                        inAir = false;
+	
+	            }
+        	}
+        	else {
+            		playing.setSpawn();
+            		playing.setCountRev(playing.CountRev() - 1);
+        	}
+	
+	            return;
         }
-            updateAttackBox();
-
-        updateExpBar();
+           	updateAttackBox();
+            updateExpBar();
 
 
         updateAttackBox();
@@ -417,7 +423,7 @@ public class Player extends Entity {
         }
     }
 
-    private void stopStepSound() {
+    public void stopStepSound() {
         if (isStepSoundPlaying ) {
             playing.getGame().getAudioPlayer().stopEffect(AudioPlayer.RUN); // Dừng âm thanh
             isStepSoundPlaying = false; // Đặt lại cờ
@@ -462,6 +468,16 @@ public class Player extends Entity {
         } else if (currentHealth >= maxHealth) {
             currentHealth = maxHealth;
         }
+    }
+    
+    public void kill(int value) {
+    	 currentHealth -= value;
+         if (currentHealth <= 0) {
+             currentHealth = 0;
+             // gameOver();
+         } else if (currentHealth >= maxHealth) {
+             currentHealth = maxHealth;
+         }
     }
 
     public void changeStamina(int value) {
@@ -636,7 +652,7 @@ public class Player extends Entity {
         levelUpImg=LoadSave.GetSpriteAtlas(LoadSave.LEVEL_UP_IMG);
 
     }
-
+    
     public void loadLvlData(int[][] lvlData) {
         this.lvlData = lvlData;
         if (!IsEntityOnFloor(hitbox, lvlData))
