@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-
+import audio.AudioPlayer;
 import gameState.Gamestate;
 
 import gameState.Playing;
@@ -77,8 +77,6 @@ public class PauseOverlay {
         g.drawImage(backgroundImg, bgX, bgY, bgW, bgH, null);
 
 
-
-
         // UrmButtons
         menuB.draw(g);
         replayB.draw(g);
@@ -94,12 +92,18 @@ public class PauseOverlay {
 
     public void mousePressed(MouseEvent e) {
 
-        if (isIn(e, menuB))
+        if (isIn(e, menuB)){
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             menuB.setMousePressed(true);
-        else if (isIn(e, replayB))
+        }
+        else if (isIn(e, replayB)){
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             replayB.setMousePressed(true);
-        else if (isIn(e, unpauseB))
+        }
+        else if (isIn(e, unpauseB)){
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             unpauseB.setMousePressed(true);
+        }
         else audioOptions.mousePressed(e);
 
     }
@@ -112,7 +116,6 @@ public class PauseOverlay {
             if (menuB.isMousePressed()) {
                 playing.resetAll();
                playing.setGameState(Gamestate.MENU);
-
                 playing.unpauseGame();
             }
         } else if (isIn(e, replayB)) {

@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-
+import audio.AudioPlayer;
 import gameState.Gamestate;
 
 import gameState.Playing;
@@ -87,6 +87,7 @@ public class GameOverOverlay {
     public void mouseReleased(MouseEvent e) {
         if (isIn(menu, e)) {
             if (menu.isMousePressed()) {
+
                 playing.resetAll();
                 playing.setGameState(Gamestate.MENU);
             }
@@ -100,9 +101,13 @@ public class GameOverOverlay {
     }
 
     public void mousePressed(MouseEvent e) {
-        if (isIn(menu, e))
+        if (isIn(menu, e)) {
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             menu.setMousePressed(true);
-        else if (isIn(play, e))
+        }
+        else if (isIn(play, e)) {
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
             play.setMousePressed(true);
+        }
     }
 }

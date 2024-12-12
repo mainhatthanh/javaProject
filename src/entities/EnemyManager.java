@@ -9,6 +9,9 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import audio.AudioPlayer;
+
 import static utilz.Constants.EnemyConstants.*;
 
 public class EnemyManager {
@@ -105,7 +108,7 @@ public class EnemyManager {
         boolean isAnyActiveBoss4 = false;
         boolean isAnyActiveBossFinal = false;
         
-
+        
         
         for (Shark sh : sharks) 
             if (sh.isActive()) {
@@ -125,7 +128,6 @@ public class EnemyManager {
                 if (mino.isActive()) {
                     mino.updateHealthBar();
                     mino.update(lvlData, player);
-                    
                     isAnyActiveMinotaur = true;
                 }
             
@@ -149,7 +151,6 @@ public class EnemyManager {
                     spi.update(lvlData, player);
                     isAnyActiveSpider = true;
                 }
-            
             for (Boss1 b : boss1)
                 if (b.isActive()) {
                     b.updateHealthBar();
@@ -164,37 +165,45 @@ public class EnemyManager {
                     isAnyActiveBoss5 = true;
                 
                 }
-
             
+
             for (Toro t : toros) 
                 if (t.isActive()) {
-                    enemyCheck = TORO;
-                	t.updateHealthBar();
+                	enemyCheck = TORO;
+                    if(t.isAttacking()) 
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS1_ATTACK1);
+                    t.updateHealthBar();
                     t.update(lvlData, player);
                     isAnyActiveToro = true;
                 }
-
+            
             for (Boss2 b2 : boss2)
                 if (b2.isActive()) {
                     enemyCheck = BOSS2;
-                	b2.updateHealthBar();
+                    if(b2.isAttacking()) 
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS2_ATTACK);
                     b2.update(lvlData, player);
+                    b2.updateHealthBar();
                     isAnyActiveBoss2 = true;
                 }
 
             for (Boss3 b3 : boss3)
                 if (b3.isActive()) {
                 	enemyCheck = BOSS3;		
-                	b3.updateHealthBar();
+                    if(b3.isAttacking()) 
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS3_ATTACK);
                     b3.update(lvlData, player);
+                    b3.updateHealthBar();
                     isAnyActiveBoss3 = true;
                 }
 
             for (Boss4 b4 : boss4)
                 if (b4.isActive()) {
                     enemyCheck = BOSS4;
-                	b4.updateHealthBar();
+                    if(b4.isAttacking()) 
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS4_ATTACK);
                     b4.update(lvlData, player);
+                    b4.updateHealthBar();
                     isAnyActiveBoss4 = true;
                 }
             
@@ -339,7 +348,7 @@ public class EnemyManager {
                         (int) (spi.getHitBox().y - SPIDER_DRAWOFFSET_Y - 100),
                         (int) (SPIDER_WIDTH * spi.flipY() * 3), (int) (SPIDER_HEIGHT * 3), null);
 //            spi.drawAttackHitbox(g, xLvlOffset);
-//            spi.drawHitbox(g, xLvlOffset);
+           spi.drawHitbox(g, xLvlOffset);
             spi.drawHealthBar(g, xLvlOffset);
             }
         }
@@ -365,9 +374,10 @@ public class EnemyManager {
                         (int) (me.getHitBox().x - xLvlOffset - MONEYE1_DRAWOFFSET_X + me.flipX()),
                         (int) (me.getHitBox().y - MONEYE1_DRAWOFFSET_Y + 5),
                         (int) (MONEYE1_WIDTH * me.flipY()), (int) (MONEYE1_HEIGHT), null);
+                me.drawHealthBar(g, xLvlOffset);
 //                me.drawHitbox(g, xLvlOffset);
 //                me.drawAttackHitbox(g, xLvlOffset);
-                me.drawHealthBar(g, xLvlOffset);
+   
             }
     }
 
@@ -410,20 +420,22 @@ public class EnemyManager {
     }
 
     
-    public void checkEnemyHit(Rectangle2D.Float attackBox, Player player) {
+    public void checkEnemyHit(Rectangle2D.Float attackBox ,Player player) {
         for (Crabby c : crabbies)
-            if (c.getCurrentHealth() > 0)
+            if (c.getCurrentHealth() > 0) {
                 if (attackBox.intersects(c.getHitBox())) {
-                    c.hurt(10, player);
+                    c.hurt(player.playerDamage, player);
                     expUp = c.getExpUpdate();
                     return;
                 }
+            }
 
         for (Shark shark : sharks)
             if (shark.isActive())
                 if (shark.getCurrentHealth() > 0)
                     if (attackBox.intersects(shark.getHitBox())) {
-                        shark.hurt(10, player);
+                
+                        shark.hurt(player.playerDamage, player);
                         expUp = shark.getExpUpdate();
                         return;
                     }
@@ -432,7 +444,7 @@ public class EnemyManager {
             if (me.isActive())
                 if (me.getCurrentHealth() > 0)
                     if (attackBox.intersects(me.getHitBox())) {
-                        me.hurt(10, player);
+                        me.hurt(player.playerDamage, player);
                         expUp = me.getExpUpdate();
                         return;
                     }
@@ -441,7 +453,8 @@ public class EnemyManager {
             if (me2.isActive())
                 if (me2.getCurrentHealth() > 0)
                     if (attackBox.intersects(me2.getHitBox())) {
-                        me2.hurt(10, player);
+                      
+                        me2.hurt(player.playerDamage, player);
                         expUp = me2.getExpUpdate();
                         return;
                     }
@@ -450,7 +463,7 @@ public class EnemyManager {
             if (spi.isActive())
                 if (spi.getCurrentHealth() > 0)
                     if (attackBox.intersects(spi.getHitBox())) {
-                        spi.hurt(10, player);
+                        spi.hurt(player.playerDamage, player);
                         expUp = spi.getExpUpdate();
                         return;
                     }
@@ -459,7 +472,8 @@ public class EnemyManager {
             if (mino.isActive())
                 if (mino.getCurrentHealth() > 0)
                     if (attackBox.intersects(mino.getHitBox())) {
-                        mino.hurt(10, player);
+                       
+                        mino.hurt(player.playerDamage, player);
                         expUp = mino.getExpUpdate();
                         return;
                     }
@@ -467,18 +481,25 @@ public class EnemyManager {
         
         for (Toro t : toros)
             if (t.isActive())
-                if (t.getCurrentHealth() > 0)
+                if (t.getCurrentHealth() > 0 ) {
+
                     if (attackBox.intersects(t.getHitBox())) {
-                        t.hurt(10, player);
+                       
+                        t.hurt(player.playerDamage, player);
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT_BOSS);
+                        if(t.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS1_DEAD);
+                        }
                         expUp = t.getExpUpdate();
                         return;
                     }
 
+                }
         for (Boss1 b : boss1)
             if (b.isActive())
                 if (b.getCurrentHealth() > 0)
                     if (attackBox.intersects(b.getHitBox())) {
-                        b.hurt(10, player);
+                        b.hurt(player.playerDamage, player);
                         expUp = b.getExpUpdate();
                         return;
                     }
@@ -487,7 +508,11 @@ public class EnemyManager {
             if (b2.isActive())
                 if (b2.getCurrentHealth() > 0)
                     if (attackBox.intersects(b2.getHitBox())) {
-                        b2.hurt(10, player);
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT_BOSS);
+                        b2.hurt(player.playerDamage, player);
+                        if(b2.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS2_DEAD);
+                        }
                         expUp = b2.getExpUpdate();
                         return;
                     }
@@ -496,7 +521,11 @@ public class EnemyManager {
             if (b3.isActive())
                 if (b3.getCurrentHealth() > 0)
                     if (attackBox.intersects(b3.getHitBox())) {
-                        b3.hurt(10, player);
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT_BOSS);
+                        b3.hurt(player.playerDamage, player);
+                        if(b3.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS3_DEAD);
+                        }
                         expUp = b3.getExpUpdate();
                         return;
                     }
@@ -505,7 +534,11 @@ public class EnemyManager {
             if (b4.isActive())
                 if (b4.getCurrentHealth() > 0)
                     if (attackBox.intersects(b4.getHitBox())) {
-                        b4.hurt(10, player);
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT_BOSS);
+                        b4.hurt(player.playerDamage, player);
+                        if(b4.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS4_DEAD);
+                        }
                         expUp = b4.getExpUpdate();
                         return;
                     }
@@ -514,7 +547,8 @@ public class EnemyManager {
             if (b5.isActive())
                 if (b5.getCurrentHealth() > 0)
                     if (attackBox.intersects(b5.getHitBox())) {
-                        b5.hurt(10, player);
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
+                        b5.hurt(player.playerDamage, player);
                         expUp = b5.getExpUpdate();
                         return;
                     }
@@ -537,6 +571,101 @@ public class EnemyManager {
             for (int i = 0; i < bossFinalArr[j].length; i++)
             	bossFinalArr[j][i] = temp.getSubimage(i * BOSSFINAL_WIDTH_DEFAULT, j * BOSSFINAL_HEIGHT_DEFAULT,
                         BOSSFINAL_WIDTH_DEFAULT, BOSSFINAL_HEIGHT_DEFAULT);
+    }
+
+
+    public boolean isStickHitEnemy(Rectangle2D.Float stickHitBox ,Player player) {
+        for (Crabby c : crabbies)
+        if (c.getCurrentHealth() > 0) {
+            if (stickHitBox.intersects(c.getHitBox())) {
+                return true;
+            }
+        }
+                
+
+        for (Shark shark : sharks)
+            if (shark.isActive())
+                if (shark.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(shark.getHitBox())) {
+
+                        return true;
+                    }
+
+        for (Monster_Eye1 me : moneyes)
+            if (me.isActive())
+                if (me.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(me.getHitBox())) {
+                        return true;
+                    }
+
+        for (Monster2 me2 : monster2s)
+            if (me2.isActive())
+                if (me2.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(me2.getHitBox())) {
+                        
+                
+                        return true;
+                    }
+
+        for (Spider spi : spiders)
+            if (spi.isActive())
+                if (spi.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(spi.getHitBox())) {
+                        return true;
+                    }
+
+        for (Minotaur mino : minotaurs)
+            if (mino.isActive())
+                if (mino.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(mino.getHitBox())) {
+                        return true;
+                    }
+
+
+        for (Toro t : toros)
+            if (t.isActive())
+                if (t.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(t.getHitBox())) {
+                        return true;
+                    }
+
+        for (Boss1 b : boss1)
+            if (b.isActive())
+                if (b.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(b.getHitBox())) {
+                        return true;
+                    }
+
+        for (Boss2 b2 : boss2)
+            if (b2.isActive())
+                if (b2.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(b2.getHitBox())) {
+                        return true;
+                    }
+
+        for (Boss3 b3 : boss3)
+            if (b3.isActive())
+                if (b3.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(b3.getHitBox())) {
+                        return true;
+                    }
+
+        for (Boss4 b4 : boss4)
+            if (b4.isActive())
+                if (b4.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(b4.getHitBox())) {
+                        return true;
+                    }
+
+        for (Boss5 b5 : boss5)
+            if (b5.isActive())
+                if (b5.getCurrentHealth() > 0)
+                    if (stickHitBox.intersects(b5.getHitBox())) {
+                        return true;
+                    }
+
+        return false;
+
     }
 
     private void loadEnemyImgSpider() {
@@ -705,7 +834,7 @@ public class EnemyManager {
 	public void drawIDLE(Graphics g, int xLvlOffset) {
 		
 		for (Toro t : toros){
-                g.drawImage(toroArr[IDLE][t.getAniIndex()],
+                g.drawImage(toroArr[5][t.getAniIndex()],
                         (int) (t.getHitBox().x - xLvlOffset - TORO_DRAWOFFSET_X + t.flipX()),
                         (int) (t.getHitBox().y - TORO_DRAWOFFSET_Y  ),
                         (int) (TORO_WIDTH * t.flipY() * 1.2), (int) (TORO_HEIGHT * 1.2), null);

@@ -21,7 +21,8 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Boss4 extends Enemy {
-
+	private boolean isAttacking;
+	
 	public Boss4(float x, float y) {
 		 super(x, y, BOSS4_WIDTH, BOSS4_HEIGHT, BOSS4);
 	        initHitbox(50,20);
@@ -122,6 +123,13 @@ public class Boss4 extends Enemy {
 	                    	checkEnmyHit(attackBox,player);
 	                    if(aniIndex ==10)
 	                    	player.setJump(false);
+
+						if (aniIndex == 6) 
+							setAttacking(true);
+						//elseif
+						if(aniIndex == 9 ) 
+							setAttacking(false);
+
 	                    break;
 	                case HIT:
 	                    break;
@@ -166,5 +174,13 @@ public class Boss4 extends Enemy {
 	              return 1;
 	          }
 	    }
-	    
+
+		public boolean isAttacking() {
+			return isAttacking;
+		}
+		
+		public void setAttacking(boolean isAttacking) {
+			this.isAttacking = isAttacking;
+		}
+
 }

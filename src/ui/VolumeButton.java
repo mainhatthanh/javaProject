@@ -65,12 +65,17 @@ public class VolumeButton extends PauseButton {
       updateFloatValue();
         bounds.x = buttonX - VOLUME_WIDTH / 2;
 
+
     }
 
     private void updateFloatValue() {
         float range = maxX - minX;
         float value = buttonX-minX;
-        floatValue = value/range;
+        if (value <= range / 2) {
+	        floatValue = (value / (range / 2)) * 0.75f;
+	    } else {
+	        floatValue = 0.75f + ((value - range / 2) / (range / 2)) * 0.25f;
+	    }
     }
 
     public void resetBools() {
