@@ -79,6 +79,9 @@ public class Playing extends State implements Statemethods {
 
    private Tutorial tutorial;
 
+   //Plot
+    private Plot plot;
+
 
     /*private int DamageNormalAttack = 10;
     private int DamageUltiAttack = 40;*/
@@ -146,6 +149,7 @@ public class Playing extends State implements Statemethods {
         gameOverOverlay = new GameOverOverlay(this);
         levelCompletedOverlay = new LevelCompletedOverlay(this);
         tutorial = new Tutorial();
+        plot = new Plot();
 
         // Căn chỉnh camera theo vị trí nhân vật
         caclcLvlOffset(); // Tính maxLvlOffsetX và maxLvlOffsetY trước
@@ -169,7 +173,7 @@ public class Playing extends State implements Statemethods {
         
         }else if(fly1) {
         	player.update();
-        	objectManager.updateFlyWukong(player);	
+        	objectManager.updateFlyWukong(player);
         	if(objectManager.getFly()) {
         		game.getAudioPlayer().lvlCompleted();
         		fly2 = true;
@@ -180,6 +184,7 @@ public class Playing extends State implements Statemethods {
         	if(objectManager.getXPos() >= Game.GAME_WIDTH+ 20) {
         		lvlCompleted = true;
         		levelCompletedOverlay.update();
+
                 expThatChange = 0;	
                 levelUpTime = 0;
         	}
@@ -202,6 +207,9 @@ public class Playing extends State implements Statemethods {
             player.update();
         }
         else if(tutorial.isShowTutorial()){
+            pauseOverlay.update();
+        }
+        else if(plot.isShowPlot()){
             pauseOverlay.update();
         }
              else {
@@ -308,6 +316,10 @@ public class Playing extends State implements Statemethods {
             tutorial.draw(g);
             player.stopStepSound();
         }
+        else if(plot.isShowPlot()){
+            plot.draw(g,levelManager.getLevelIndex());
+            player.stopStepSound();
+        }
 //=======
 //            player.stopStepSound();
 //            gameOverOverlay.draw(g);
@@ -386,7 +398,7 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (!gameOver){
+     /*   if (!gameOver){
             if (e.getButton() == MouseEvent.BUTTON1) {
                 if (player.getCurrentStamina() >= GetStamina(ATTACK)) {
                     player.setAttacking(true);
@@ -401,7 +413,7 @@ public class Playing extends State implements Statemethods {
                 else{ 
                     System.out.println("Khong du mana");
                 }
-            }
+            }*/
     }
 
     @Override
@@ -438,8 +450,10 @@ public class Playing extends State implements Statemethods {
                 case KeyEvent.VK_R:
                     tutorial.setTutorial(!tutorial.isShowTutorial());
                    break;
-                	
-                	
+                case KeyEvent.VK_B:
+                    plot.setPlot(false);
+                    this.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
+                    break;
                 case KeyEvent.VK_SPACE:
                     if(player.getCurrentStamina() >= GetStamina(JUMP)){
                         player.setJump(true);
@@ -642,6 +656,9 @@ public class Playing extends State implements Statemethods {
 
      public Tutorial getTutorial(){
         return tutorial;
+     }
+     public Plot getPlot(){
+        return plot;
      }
 
 

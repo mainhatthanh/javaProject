@@ -1,5 +1,6 @@
 package objects;
 
+import audio.AudioPlayer;
 import gameState.Playing;
 import levels.Level;
 import main.Game;
@@ -56,9 +57,6 @@ public class ObjectManager {
     public ObjectManager(Playing playing) {
         this.playing = playing;
         loadImgs();
-
-        
-
     }
     
     public void checkTrapTouched(Player p) {
@@ -71,8 +69,9 @@ public class ObjectManager {
 		for(Scroll sc : scrolls)
 			if(sc.isActive())
 			if(sc.getHitbox().intersects(player.getHitBox())) {
+				playing.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
 				sc.setActive(false);
-				playing.getTutorial().setTutorial(true);
+				playing.getPlot().setPlot(true);
 			}
 
 	}
@@ -541,7 +540,7 @@ public class ObjectManager {
 					    (int) (s.getHitbox().y - s.getyDrawOffset()),
 						SCROLL_WIDTH,
 						SCROLL_HEIGHT, null);
-			s.drawHitbox(g, xLvlOffset);
+			//s.drawHitbox(g, xLvlOffset);
     		}
     	}
 		

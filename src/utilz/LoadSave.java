@@ -81,6 +81,12 @@ public class LoadSave {
 
     public static final String TUTORIAL_PAPER = "tutorial.png";
 
+    public static final String PLOT1 = "plot1.png";
+    public static final String PLOT2 = "plot2.png";
+    public static final String PLOT3 = "plot3.png";
+    public static final String PLOT4 = "plot4.png";
+    public static final String PLOT5 = "plot5.png";
+
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage img = null;
         InputStream is = LoadSave.class.getResourceAsStream("/" + fileName);
