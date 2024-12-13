@@ -184,7 +184,9 @@ public class Player extends Entity {
         	}
         	else {
             		playing.setSpawn();
+            		currentHealth = maxHealth;
             		playing.setCountRev(playing.CountRev() - 1);
+            		
         	}
 	
 	            return;
@@ -213,6 +215,8 @@ public class Player extends Entity {
                         powerAttackActive=false;
                     }
                 }
+                checkTrapTouched();
+                checkObjectTouched();
 
 
 
@@ -227,6 +231,15 @@ public class Player extends Entity {
         updateAnimationTick();
         setAnimation();
 
+    }
+    
+    private void checkTrapTouched() {
+		playing.checkTrapTouched(this);
+
+	}
+
+	private void checkObjectTouched() {
+    	playing.checkObjectTouched(hitbox);
     }
 
 
@@ -257,6 +270,7 @@ public class Player extends Entity {
     
             playing.checkEnemyHit(attackBox);
             playing.getGame().getAudioPlayer().playAttackSound();
+            playing.checkObjectHit(attackBox);
         } else {
             if(aniIndex>=6 && !attackChecked){
                 attackChecked = true;

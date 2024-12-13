@@ -164,7 +164,7 @@ public class Playing extends State implements Statemethods {
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
-
+         
             exp = enemyManager.getExpUp();
             if(exp != 0) {
             	String a ="+"+ exp;
@@ -253,6 +253,7 @@ public class Playing extends State implements Statemethods {
         player.resetAll();
 
         enemyManager.resetAllEnemies();
+        objectManager.resetAllObjects();
          /*if(player.isCurving())
             curveManager.resetCurve(player);*/
 
@@ -260,6 +261,23 @@ public class Playing extends State implements Statemethods {
 
 
     }
+    
+    public void checkObjectHit(Rectangle2D.Float attackBox) {
+		objectManager.checkObjectHit(attackBox);
+	}
+
+
+	public void checkObjectTouched(Rectangle2D.Float hitbox) {
+		objectManager.checkObjectTouched(hitbox);
+	}
+
+	public void checkTrapTouched(Player p) {
+		objectManager.checkTrapTouched(p);
+	}
+	
+	public void checkChestsOpen(Rectangle2D.Float hitbox) {
+		objectManager.checkChestsOpen(hitbox);
+	}
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
@@ -326,6 +344,9 @@ public class Playing extends State implements Statemethods {
                 case KeyEvent.VK_Q:
                 	enemyManager.checkBoss = false;
                 	break;
+                case KeyEvent.VK_E:
+                	objectManager.checkChestsOpen(player.getHitBox());
+                    break;
                 	
                 	
                 case KeyEvent.VK_SPACE:
@@ -507,7 +528,7 @@ public class Playing extends State implements Statemethods {
     }
 
     public void restoreStaminaDefault(){
-        player.changeStamina(5);
+        player.changeStamina(100);
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
