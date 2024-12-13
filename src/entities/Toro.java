@@ -69,18 +69,18 @@ public class Toro extends Enemy {
 				move(lvlData);
 				break;
 			case ATTACK:
-				if(aniIndex ==0)
+				if(aniIndex ==0) {
+					
 					attackChecked = false;
-				
+				}
 				if(aniIndex == 3  && !attackChecked) {
 
-					setAttacking(false);
+					setAttacking(true);
 					checkEnmyHit(attackBox, player);
 				}
-				if(aniIndex == 2  ) {
-					setAttacking(true);
-					
-					
+				
+				if(aniIndex==4){
+					setAttacking(false);
 				}
 				
 				break;
