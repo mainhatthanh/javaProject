@@ -273,10 +273,10 @@ public class Playing extends State implements Statemethods {
             g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             pauseOverlay.draw(g);
             
-            player.render(g, xLvlOffset);
-            player.drawSticks(g,xLvlOffset);
-            enemyManager.draw(g, xLvlOffset);
-            objectManager.draw(g, xLvlOffset);
+//            player.render(g, xLvlOffset);
+//            player.drawSticks(g,xLvlOffset);
+//            enemyManager.draw(g, xLvlOffset);
+//            objectManager.draw(g, xLvlOffset);
         } else if (gameOver) {
 			player.stopStepSound();
             gameOverOverlay.draw(g);
@@ -297,6 +297,7 @@ public class Playing extends State implements Statemethods {
         	if(objectManager.getXPos() >= Game.GAME_WIDTH+ 20 + xLvlOffset) {
         		levelCompletedOverlay.draw(g);
         		expThatChange = 0;
+        		player.stopStepSound();
         	}
         	
         }
@@ -434,8 +435,7 @@ public class Playing extends State implements Statemethods {
                 	break;
 
                 case KeyEvent.VK_R:
-                    tutorial.toggleShowTutorial();
-                   // paused = !paused;
+                    tutorial.setTutorial(!tutorial.isShowTutorial());
                    break;
                 	
                 	

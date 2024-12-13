@@ -19,7 +19,7 @@ public class LoadSave {
     
     public static final String LEVEL_ATLAS ="tiletest.png";
     public static final String MENU_BACKGROUND ="menu_background.png";
-    public static final String MENU_BACKGROUND_IMG ="baner.png";
+    public static final String MENU_BACKGROUND_IMG ="background.png";
     public static final String PLAYING_BACKGROUND_IMG ="forest_background.png";
     public static final String  COMPLETED_IMG ="completed_sprite.png";
     public static final String  DEATH_SCREEN ="death_screen.png";

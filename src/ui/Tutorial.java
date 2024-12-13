@@ -41,18 +41,18 @@ public class Tutorial {
         g.drawImage(imgTutorial, tutorialX, tutorialY, tutorialW, tutorialH, null);
 
     }
-    public void toggleShowTutorial(){
-        if(iShowTutorial){
-            iShowTutorial=false;
-        }
-        else if(!iShowTutorial){
-            iShowTutorial=true;
-
-        }
-    }
+//    public void toggleShowTutorial(){
+//        if(iShowTutorial){
+//            iShowTutorial=false;
+//        }
+//        else if(!iShowTutorial){
+//            iShowTutorial=true;
+//
+//        }
+//    }
 
     public boolean isShowTutorial(){
-        return this.iShowTutorial;
+        return iShowTutorial;
     }
 
     public void setTutorial(boolean isShow){
