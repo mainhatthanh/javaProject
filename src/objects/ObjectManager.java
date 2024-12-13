@@ -291,7 +291,6 @@ public class ObjectManager {
 	    		fly = fw.getCheck();
 	    		if(!fly)
 	    			fw.checkTouched(player);
-	    		
 	    		fw.update(fw.getRowIndex());
 	//    		if(fw.getCheck()) {
 	//    			fw.setRowIndex(0);

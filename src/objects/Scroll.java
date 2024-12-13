@@ -8,8 +8,8 @@ public class Scroll extends GameObjects {
 		
 		initHitbox(20, 20);
 		xDrawOffset = 0;
-		yDrawOffset = (int) (0*Game.SCALE);
-		this.hitbox.y = yDrawOffset + (int) (16*Game.SCALE);
+		yDrawOffset = (int) (5*Game.SCALE);
+	//hitbox.y = yDrawOffset + (int) (16*Game.SCALE);
 	}
 	public void update() {
 		updateAnimationTick();

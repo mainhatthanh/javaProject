@@ -220,6 +220,7 @@ public class EnemyManager {
                     && !isAnyActiveBoss4 && !isAnyActiveBoss5 && !isAnyActiveBossFinal) {
 
                 playing.setFlyWukong(true);
+                playing.setLevelCompleted(true);
 
             }
         }
