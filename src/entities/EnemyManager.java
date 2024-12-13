@@ -209,6 +209,8 @@ public class EnemyManager {
             
             for (BossFinal bf : bossFinal)
                 if (bf.isActive()) {
+                    if(bf.isAttacking()) 
+                        playing.getGame().getAudioPlayer().playAttackSound();
                     enemyCheck = BOSSFINAL;
                 	bf.updateHealthBar();
                     bf.update(lvlData, player);
@@ -548,7 +550,7 @@ public class EnemyManager {
             if (b5.isActive())
                 if (b5.getCurrentHealth() > 0)
                     if (attackBox.intersects(b5.getHitBox())) {
-                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
+                       
                         b5.hurt(player.playerDamage, player);
                         expUp = b5.getExpUpdate();
                         return;
@@ -556,9 +558,13 @@ public class EnemyManager {
         
         for (BossFinal bf : bossFinal)
             if (bf.isActive())
-                if (bf.getCurrentHealth() > 0)
+                if (bf.getCurrentHealth() > 0) 
                     if (attackBox.intersects(bf.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
                         bf.hurt(10, player);
+                        if (bf.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
+                        }
                         expUp = bf.getExpUpdate();
                         return;
                     }

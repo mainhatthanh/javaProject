@@ -66,7 +66,7 @@ public class Constants {
         public static final int BARREL = 2;
         public static final int BOX = 3;
 
-        public static final int FLYWUKONG = 4;
+        public static final int FLYWUKONG = 15;
 
         public static final int TRAP1 = 4;
         public static final int CHEST = 5;

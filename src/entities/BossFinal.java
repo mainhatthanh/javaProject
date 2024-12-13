@@ -21,7 +21,7 @@ import main.Game;
 public class BossFinal extends Enemy {
 	
 		private int attackBoxOffsetX;
-
+		private boolean isAttacking;
 	    public BossFinal(float x, float y) {
 	        super(x, y, BOSSFINAL_WIDTH, BOSSFINAL_HEIGHT, BOSSFINAL);
 	        initHitbox(25,30);
@@ -108,11 +108,18 @@ public class BossFinal extends Enemy {
 	                    move(lvlData);
 	                    break;
 	                case ATTACK:
-	                    if(aniIndex==0)
+	                    if(aniIndex==0) {
 	                        attackChecked = false;
-
-	                    if(aniIndex== 1 &&!attackChecked)
+							
+						}
+	                    if(aniIndex== 1 &&!attackChecked) {
 	                        checkEnmyHit(attackBox,player);
+							setAttacking(true);
+						}
+						if (aniIndex == 2) {
+							setAttacking(false);
+						}
+
 	                    break;
 	                case HIT:
 	                    break;
@@ -158,7 +165,15 @@ public class BossFinal extends Enemy {
 	              return -1;
 	          }
 	    }
+		public boolean isAttacking() {
+			return isAttacking;
+		}
+		
+		public void setAttacking(boolean isAttacking) {
+			this.isAttacking = isAttacking;
+		}
 	}
+	
 
 
 
