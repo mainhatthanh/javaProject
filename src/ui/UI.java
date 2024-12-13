@@ -11,6 +11,8 @@ import gameState.Playing;
 import main.Game;
 import main.GamePanel;
 
+import static utilz.Constants.EnemyConstants.GetNumberMessageBoss;
+
 public class UI {
 	Playing playing;
 	Font arial_40;
@@ -31,7 +33,6 @@ public class UI {
 	}
 	
 	public void showMessage(String text) {
-		
 		message = text;
 		messageOn = true;
 	}
@@ -41,7 +42,7 @@ public class UI {
 		
 		g2.setFont(arial_40);
 		g2.setColor(Color.white);
-		g2.drawString("FPS: " + playing.getGame().getFPS(),  1090, 50);
+		g2.drawString("FPS: " + playing.getGame().getFPS(),  1050, 50);
 		
 		if(messageOn) {
 			counter ++;
@@ -56,10 +57,11 @@ public class UI {
 		}
 	}
 	
-	public void setText(String[] text, int count) {
-		textLength = count;
-		for(int i=0; i < count; i++) {
+	public void setText(String[] text, int enemyCheck) {
+		textLength = GetNumberMessageBoss(enemyCheck) ;
+		for(int i=0; i < 3; i++) {
 			this.text1[i] = text[i];
+
 		}
 	}
 	
@@ -90,7 +92,7 @@ public class UI {
 		g2.drawRoundRect(x+5, y + 5, width -10, height -10, 40, 25);
 		
 		
-		
+		//chỉ dẫn người chơi
 		if(textIndex >= textLength-1) {
 			g2.setFont(arial_5);
 			g2.setColor(Color.red);
@@ -102,7 +104,7 @@ public class UI {
 		}	
 		
 		
-		//hiển thị chữ
+		//hiển thị cuộc trò chuyện
 		if(textIndex >= textLength)
 			textIndex = textLength -1;
 		drawText(text1, textIndex, g2, x + 10, y + 50);

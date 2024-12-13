@@ -77,8 +77,6 @@ public class PauseOverlay {
         g.drawImage(backgroundImg, bgX, bgY, bgW, bgH, null);
 
 
-
-
         // UrmButtons
         menuB.draw(g);
         replayB.draw(g);
@@ -118,7 +116,6 @@ public class PauseOverlay {
             if (menuB.isMousePressed()) {
                 playing.resetAll();
                playing.setGameState(Gamestate.MENU);
-
                 playing.unpauseGame();
             }
         } else if (isIn(e, replayB)) {

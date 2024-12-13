@@ -43,10 +43,11 @@ public class GameObjects {
     }
 
     public void reset(){
+    	hitbox.x = x;
+    	hitbox.y = y;
         aniTick = 0;
         aniIndex = 0;
         active = true;
-
         if (objType == BARREL || objType == BOX || objType == TRAP1 || objType == CHEST || objType == CANNON_LEFT || objType == CANNON_RIGHT || objType == TRAP2_LEFT || objType == TRAP2_RIGHT)
             doAnimation = false;
         else
@@ -59,7 +60,7 @@ public class GameObjects {
 
     protected void drawHitbox(Graphics g, int xLvlOffset){
         g.setColor(Color.PINK);
-        g.drawRect((int)hitbox.x-xLvlOffset,(int)hitbox.y,(int)hitbox.width,(int)hitbox.height);
+        g.drawRect((int)hitbox.x-xLvlOffset,(int)hitbox.y ,(int)hitbox.width,(int)hitbox.height);
     }
 
     public boolean isActive() {

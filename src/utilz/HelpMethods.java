@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import entities.*;
 import gameState.Playing;
 import main.Game;
+import objects.FlyWukong;
 import objects.GameContainer;
 import objects.Potion;
 import objects.Projectile;
@@ -213,7 +214,7 @@ public class HelpMethods {
                 Color color = new Color(img.getRGB(i, j));
                 int value = color.getBlue();
                 if (value == SCROLL)
-                    list.add(new Scroll(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+                    list.add(new Scroll(i* Game.TILES_SIZE, j* Game.TILES_SIZE+35, value));
             }
         return list;
 
@@ -368,6 +369,18 @@ public class HelpMethods {
         return list;
     }
     
+    public static ArrayList<BossFinal> GetBossFinal(BufferedImage img) {
+        ArrayList<BossFinal> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == BOSSFINAL)
+                    list.add(new BossFinal(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+            }
+        return list;
+    }
+    
     public static ArrayList<Boss4> GetBoss4(BufferedImage img) {
         ArrayList<Boss4> list = new ArrayList<>();
         for (int j = 0; j < img.getHeight(); j++)
@@ -469,7 +482,35 @@ public class HelpMethods {
    /* public static boolean IsBulletHittingLevel(Bullet b, int[][] lvlData) {
         return IsSolid(b.getHitbox().x + b.getHitbox().width / 2, b.getHitbox().y + b.getHitbox().height / 2, lvlData);
     }*/
+    
+    
+    public static Point GetPlayerMeet(BufferedImage img) {
+    	for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == 102)
+                   return new Point(i*Game.TILES_SIZE,j*Game.TILES_SIZE);
+            }
+        return new Point(1*Game.TILES_SIZE,1*Game.TILES_SIZE);
+    }
 
+    
+    public static ArrayList<FlyWukong> GetFlyWukong(BufferedImage img) {
+        ArrayList<FlyWukong> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == FLYWUKONG) {
+                    list.add(new FlyWukong(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+                }
+            }
+        return list;
+
+    }
+    
+    
     public static boolean CanMESeePlayer(int[][] lvlData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile) {
         int firstXTile = (int) (firstHitbox.x / Game.TILES_SIZE);
         int secondXTile = (int) (secondHitbox.x / Game.TILES_SIZE);
