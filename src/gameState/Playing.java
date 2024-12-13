@@ -145,7 +145,7 @@ public class Playing extends State implements Statemethods {
         pauseOverlay = new PauseOverlay(this); 
         gameOverOverlay = new GameOverOverlay(this);
         levelCompletedOverlay = new LevelCompletedOverlay(this);
-        tutorial = new Tutorial(this);
+        tutorial = new Tutorial();
 
         // Căn chỉnh camera theo vị trí nhân vật
         caclcLvlOffset(); // Tính maxLvlOffsetX và maxLvlOffsetY trước
@@ -260,10 +260,6 @@ public class Playing extends State implements Statemethods {
        //draw lvlUp khi len cap
         if(player.getIsShowLvlUp()){
             player.drawLvlUp(g,xLvlOffset);
-            player.render(g, xLvlOffset);
-            player.drawSticks(g,xLvlOffset);
-            enemyManager.draw(g, xLvlOffset);
-            objectManager.draw(g, xLvlOffset);
         }
 
 
@@ -289,6 +285,7 @@ public class Playing extends State implements Statemethods {
         }
         else if(fly1) {
         	player.render(g, xLvlOffset);
+            player.drawSticks(g,xLvlOffset);
         	objectManager.drawFlyWukong(g, xLvlOffset);
         	
         }
@@ -307,8 +304,10 @@ public class Playing extends State implements Statemethods {
             expThatChange = 0;
             levelUpTime = 0;
         }
-        else if(tutorial.isShowTutorial()){
-            tutorial.draw(g);	
+        else if(tutorial.isShowTutorial()) {
+            tutorial.draw(g);
+            player.stopStepSound();
+        }
 //=======
 //            player.stopStepSound();
 //            gameOverOverlay.draw(g);
@@ -320,11 +319,12 @@ public class Playing extends State implements Statemethods {
 //            levelUpTime = 0;
 //        
 //>>>>>>> 0eef73b5a3ef415fe1f14ff5c396ef6284a5a68e
-        }
+
         else {
         	player.render(g, xLvlOffset);
             enemyManager.draw(g, xLvlOffset);
             objectManager.draw(g, xLvlOffset);
+            player.drawSticks(g,xLvlOffset);
             
         }
 
@@ -431,9 +431,10 @@ public class Playing extends State implements Statemethods {
                 	break;
                 case KeyEvent.VK_Q:
                 	count = 1;
-                
                 	break;
-
+                case KeyEvent.VK_L:
+                    player.powerAttack();
+                    break;
                 case KeyEvent.VK_R:
                     tutorial.setTutorial(!tutorial.isShowTutorial());
                    break;
@@ -452,7 +453,7 @@ public class Playing extends State implements Statemethods {
                     getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
                     paused = !paused;
                     break;
-                case KeyEvent.VK_F:
+                case KeyEvent.VK_J:
                     if(e.getKeyCode()!=KeyEvent.VK_G)
                         if(player.getCurrentStamina() >= GetStamina(ATTACK)){
                             player.setAttacking(true);
@@ -463,7 +464,7 @@ public class Playing extends State implements Statemethods {
                             System.out.println("Khong du mana");
                         }
                         break;
-                case KeyEvent.VK_G:
+                case KeyEvent.VK_K:
                     if(e.getKeyCode()!=KeyEvent.VK_F)
                         if(player.getCurrentStamina() >= GetStamina(ULTI)){
                             player.setUltiSkill(true);
@@ -637,6 +638,10 @@ public class Playing extends State implements Statemethods {
     }
      public void setSpawn() {
     	 player.setSpawn(levelManager.getCurrentLevel().getFlag1());
+     }
+
+     public Tutorial getTutorial(){
+        return tutorial;
      }
 
 

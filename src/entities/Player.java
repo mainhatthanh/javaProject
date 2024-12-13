@@ -823,7 +823,7 @@ public class Player extends Entity {
         for(Stick st:sticks) {
             if (st.isActive())
                 g.drawImage(stickImg, (int) (st.getHitbox().x - xLvlOffset), (int) (st.getHitbox().y), STICK_WIDTH, STICK_HEIGHT, null);
-            //st.drawStickHitbox(g,xLvlOffset);
+           // st.drawStickHitbox(g,xLvlOffset);
         }
 
     }
