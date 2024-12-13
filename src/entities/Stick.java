@@ -2,6 +2,7 @@ package entities;
 
 import main.Game;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -14,13 +15,13 @@ public class Stick {
 
 
     public Stick(int x, int y, int dir) {
-        int xOffset = (int) (-3 * Game.SCALE);
-        int yOffset = (int) (5 * Game.SCALE);
+        int xOffset = (int) (-40 * Game.SCALE);
+        int yOffset = (int) (16 * Game.SCALE);
 
         if (dir == 1)
-            xOffset = (int) (29 * Game.SCALE);
+            xOffset = (int) (18 * Game.SCALE);
 
-        hitbox = new Rectangle2D.Float(x + xOffset-40, y + yOffset-20, STICK_WIDTH, STICK_HEIGHT);
+        hitbox = new Rectangle2D.Float(x+xOffset, y + yOffset, STICK_WIDTH, STICK_HEIGHT);
         this.dir = dir;
     }
 
@@ -43,5 +44,10 @@ public class Stick {
 
     public boolean isActive() {
         return active;
+    }
+    public void drawStickHitbox(Graphics g,int xLvlOffset){
+        g.setColor(Color.WHITE);
+        g.drawRect((int) (this.getHitbox().x - xLvlOffset), (int) (this.getHitbox().y), STICK_WIDTH, STICK_HEIGHT);
+
     }
 }

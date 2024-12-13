@@ -1,9 +1,13 @@
 package objects;
 
+import audio.AudioPlayer;
 import gameState.Playing;
 import levels.Level;
 import main.Game;
+
+import ui.Tutorial;
 import utilz.Constants.ObjectsConstants;
+
 import utilz.LoadSave;
 
 import java.awt.*;
@@ -13,35 +17,46 @@ import java.util.ArrayList;
 import entities.Entity;
 import entities.Player;
 
+import entities.Player;
+
 import static utilz.Constants.ObjectsConstants.*;
 import static utilz.HelpMethods.*;
 import static utilz.Constants.Projectiles.*;
 import static utilz.Constants.Arrows.*;
 
 public class ObjectManager {
+	
+	public boolean fly ;
 
     Playing playing;
-    private BufferedImage[][] potionImgs, containerImgs;
+    
     private BufferedImage trap1Img, scrollImg, swordImg, cannonBallImg, arrowImg;
     private BufferedImage[] chestImgs, cannonImgs, arrowTrapImgs, trap2Imgs, flagImgs;
+    private BufferedImage[][] potionImgs, containerImgs, flyImgs;
+
+    
     private ArrayList<Potion> potions;
     private ArrayList<GameContainer> containers;
-    private ArrayList<Trap1> trap1;
+    private ArrayList<Flag> flags;
     private ArrayList<Chest> chests;
     private ArrayList<Scroll> scrolls;
+    
+    private ArrayList<Trap1> trap1;
     private ArrayList<Sword> swords;
     private ArrayList<Cannon> cannons;
     private ArrayList<ArrowTrap> arrowTraps;
     private ArrayList<Trap2> trap2;
-    private ArrayList<Flag> flags;
+
     private ArrayList<Projectile> projectiles = new ArrayList<>();
     private ArrayList<Arrow> arrows = new ArrayList<>();
+    
+    private ArrayList<FlyWukong> flyWukong ;
+	private Tutorial tutorial;
+
 
     public ObjectManager(Playing playing) {
         this.playing = playing;
         loadImgs();
-        
-
     }
     
     public void checkTrapTouched(Player p) {
@@ -50,6 +65,23 @@ public class ObjectManager {
     			p.kill(TRAP1_VALUE);
     		
     }
+	public void checkScrollTouched(Player player) {
+		for(Scroll sc : scrolls)
+			if(sc.isActive())
+			if(sc.getHitbox().intersects(player.getHitBox())) {
+				playing.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
+				sc.setActive(false);
+				playing.getPlot().setPlot(true);
+			}
+
+	}
+
+
+	public ArrayList<Scroll> getScrolls() {
+		return scrolls;
+	}
+
+
     
     public void checkObjectTouched(Rectangle2D.Float hitbox) {
 		for (Potion p : potions)
@@ -121,19 +153,24 @@ public class ObjectManager {
 
 
     public void loadObjects(Level newLevel){
+
+		flyWukong = new  ArrayList<>(newLevel.getFlyWukong());
+		
         potions = new ArrayList<>(newLevel.getPotions());
         containers = new ArrayList<>(newLevel.getContainers());
-        trap1 = new ArrayList<>(newLevel.getTrap1());
         chests = new ArrayList<>(newLevel.getChests());
         scrolls = new ArrayList<>(newLevel.getScrolls());
+        flags = new ArrayList<>(newLevel.getFlag());
+        
+        trap1 = new ArrayList<>(newLevel.getTrap1());
         swords = new ArrayList<>(newLevel.getSwords());
         cannons = new ArrayList<>(newLevel.getCannons());
         arrowTraps = new ArrayList<>(newLevel.getArrowTraps());
         trap2 = new ArrayList<>(newLevel.getTrap2());
-        flags = new ArrayList<>(newLevel.getFlag());
+
         projectiles.clear();
         arrows.clear();
-        
+
     }
 
     public void loadImgs() {
@@ -152,6 +189,14 @@ public class ObjectManager {
             }
         }
         
+
+        BufferedImage flySprite = LoadSave.GetSpriteAtlas(LoadSave.WUKONG_FLY);
+        flyImgs = new BufferedImage[2][4];
+        for (int i = 0; i < flyImgs.length; i++) 
+            for (int j = 0; j < 4; j++) 
+            	flyImgs[i][j] = flySprite.getSubimage(j * 128, i * 40, 128, 40);
+        
+
         cannonImgs = new BufferedImage[7];
 		BufferedImage cannonSprite = LoadSave.GetSpriteAtlas(LoadSave.CANNON_ATLAS);
 
@@ -193,6 +238,7 @@ public class ObjectManager {
         for (int i = 0; i < 10 ; i++) {
         	trap2Imgs[i] = trap2Sprite;
         }
+
     }
 
     public void update(int[][] lvlData, Player player){
@@ -212,6 +258,8 @@ public class ObjectManager {
         
         updateCannons(lvlData, player);
         updateProjectiles(lvlData, player);
+	    checkScrollTouched(player);
+
         
         for (Flag f : flags) {
         	if (f.active) {
@@ -237,6 +285,22 @@ public class ObjectManager {
         
     }
     
+	public void updateFlyWukong(Player player) {
+		for(FlyWukong fw: flyWukong) 
+	    	if(fw.isActive()) {
+	    		fly = fw.getCheck();
+	    		if(!fly)
+	    			fw.checkTouched(player);
+	    		fw.update(fw.getRowIndex());
+	//    		if(fw.getCheck()) {
+	//    			fw.setRowIndex(0);
+	//    			fw.update(fw.getRowIndex());
+	//    		}
+	    		//System.out.println(fw.getRowIndex());
+	    	}
+	
+	}
+	
     private void updateTrap2(int[][] lvlData, Player player) {
     	for (Trap2 t2 : trap2) {
 			if (!t2.doAnimation)
@@ -344,7 +408,25 @@ public class ObjectManager {
 
 	}
 
-
+    public void drawFlyWukong(Graphics g, int xLvlOffset) {
+    	for(FlyWukong fwk : flyWukong)
+    		if(fwk.active) {
+    			g.drawImage(flyImgs[fwk.getRowIndex()][fwk.getAniIndex()], 
+    					(int)(fwk.getHitbox().x - xLvlOffset), 
+    					(int)(fwk.getHitbox().y -20), 
+    					(int)(128  * Game.SCALE  * 1.5),(int) (40 * Game.SCALE * 1.5 ), null);
+    			//System.out.println();
+    			//fwk.drawHitbox(g, xLvlOffset);
+    		}
+    }
+    
+    public float getXPos() {
+    	for(FlyWukong fw: flyWukong) 
+        	if(fw.isActive()) {
+        		return fw.getHitbox().x ;
+        	}
+    	return 0;
+    }
     public void draw(Graphics g, int xLvlOffset) {
         drawPotions(g, xLvlOffset);
         drawContainer(g, xLvlOffset);
@@ -525,9 +607,12 @@ public class ObjectManager {
     }
     
     public void resetAllObjects() {
-    	
     	loadObjects(playing.getLevelManager().getCurrentLevel());
+  
     	
+		for(FlyWukong fwk : flyWukong)
+			fwk.reset();
+
     	for (Flag f : flags) {
     		f.reset();
     	}
@@ -557,8 +642,11 @@ public class ObjectManager {
     	for (ArrowTrap at : arrowTraps)
     		at.reset();
     }
+	public boolean getFly() {
+		return fly;
+	}
     
-    
+
 
 
 }

@@ -13,6 +13,7 @@ public class Crabby extends Enemy{
 
 
     private int attackBoxOffsetX;
+    private boolean isAttacking;
 
     public Crabby(float x, float y) {
 
@@ -62,11 +63,20 @@ public class Crabby extends Enemy{
                     move(lvlData);
                     break;
                 case ATTACK:
-                    if(aniIndex==0)
+                    if(aniIndex==0) {
+                        
                         attackChecked = false;
+                        
+                    }
 
-                    if(aniIndex==3&&!attackChecked)
+                    if(aniIndex==3&&!attackChecked) {
+                        
+                        
                         checkEnmyHit(attackBox,player);
+                    }
+                    if(aniIndex == 5) {
+                        setAttacking(false);
+                    }
                     break;
                 case HIT:
                     break;
@@ -97,4 +107,12 @@ public class Crabby extends Enemy{
           }
     }
 
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+    
+    public void setAttacking(boolean isAttacking) {
+        this.isAttacking = isAttacking;
+    }
+    
 }

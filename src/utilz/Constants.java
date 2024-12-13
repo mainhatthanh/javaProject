@@ -28,8 +28,8 @@ public class Constants {
     
 
     public static class Curve{
-        public static final int STICK_WIDTH_DEFAULT = 80;
-        public static final int STICK_HEIGHT_DEFAULT = 50;
+        public static final int STICK_WIDTH_DEFAULT = 40;
+        public static final int STICK_HEIGHT_DEFAULT = 4;
 
         public static final int STICK_WIDTH = (int)(Game.SCALE*STICK_WIDTH_DEFAULT);
         public static final int STICK_HEIGHT = (int)(Game.SCALE*STICK_HEIGHT_DEFAULT);
@@ -65,6 +65,9 @@ public class Constants {
         public static final int BLUE_POTION = 1;
         public static final int BARREL = 2;
         public static final int BOX = 3;
+
+        public static final int FLYWUKONG = 4;
+
         public static final int TRAP1 = 4;
         public static final int CHEST = 5;
         public static final int SCROLL = 6;
@@ -76,6 +79,7 @@ public class Constants {
         public static final int TRAP2_RIGHT = 12;
         public static final int PEACH = 13;
         public static final int FLAG = 14;
+
 
         public static final int RED_POTION_VALUE = 15;
         public static final int BLUE_POTION_VALUE = 100;
@@ -122,8 +126,8 @@ public class Constants {
         public static final int SWORD_WIDTH = (int) (SWORD_WIDTH_DEFAULT * Game.SCALE);
         public static final int SWORD_HEIGHT = (int) (SWORD_HEIGHT_DEFAULT * Game.SCALE);
         
-        public static final int SCROLL_WIDTH_DEFAULT = 13;
-        public static final int SCROLL_HEIGHT_DEFAULT = 13;
+        public static final int SCROLL_WIDTH_DEFAULT = 20;
+        public static final int SCROLL_HEIGHT_DEFAULT = 20;
         public static final int SCROLL_WIDTH = (int) (SCROLL_WIDTH_DEFAULT * Game.SCALE);
         public static final int SCROLL_HEIGHT = (int) (SCROLL_HEIGHT_DEFAULT * Game.SCALE);
         
@@ -162,13 +166,15 @@ public class Constants {
         public static final int MONSTER_EYE1 = 3;
         public static final int MONSTER2 = 4;
         public static final int SPIDER = 5;
+        public static final int BOSS1 = 7;
+        public static final int BOSS5 = 11;
         
         public static final int TORO = 6;
-        public static final int BOSS1 = 7;
         public static final int BOSS2 = 8;
         public static final int BOSS3 = 9;
         public static final int BOSS4 = 10;
-        public static final int BOSS5 = 11;
+        public static final int BOSSFINAL = 12;
+       
         
         
         public static final int IDLE = 0;
@@ -176,6 +182,17 @@ public class Constants {
         public static final int ATTACK = 2;
         public static final int HIT = 3;
         public static final int DEAD = 4;
+        public static final int IDLE_2 = 5;
+        public static final int ATTACK2 = 6;
+        
+        
+        
+        public static final int	BOSSFINAL_WIDTH_DEFAULT = 64;
+        public static final int BOSSFINAL_HEIGHT_DEFAULT = 40;
+        public static final int BOSSFINAL_WIDTH = (int) (BOSSFINAL_WIDTH_DEFAULT * Game.SCALE);
+        public static final int BOSSFINAL_HEIGHT = (int) (BOSSFINAL_HEIGHT_DEFAULT * Game.SCALE);
+        public static final int BOSSFINAL_DRAWOFFSET_X = (int) (38 * Game.SCALE);
+        public static final int BOSSFINAL_DRAWOFFSET_Y = (int) (15 * Game.SCALE);
         
         
         public static final int	BOSS5_WIDTH_DEFAULT = 96;
@@ -272,7 +289,7 @@ public class Constants {
                         return 8;
                     else if(enemy_type == MINOTAUR)
                         return 9;
-                    else if( enemy_type == TORO || enemy_type == SPIDER)
+                    else if( enemy_type == TORO || enemy_type == SPIDER || enemy_type == BOSSFINAL)
                     	return 5;
                     else if( enemy_type == BOSS1 || enemy_type == BOSS4 )
                     	return 6;
@@ -293,6 +310,8 @@ public class Constants {
                     	return 5;
                 	else if(enemy_type == BOSS2 || enemy_type == BOSS3)
                     	return 7;
+                	else if(enemy_type == BOSSFINAL)
+                		return 6;
                     return 6;
                 case ATTACK:
                     if (enemy_type == SHARK || enemy_type == BOSS5)
@@ -309,11 +328,13 @@ public class Constants {
                     	return 4;
                     else if(enemy_type == BOSS4)
                     	return 15;
+                    else if(enemy_type == BOSSFINAL)
+                    	return 3;
                     return 7;
                 case HIT:
                     if(enemy_type==MINOTAUR || enemy_type == BOSS4)
                         return 5;
-                    else if (enemy_type == TORO || enemy_type == BOSS1 || enemy_type == SPIDER || enemy_type == BOSS3)
+                    else if (enemy_type == TORO || enemy_type == BOSS1 || enemy_type == SPIDER || enemy_type == BOSS3 || enemy_type == BOSSFINAL)
                     	return 3;
                     else if(enemy_type == MONSTER_EYE1)
                     	return 6;
@@ -328,11 +349,22 @@ public class Constants {
                     	return 4;
                     else if(enemy_type == MONSTER_EYE1 || enemy_type == SPIDER)
                     	return 9;
-                    else if(enemy_type == BOSS3)
+                    else if(enemy_type == BOSS3 || enemy_type == BOSSFINAL)
                     	return 7;
                     else if(enemy_type == BOSS4)
                     	return 19;
                     return 5;
+                    
+                case IDLE_2:
+                	if(enemy_type ==TORO)
+                		return 6;
+                	return 0;
+                	
+                	
+                case ATTACK2:
+                if(enemy_type == TORO)
+                	return 4;
+                return 0;
             }
 
             return 0;
@@ -394,7 +426,7 @@ public class Constants {
                case SHARK:
               	return 2;
                 case TORO:
-               	return 2;
+               	return 10;
                 case BOSS1:
                	return 2;
                case BOSS2:
@@ -404,26 +436,37 @@ public class Constants {
                 case BOSS4:
                 	return 2;
                 case BOSS5:
-               	return 2;
+                	return 2;
                 case MONSTER_EYE1:
                 	return 2;
                 case SPIDER :
                 	return 2;
                 default:
-                	return 10;
+                	return 0;
             }
         }
         
         
         public static int GetNumberMessageBoss(int enemy_type) {
         	switch(enemy_type) {
-//        	case TORO:
-//        	case BOSS2:
-//        	case BOSS3:
-//        	case BOSS4:
-//        	case BOSS5:
+        	case TORO:
+        	case BOSS2:
+        	case BOSS3:
+        	case BOSS4:
+        		return 3;
+        	case BOSS5:
         	default:
         		return 3;
+        	}
+        }
+        
+        public static String[] GetMessageEnemy(int enemy_type) {
+        	switch(enemy_type) {
+        	
+        	default:
+        		return new String[] {"Khá lắm khá lắm, cuối cùng ngươi cũng đã đến được đây",
+        				"Tôn Ngộ Không, người thật to gan, dám đến quậy phá nơi ở của ta,\n tội ngươi xứng đáng chết"
+        				,"Hôm nay ta phải dạy cho ngươi một bài học"};
         	}
         }
     }
@@ -497,12 +540,14 @@ public class Constants {
 
         public static int GetSpriteAmount(int player_action) {
             switch (player_action) {
-                case DEAD:
-                    return 8;
-                case RUNNING:
-                    return 6;
+                
+                
                 case IDLE:
                     return 5;
+                case RUNNING:
+                  return 6;
+                case JUMP:
+                	return 3;
                 case HIT:
                 case THROW:
                   return 4;
@@ -511,8 +556,11 @@ public class Constants {
                 case ULTI:
                     return 8;
                 case FALLING:
+                	return 1;
+                case DEAD:
+                    return 7;
                 default:
-                    return 1;
+                    return 3;
             }
         }
 

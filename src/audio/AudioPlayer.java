@@ -1,4 +1,4 @@
-package audio;
+ 	package audio;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -31,6 +31,10 @@ public class AudioPlayer {
     public static int BOSS4_DEAD = 15;
     public static int RUN = 16;
     public static int THROW = 17;
+    public static int BOSS4_ATTACK = 18;
+    public static int BOSS3_ATTACK = 19;
+    public static int BOSS2_ATTACK = 20;
+    public static int PAPER = 21;
 
     private Clip[] songs,effects;
     private int currentSongId;
@@ -53,7 +57,7 @@ public class AudioPlayer {
     }
 
     private void loadEffect(){
-        String[] effectNames = {"die", "jump", "gameover", "lvlcompleted", "attack1", "attack2", "attack3","levelUp","Click","hit","boss1_attack1","boss2_dead","boss3_dead","boss4_dead","boss1_dead","hit_boss","run","throwSound"};
+        String[] effectNames = {"die", "jump", "gameover", "lvlcompleted", "attack1", "attack2", "attack3","levelUp","Click","hit","boss1_attack1","boss1_dead","hit_boss","boss2_dead","boss3_dead","boss4_dead","run","throwSound","boss4_attack","boss3_attack","boss2_attack","paper"};
         effects=new Clip[effectNames.length];
         for(int i=0;i<effects.length;i++)
             effects[i]=getClip(effectNames[i]);
@@ -121,6 +125,7 @@ public class AudioPlayer {
             playSong(LEVEL_5);
     }
     public void lvlCompleted(){
+
         stopSong();
         playEffect(LVL_COMPLETED);
     }

@@ -22,12 +22,21 @@ import static utilz.Constants.PlayerConstants.*;
 import static utilz.HelpMethods.*;
 
 public class Player extends Entity {
-    private BufferedImage[][] animations;
+    
+	private BufferedImage[][] animations;
+
+    private boolean moving = false, attacking = false;
+    private boolean right, left, jump;
+
+    private int[][] lvlData;
+    private float xDrawOffset = 38 * Game.SCALE;
+    private float yDrawOffset =  15* Game.SCALE;
+
     protected int playerDamage;
     private double levelUpTimesIncrease = 1.1;
     
     public static int levelUpTime;
-    private float yDrawOffset = 15 * Game.SCALE;
+
     // jumping / gravity
 
     private float jumpSpeed = -2.35f * Game.SCALE;
@@ -35,12 +44,6 @@ public class Player extends Entity {
 
     // Status BarUI
     private BufferedImage statusBarImg;
-
-    private boolean moving = false, attacking = false;
-    private boolean right, left, jump;
-
-    private int[][] lvlData;
-    private float xDrawOffset = 38 * Game.SCALE;
 
     private int statusBarWidth = (int) (192 * Game.SCALE);
     private int statusBarHeight = (int) (58 * Game.SCALE);
@@ -99,6 +102,7 @@ public class Player extends Entity {
     private int powerGrowTick;
 
     //Chieu ban
+    private Stick stick;
     private boolean isThrow;
    private boolean sticking;
    private BufferedImage stickImg;
@@ -147,7 +151,6 @@ public class Player extends Entity {
     }
 
     public void update() {
-        System.out.println(this.getPlayerDamage());
         updateHealthBar();
         updateStaminaBar();
         playerUpdateLevel(levelUp);
@@ -157,7 +160,32 @@ public class Player extends Entity {
             updateDirStick();
 
         if (currentHealth <= 0) {
-        	if (playing.TouchFlag() == false || playing.CountRev() == 0) {
+//<<<<<<< HEAD
+//            if (state != DEAD) {
+//                state = DEAD;
+//                aniTick = 0;
+//                aniIndex = 0;
+//                playing.setPlayerDying(true);
+//                playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
+//            } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
+//                playing.setGameOver(true);
+//                playing.getGame().getAudioPlayer().stopSong();
+//                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
+//            } else {
+//                updateAnimationTick();
+//
+//                //fall if in air
+//                if (inAir)
+//                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
+//                        hitbox.y += airSpeed;
+//                        airSpeed += GRAVITY;
+//                    } else
+//                        inAir = false;
+//            }
+//
+//            return;
+//=======
+        	if ( playing.CountRev() == 0) {
         	
 	            if (state != DEAD) {
 	                state = DEAD;
@@ -190,6 +218,7 @@ public class Player extends Entity {
         	}
 	
 	            return;
+
         }
            	updateAttackBox();
             updateExpBar();
@@ -320,13 +349,16 @@ public class Player extends Entity {
     }
 
     public void render(Graphics g, int xlvlOffset) {
-        g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
+    
+    	g.drawImage(animations[state][aniIndex], (int) ((hitbox.x - xDrawOffset) - xlvlOffset + flipX),
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
         drawUI(g);
 //         drawAttackHitbox(g, xlvlOffset);
 //         drawHitbox(g, xlvlOffset);
+    	
     }
+    
 
     public void drawLvlUp(Graphics g,int xlvlOffset){
         if(isShowLevelUp) {
@@ -437,7 +469,7 @@ public class Player extends Entity {
         }
     }
 
-    private void stopStepSound() {
+    public void stopStepSound() {
         if (isStepSoundPlaying ) {
             playing.getGame().getAudioPlayer().stopEffect(AudioPlayer.RUN); // Dừng âm thanh
             isStepSoundPlaying = false; // Đặt lại cờ
@@ -763,7 +795,26 @@ public class Player extends Entity {
         }
     }
 
+	public void renderIDLE(Graphics g, int xLvlOffset) {
+		g.drawImage(animations[IDLE][aniIndex], (int) ((hitbox.x - xDrawOffset) - xLvlOffset + flipX),
+                (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
+        drawUI(g);
+		
+	}
+	
+    public void updateIDLE() {
+   	 aniTick++;
+        if (aniTick >= ANI_SPEED) {
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >= GetSpriteAmount(IDLE)) {
+                aniIndex = 0;
+                attacking = false;
+                attackChecked = false;
+            }
 
+        }
+   }
 
     ////////Ban STICK
 
@@ -783,9 +834,12 @@ public class Player extends Entity {
     }
 
     public void drawSticks(Graphics g,int xLvlOffset){
-        for(Stick st:sticks)
-            if(st.isActive())
-                g.drawImage(stickImg,(int)(st.getHitbox().x-xLvlOffset),(int)(st.getHitbox().y),STICK_WIDTH,STICK_HEIGHT,null);
+        for(Stick st:sticks) {
+            if (st.isActive())
+                g.drawImage(stickImg, (int) (st.getHitbox().x - xLvlOffset), (int) (st.getHitbox().y), STICK_WIDTH, STICK_HEIGHT, null);
+           // st.drawStickHitbox(g,xLvlOffset);
+        }
+
     }
 
 
@@ -794,6 +848,7 @@ public class Player extends Entity {
         for(Stick st:sticks) {
             if (st.isActive()) {
                 st.updatePos();
+
                 if (playing.isStickHitEnemy(st.getHitbox())) {
                     playing.checkEnemyHit(st.getHitbox());
                     st.setActive(false);
@@ -814,7 +869,7 @@ public class Player extends Entity {
 
 
     public void reloadStick(Player player){
-        sticks.add(new Stick((int) player.getHitbox().x-22,(int)player.getHitbox().y,stickDir));
+        sticks.add(new Stick((int) player.getHitbox().x,(int)player.getHitbox().y,stickDir));
     }
 
     private void updateDirStick(){
@@ -832,16 +887,6 @@ public class Player extends Entity {
         }
         else isThrow=throwing;
     }
-
-
-
-
-
-
-
-//////
-
-
 
     public void setPlayerDamage(int a){
         this.playerDamage = a;
@@ -884,5 +929,9 @@ public class Player extends Entity {
     public boolean isUltiSkill(){
         return ultiSkill;
     }
+    public Stick getStick(){
+        return stick;
+    }
+
 
 }

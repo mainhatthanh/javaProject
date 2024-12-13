@@ -5,6 +5,7 @@ import entities.Boss2;
 import entities.Boss3;
 import entities.Boss4;
 import entities.Boss5;
+import entities.BossFinal;
 import entities.Crabby;
 import entities.Minotaur;
 import entities.Monster2;
@@ -14,6 +15,7 @@ import entities.Spider;
 import entities.Toro;
 import gameState.Playing;
 import main.Game;
+import objects.FlyWukong;
 import objects.GameContainer;
 import objects.Potion;
 import objects.Scroll;
@@ -41,53 +43,72 @@ public class Level {
     private int maxLvlOffsetX;
     private int[][] lvlData;
     
-    
-    private ArrayList<Crabby> crabs;
+    //items
     private ArrayList<GameContainer> containers;
     private ArrayList<Potion> potions;
-    private ArrayList<Trap1> trap1;
     private ArrayList<Chest> chests;
     private ArrayList<Scroll> scrolls;
+    private ArrayList<Flag> flags;
+
+    //trap
+    private ArrayList<Trap1> trap1;
     private ArrayList<Sword> swords;
     private ArrayList<Cannon> cannons;
     private ArrayList<ArrowTrap> arrowTraps;
     private ArrayList<Trap2> trap2;
-    private ArrayList<Flag> flags;
     
+    //cân đẩu vân
+    private ArrayList<FlyWukong> flyWukong ;
+    
+    
+    //quái thường
+	private ArrayList<Crabby> crabs;
     private ArrayList<Shark> sharks;
     private ArrayList<Minotaur> minotaurs;
     private ArrayList<Monster_Eye1> monEye1;
     private ArrayList<Monster2> monster2;
     private ArrayList<Spider> spiders;
-    
-    private ArrayList<Toro> toros;
     private ArrayList<Boss1> boss1;
+    private ArrayList<Boss5> boss5;
+    
+    //boss
+    private ArrayList<Toro> toros;
     private ArrayList<Boss2> boss2;
     private ArrayList<Boss3> boss3;
     private ArrayList<Boss4> boss4;
-    private ArrayList<Boss5> boss5;
-
-    
+    private ArrayList<BossFinal> bossFinal;
+   
+    //điểm ban đầu của nhân vật
     private Point playerSpawn;
+    
+    //điểm kiểm tra dialogue
+    private Point playerMeet;
 
     
  public Level(BufferedImage img){
     this.img=img;
      createLevelData();
      createEnemies();
+
      createContainers();
+     createFlags();
      createPotions();
-     createTrap1();
      createChest();
      createScroll();
+     
+     createTrap1();
      createSword();
      createCannons();
      createArrowTraps();
      createTrap2();
-     createFlags();
+     
+     createFlyWukong();
+     
+
      
      calcLvlOffsets();
      calcPlayerSpawn();
+     calcPlayerMeet();
  }
  
  	private void createFlags() {
@@ -138,7 +159,15 @@ public class Level {
 	private void calcPlayerSpawn() {
 		playerSpawn = GetPlayerSpawn(img);
     }
+    
+    private void calcPlayerMeet() {
+        playerMeet = GetPlayerMeet(img);
+    }
 
+    private void createFlyWukong() {
+    	flyWukong = HelpMethods.GetFlyWukong(img);
+    }
+    
     private void createContainers() {
         containers = HelpMethods.GetContainers(img);
     }
@@ -154,13 +183,15 @@ public class Level {
      monEye1 = GetMonEye1(img);
      monster2 = GetMonster2(img);
      spiders = GetSpider(img);
+     boss1 = GetBoss1(img);
+     boss5 = GetBoss5(img);
      
      toros = GetToros(img);
-     boss1 = GetBoss1(img);
      boss2 = GetBoss2(img);
      boss3 = GetBoss3(img);
      boss4 = GetBoss4(img);
-     boss5 = GetBoss5(img);
+     bossFinal = GetBossFinal(img);
+     
 
     }
 
@@ -187,87 +218,46 @@ public class Level {
         return maxLvlOffsetX;
     }
 
-    public ArrayList<Crabby> getCrabs() {
-        return crabs;
-    }
-    public ArrayList<Chest> getChests() {
-        return chests;
-    }
-    public ArrayList<Sword> getSwords(){
-    	return swords;
-    }
+
+    public ArrayList<Crabby> getCrabs() 	  		{return 	crabs;}
+    public ArrayList<Minotaur> getMinotaurs() 		{return 	minotaurs;}
+    public ArrayList<Shark> getSharks()		  		{return  	sharks;}
+    public ArrayList<Monster_Eye1> getMonEye1()		{return 	monEye1;}
+    public ArrayList<Monster2> getMonster2()		{return 	monster2;}
+    public ArrayList<Spider> getSpider()			{return 	spiders;}
+    public ArrayList<Boss1> getBoss1()				{return 	boss1;}
+    public ArrayList<Boss5> getBoss5() 				{return 	boss5;}		
     
+    
+    public ArrayList<Toro> getToros()				{return 	toros;}
+    public ArrayList<Boss2> getBoss2()				{return 	boss2;}  
+    public ArrayList<Boss3> getBoss3()				{return 	boss3; }   
+    public ArrayList<Boss4> getBoss4()				{return 	boss4;}
+    public ArrayList<BossFinal> getBossFinal()		{return 	bossFinal;}
+    
+    
+    
+    public ArrayList<Chest> getChests() 			{return 	chests;}
+    public ArrayList<GameContainer> getContainers() {return 	containers;}
+    public ArrayList<Potion> getPotions() 			{ return 	potions;}
+    public ArrayList<Flag> getFlag() 				{return 	flags;}
+    public ArrayList<Scroll> getScrolls() 			{return 	scrolls; }
 
 
-    public ArrayList<GameContainer> getContainers() {
-        return containers;
-    }
+    public ArrayList<Sword> getSwords()				{return 	swords;}
+    public ArrayList<Trap2> getTrap2() 				{return 	trap2;}
+    public ArrayList<Trap1> getTrap1() 				{return 	trap1;}
+    public ArrayList<Cannon> getCannons()			{return 	cannons;}
+    public ArrayList<ArrowTrap> getArrowTraps() 	{return 	arrowTraps;}
 
-    public ArrayList<Potion> getPotions() {
-        return potions;
-    }
     
-    public ArrayList<Flag> getFlag() {
-    	return flags;
-    }
-    public ArrayList<Scroll> getScrolls() {
-    	return scrolls;
-    }
-    public ArrayList<Trap2> getTrap2() {
-    	return trap2;
-    }
-    public ArrayList<Trap1> getTrap1() {
-    	return trap1;
-    }
-    public ArrayList<Cannon> getCannons(){
-		return cannons;
-	}
-    public ArrayList<ArrowTrap> getArrowTraps() {
-    	return arrowTraps;
-    }
-    public ArrayList<Shark> getSharks(){return  sharks;}
+    public ArrayList<FlyWukong> getFlyWukong() 		{return 	flyWukong;}
 
-    public ArrayList<Minotaur> getMinotaurs() {
-        return minotaurs;
-    }
 
-    public ArrayList<Monster_Eye1> getMonEye1(){
-    	return monEye1;
-    }
-    
-    public ArrayList<Monster2> getMonster2(){
-    	return monster2;
-    }
-    
-    public ArrayList<Spider> getSpider(){
-    	return spiders;
-    }
-    
-    
-    public ArrayList<Toro> getToros(){
-    	return toros;
-    }
-    
-    public ArrayList<Boss1> getBoss1(){
-    	return boss1;
-    }
-    
-    public ArrayList<Boss2> getBoss2(){
-    	return boss2;
-    }
-    
-    public ArrayList<Boss3> getBoss3(){
-    	return boss3;
-    }
-    
-    public ArrayList<Boss4> getBoss4(){
-    	return boss4;
-    }
-    
-    public ArrayList<Boss5> getBoss5(){
-    	return boss5;
-    }		
-    
+  public Point getPlayerMeet() {
+	  return playerMeet;
+  }
+
   public Point getPlayerSpawn(){
      return playerSpawn;
   }
