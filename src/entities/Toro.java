@@ -1,12 +1,10 @@
 package entities;
 
+import static utilz.Constants.ANI_SPEED;
 import static utilz.Constants.Directions.*;
 
 
 import static utilz.Constants.EnemyConstants.*;
-import static utilz.Constants.EnemyConstants.HIT;
-import static utilz.Constants.EnemyConstants.IDLE;
-import static utilz.Constants.EnemyConstants.RUNNING;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -15,7 +13,9 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Toro extends Enemy {
-	
+
+	private int speed;
+	private boolean isAttacking;
 	private int attackBoxOffsetX;
 
 	public Toro(float x, float y) {
@@ -25,8 +25,9 @@ public class Toro extends Enemy {
         this.enemyHealthBarHeight = (int)(3* Game.SCALE);
         this.enemyHealthWidth = enemyHealthBarWidth;
         this.walkSpeed = 0.38f * Game.SCALE;
-        this.setDialogue();
 		initAttackBox();
+		
+		speed =ANI_SPEED;
 	}
 	
 	//khai bao attackbox
@@ -37,12 +38,53 @@ public class Toro extends Enemy {
 	}
 
 	public void update(int[][] lvlData, Player player) {
-		updateBehaviour(lvlData,player);
-        updateAnimationTick();
-        updateAttackBoxFlip();
-        updateHealthBar();
+        	
+            
+            if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
+            	speed = 20;
+            	walkSpeed = 0.45f * Game.SCALE;
+            	updateBehaviour(lvlData,player);
+                updateAnimationTick1(speed);
+                updateAttackBoxFlip1();
+                updateHealthBar();
+            }
+            
+            else {
+            	updateBehaviour(lvlData,player);
+                updateAnimationTick();
+                updateAttackBoxFlip();
+                updateHealthBar();
+            }
+        
 	}
 	
+	private void updateAttackBoxFlip1() {
+        attackBox.x = hitbox.x - attackBoxOffsetX;
+        attackBox.y = hitbox.y ;
+        attackBox.width = 120* Game.SCALE;
+        
+    }
+	
+	private void updateAnimationTick1(int n) {
+        aniTick++;
+        if (aniTick >= n) {
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >= GetSpriteAmount(enemyType, state)) {
+                aniIndex = 0;
+
+                switch (state) {
+                    case ATTACK, HIT -> state = IDLE;
+                    case DEAD -> active = false;
+                }
+
+            }
+
+        }
+    }
+	
+	
+
 	protected void updateAttackBoxFlip() {
         if (walkDir == RIGHT)
             attackBox.x = hitbox.x + hitbox.width;
@@ -61,10 +103,13 @@ public class Toro extends Enemy {
 			switch(state) {
 			case IDLE:
 				newState(RUNNING);
+				if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
+					newState(ATTACK2);
+					
+				}
 				break;
 			case RUNNING:
 				if(canSeePlayer(lvlData, player)) {
-					count ++;
 					turnTowardsPlayer(player);
 				if(isPlayerCloseAttack(player))
 					newState(ATTACK);
@@ -75,7 +120,27 @@ public class Toro extends Enemy {
 				if(aniIndex ==0)
 					attackChecked = false;
 				
-				if(aniIndex == 3  && !attackChecked)
+				if(aniIndex == 3  && !attackChecked) {
+
+					setAttacking(false);
+					checkEnmyHit(attackBox, player);
+				}
+				if(aniIndex == 2  ) {
+					setAttacking(true);
+					
+					
+				}
+				
+				break;
+				
+			case ATTACK2:
+				if(canSeePlayer(lvlData, player)) 
+					turnTowardsPlayer(player);
+				move(lvlData);
+				if(aniIndex ==0)
+					attackChecked = false;
+				
+				if(aniIndex == 1  && !attackChecked)
 					checkEnmyHit(attackBox, player);
 				break;
 			case HIT:
@@ -117,4 +182,12 @@ public class Toro extends Enemy {
 			return -1;
 		
 	}
+	public boolean isAttacking() {
+        return isAttacking;
+    }
+    
+    public void setAttacking(boolean isAttacking) {
+        this.isAttacking = isAttacking;
+    }
+    
 }

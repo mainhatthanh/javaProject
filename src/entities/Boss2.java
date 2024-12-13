@@ -17,7 +17,7 @@ import main.Game;
 
 public class Boss2 extends Enemy {
 	private int attackBoxOffsetX;
-
+    private boolean isAttacking;
     public Boss2(float x, float y) {
         super(x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2);
         initHitbox(20,30);
@@ -25,7 +25,6 @@ public class Boss2 extends Enemy {
         this.enemyHealthBarHeight = (int)(3* Game.SCALE);
         this.enemyHealthWidth = enemyHealthBarWidth;
         this.walkSpeed = 0.4f * Game.SCALE;
-        this.setDialogue();
         initAttackBox();
     }
     private void initAttackBox(){
@@ -70,7 +69,6 @@ public class Boss2 extends Enemy {
 
                 case RUNNING:
                     if(canSeePlayer(lvlData,player)) {
-                    	count ++;
                         turnTowardsPlayer(player);
                         if (isPlayerCloseAttack(player))
                             newState(ATTACK);
@@ -78,11 +76,18 @@ public class Boss2 extends Enemy {
                     move(lvlData);
                     break;
                 case ATTACK:
-                    if(aniIndex==0)
-                        attackChecked = false;
-
-                    if(aniIndex== 4 &&!attackChecked)
+                    if(aniIndex==0){
+                        setAttacking(true);
+                       
+                    }
+                    if(aniIndex== 4 &&!attackChecked){
+                        setAttacking(false);
                         checkEnmyHit(attackBox,player);
+                    }
+                    if(aniIndex == 3) {
+                        setAttacking(true);
+                    }
+                    
                     break;
                 case HIT:
                     break;
@@ -127,5 +132,12 @@ public class Boss2 extends Enemy {
           else{
               return -1;
           }
+    }
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+    
+    public void setAttacking(boolean isAttacking) {
+        this.isAttacking = isAttacking;
     }
 }

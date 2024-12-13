@@ -16,10 +16,6 @@ import static entities.Player.expThatChange;
 
 public abstract class Enemy extends Entity {
 	
-	//kiểm tra khi nhân vât đến gần boss
-	protected int count =0;
-	protected boolean firstcheck ;
-	protected boolean check ;
 	
     protected int enemyType;
     protected boolean firstUpdate = true;
@@ -30,7 +26,6 @@ public abstract class Enemy extends Entity {
     protected boolean active = true;
     protected boolean attackChecked;
     protected int attackBoxOffsetX;
-    private String[] dialogue;
     
     protected int expUpdate;
 
@@ -44,7 +39,7 @@ public abstract class Enemy extends Entity {
         this.enemyType = enemyState;
         this.maxHealth = GetMaxHealth(enemyState);
         this.currentHealth = maxHealth;
-        this.dialogue = new String[3];
+
     }
 
     protected void updateAttackBox() {
@@ -147,9 +142,11 @@ public abstract class Enemy extends Entity {
     }
 
     public void checkEnmyHit(Rectangle2D.Float attackBox, Player player) {
-        if (attackBox.intersects(player.hitbox)) {
+        if (attackBox.intersects(player.hitbox)) {	
         	player.changeHealth(-GetEnemyDmg(enemyType));
             attackChecked = true;
+            
+            
         }
         
     }
@@ -258,15 +255,18 @@ public abstract class Enemy extends Entity {
         newState(IDLE);
         active = true;
         airSpeed = 0;
-        count =0 ;
+    }
+    
+    public void updateAnimaIDLE() {
+        aniTick++;
+        if (aniTick >= ANI_SPEED) {
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >= GetSpriteAmount(enemyType, IDLE)) 
+                aniIndex = 0;
+        }
     }
 
-    
-    public void setDialogue() {
-    	dialogue[0] = "Khá lắm khá lắm, cuối cùng ngươi cũng đã đến được đây";
-    	dialogue[1] = "Tôn Ngộ Không, người thật to gan, ndám đến quậy phá nơi ở của ta,\n tội ngươi xứng đáng chết";
-    	dialogue[2] = "Hôm nay ta phải dạy cho ngươi một bài học";
-    }
 
     public int getExpUpdate() {
     	return expUpdate;
@@ -284,17 +284,10 @@ public abstract class Enemy extends Entity {
         return this.aniTick;
     }
     
-    public String getDialogue(int textIndex) {
-    	return dialogue[textIndex];
-    }
+
     
-  //chỉ cập nhật trò chuyện ở lần đầu xuất hiện
-    public boolean getCheckBoss() {
-    	if(count == 1)
-    		return true;
-    	else
-    		return false;
-    }
+
+    
 
 
 
