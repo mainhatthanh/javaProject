@@ -539,7 +539,7 @@ public class ObjectManager {
 					    (int) (s.getHitbox().y - s.getyDrawOffset()),
 						SCROLL_WIDTH,
 						SCROLL_HEIGHT, null);
-			//s.drawHitbox(g, xLvlOffset);
+			s.drawHitbox(g, xLvlOffset);
     		}
     	}
 		
