@@ -1,13 +1,8 @@
 package entities;
 
-import static utilz.Constants.Directions.RIGHT;
-import static utilz.Constants.EnemyConstants.ATTACK;
-import static utilz.Constants.EnemyConstants.BOSS2;
-import static utilz.Constants.EnemyConstants.BOSS2_HEIGHT;
-import static utilz.Constants.EnemyConstants.BOSS2_WIDTH;
-import static utilz.Constants.EnemyConstants.HIT;
-import static utilz.Constants.EnemyConstants.IDLE;
-import static utilz.Constants.EnemyConstants.RUNNING;
+import static utilz.Constants.Directions.*;
+import static utilz.Constants.EnemyConstants.*;
+import static utilz.Constants.ANI_SPEED;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,8 +11,11 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Boss2 extends Enemy {
-	private int attackBoxOffsetX;
+	
+	 private boolean change = true;
     private boolean isAttacking;
+    
+   
     public Boss2(float x, float y) {
         super(x, y, BOSS2_WIDTH, BOSS2_HEIGHT, BOSS2);
         initHitbox(20,30);
@@ -26,6 +24,8 @@ public class Boss2 extends Enemy {
         this.enemyHealthWidth = enemyHealthBarWidth;
         this.walkSpeed = 0.4f * Game.SCALE;
         initAttackBox();
+        
+        
     }
     private void initAttackBox(){
         attackBox=new Rectangle2D.Float(x,y,(int)(35*Game.SCALE),(int)(30*Game.SCALE));
@@ -33,14 +33,15 @@ public class Boss2 extends Enemy {
     }
 
     public void update(int[][] lvlData,Player player){
+    	updateAttackBoxFlip();
+    	updateAnimationTick();
     	updateBehaviour(lvlData,player);
-        updateAnimationTick();
-        updateAttackBoxFlip();
-        updateHealthBar();
-
+    	updateHealthBar();
+    	
+    	getCrazy(15, 0.6f);
     }
     
-    protected void updateAttackBoxFlip() {
+	protected void updateAttackBoxFlip() {
         if (walkDir == RIGHT)
             attackBox.x = hitbox.x + hitbox.width;
         else
@@ -64,29 +65,55 @@ public class Boss2 extends Enemy {
         }else{
             switch (state){
                 case IDLE :
-                    newState(RUNNING);
+                	if(canSeePlayer(lvlData,player)) {
+                		newState(RUNNING);
+                		turnTowardsPlayer(player);
+                	}
                     break;
 
                 case RUNNING:
-                    if(canSeePlayer(lvlData,player)) {
-                        turnTowardsPlayer(player);
-                        if (isPlayerCloseAttack(player))
-                            newState(ATTACK);
+                        if (isPlayerCloseAttack(player)) {
+                        	if(change)
+                        		newState(ATTACK);
+                        	else
+                        		newState(ATTACK2);
+                        	change =!change;
+                            
                     }
+                        if(!canSeePlayer(lvlData,player)) 
+	                		newState(IDLE);
                     move(lvlData);
                     break;
                 case ATTACK:
-                    if(aniIndex==5){
+                	if(aniIndex ==0)
+    					attackChecked = false;
+                	if(aniIndex== 4 &&!attackChecked)
+                        checkEnmyHit(attackBox,player);
+
+                    if(aniIndex == 2) 
+                        setAttacking(true);
+                    
+                    if(aniIndex==5)
                         setAttacking(false);
                        
-                    }
+                    
+                    break;
+                    
+                    
+                case ATTACK2:
+//                	if(aniIndex==0){
+//                        setAttacking(true);  
+//                    }
+                	if(aniIndex ==0)
+    					attackChecked = false; 	
+                	if(aniIndex == 2) 
+                        setAttacking(true);
+                    
                     if(aniIndex== 4 &&!attackChecked){
-                        
+                        setAttacking(false);
                         checkEnmyHit(attackBox,player);
                     }
-                    if(aniIndex == 4) {
-                        setAttacking(true);
-                    }
+                    
                     
                     break;
                 case HIT:

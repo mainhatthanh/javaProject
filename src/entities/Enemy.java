@@ -16,6 +16,9 @@ import static entities.Player.expThatChange;
 
 public abstract class Enemy extends Entity {
 	
+	protected int dmg ;
+	protected int speed;
+	protected boolean lowHealth;
 	
     protected int enemyType;
     protected boolean firstUpdate = true;
@@ -39,6 +42,8 @@ public abstract class Enemy extends Entity {
         this.enemyType = enemyState;
         this.maxHealth = GetMaxHealth(enemyState);
         this.currentHealth = maxHealth;
+        this.dmg = GetEnemyDmg(enemyType);
+        this.speed =ANI_SPEED;
 
     }
 
@@ -129,9 +134,14 @@ public abstract class Enemy extends Entity {
     }
 
     public void hurt(int amount, Player player) {
+    	
+    	if(lowHealth)
+    		amount = (int)(0.7*amount);
     	expUpdate = 0;
-        currentHealth -= amount;
+    	currentHealth -= amount;
+        
         if (currentHealth <= 0){
+        	lowHealth = false;
             newState(DEAD);
             player.changeExp(GetExperience(enemyType));
             expThatChange += GetExperience(enemyType);
@@ -142,25 +152,36 @@ public abstract class Enemy extends Entity {
     }
 
     public void checkEnmyHit(Rectangle2D.Float attackBox, Player player) {
-        if (attackBox.intersects(player.hitbox)) {	
-        	player.changeHealth(-GetEnemyDmg(enemyType));
+        if (attackBox.intersects(player.hitbox)) {
+        	if(enemyType == TORO || enemyType == BOSS2||enemyType == BOSS3||enemyType == BOSS4||enemyType == BOSSFINAL)
+        		if(lowHealth)
+        			dmg = (int)(1.2 * dmg);
+        	player.changeHealth(-dmg);
             attackChecked = true;
-            
-            
+
         }
         
+    }
+    
+    protected void getCrazy(int speedUp, float walkUp) {
+    	if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
+    		
+    		this.lowHealth = true;
+        	this.speed = speedUp;
+        	this.walkSpeed = walkUp * Game.SCALE;
+
+    	}
     }
 
     protected void updateAnimationTick() {
         aniTick++;
-        if (aniTick >= ANI_SPEED) {
+        if (aniTick >= speed) {
             aniTick = 0;
             aniIndex++;
             if (aniIndex >= GetSpriteAmount(enemyType, state)) {
                 aniIndex = 0;
-
                 switch (state) {
-                    case ATTACK, HIT -> state = IDLE;
+                    case ATTACK, ATTACK2, HIT -> state = IDLE;
                     case DEAD -> active = false;
                 }
 
@@ -169,12 +190,6 @@ public abstract class Enemy extends Entity {
         }
     }
 
-    public void update(int[][] lvlData) {
-        updateMove(lvlData);
-        updateAnimationTick();
-        updateHealthBar();
-
-    }
 
     public void updateHealthBar() {
         if (currentHealth < 0) {
@@ -255,6 +270,10 @@ public abstract class Enemy extends Entity {
         newState(IDLE);
         active = true;
         airSpeed = 0;
+        
+        lowHealth = false;
+        speed = ANI_SPEED;
+        dmg = GetEnemyDmg(enemyType);
     }
     
     public void updateAnimaIDLE() {

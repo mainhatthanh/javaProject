@@ -1,13 +1,8 @@
 package entities;
 
-import static utilz.Constants.Directions.RIGHT;
-import static utilz.Constants.EnemyConstants.ATTACK;
-import static utilz.Constants.EnemyConstants.BOSS3;
-import static utilz.Constants.EnemyConstants.BOSS3_HEIGHT;
-import static utilz.Constants.EnemyConstants.BOSS3_WIDTH;
-import static utilz.Constants.EnemyConstants.HIT;
-import static utilz.Constants.EnemyConstants.IDLE;
-import static utilz.Constants.EnemyConstants.RUNNING;
+import static utilz.Constants.Directions.*;
+import static utilz.Constants.EnemyConstants.*;
+
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,7 +11,10 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Boss3 extends Enemy {
+	
+	private boolean change = true;
 	private boolean isAttacking;
+	
 	public Boss3(float x, float y) {
 		 super(x, y, BOSS3_WIDTH, BOSS3_HEIGHT, BOSS3);
 	        initHitbox(20,30);
@@ -25,6 +23,8 @@ public class Boss3 extends Enemy {
 	        this.enemyHealthWidth = enemyHealthBarWidth;
 	        this.walkSpeed = 0.4f * Game.SCALE;
 	        initAttackBox();
+	        
+	        
 		
 	}
 	 private void initAttackBox(){
@@ -37,6 +37,8 @@ public class Boss3 extends Enemy {
 	        updateAnimationTick();
 	        updateAttackBoxFlip();
 	        updateHealthBar();
+	        
+	        getCrazy(15,  0.6f);
 	    }
 
 	    protected void updateAttackBoxFlip() {
@@ -58,20 +60,27 @@ public class Boss3 extends Enemy {
 	        }else{
 	            switch (state){
 	                case IDLE :
-	                    newState(RUNNING);
+	                	if(canSeePlayer(lvlData,player)) {
+	                		newState(RUNNING);
+	                		turnTowardsPlayer(player);
+	                	}
 	                    break;
 
 	                case RUNNING:
-	                    if(canSeePlayer(lvlData,player)) {
-	                        turnTowardsPlayer(player);
-	                        if (isPlayerCloseAttack(player))
-	                            newState(ATTACK);
+	                        if (isPlayerCloseAttack(player)) {
+	                            if(change)
+	                            	newState(ATTACK);
+	                            else
+	                            	newState(ATTACK2);
+	                            change = !change;
+	                        	
 	                    }
+	                        if(!canSeePlayer(lvlData,player)) 
+		                		newState(IDLE);
 	                    move(lvlData);
 	                    break;
 	                case ATTACK:
-	                    if(aniIndex==0){
-	                        
+	                    if(aniIndex==0){   
 							attackChecked = false;
 						}
 	                    if(aniIndex== 2 &&!attackChecked) {
@@ -83,6 +92,19 @@ public class Boss3 extends Enemy {
 						}
 						
 	                    break;
+	                case ATTACK2:
+	                	if(aniIndex==0){   
+							attackChecked = false;
+						}
+	                    if(aniIndex== 2 &&!attackChecked) {
+							setAttacking(false);
+	                        checkEnmyHit(attackBox,player);
+						}
+						if(aniIndex == 1) {
+							setAttacking(true);
+						}
+						
+	                    break;	
 	                case HIT:
 	                    break;
 	            }

@@ -22,7 +22,7 @@ public class GameOverOverlay {
     private Playing playing;
     private BufferedImage img;
     private int imgX,imgY,imgW,imgH;
-    private UrmButton menu,play;
+    private UrmButton menu, play;
 
     public GameOverOverlay(Playing playing) {
         this.playing = playing;
@@ -75,13 +75,13 @@ public class GameOverOverlay {
     }
 
     public void mouseMoved(MouseEvent e) {
-        play.setMouseOver(false);
+    	play.setMouseOver(false);
         menu.setMouseOver(false);
 
         if (isIn(menu, e))
             menu.setMouseOver(true);
         else if (isIn(play, e))
-            play.setMouseOver(true);
+        	play.setMouseOver(true);
     }
 
     public void mouseReleased(MouseEvent e) {
