@@ -161,12 +161,11 @@ public class ObjectManager {
     public void applyEffectToPlayer(GameObjects go) {
 		if (go.getObjType() == RED_POTION) 
 			playing.getPlayer().changeHealth(RED_POTION_VALUE);
-<<<<<<< HEAD
+
 		if (go.getObjType() == BLUE_POTION) {
 			playing.getPlayer().changeStamina(BLUE_POTION_VALUE);
 			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HEAL_MANA);
 		}
-=======
 		if (go.getObjType() == EXPLOSION)
 			playing.getPlayer().kill(EXPLOSION_VALUE);
 		if (go.getObjType() == BLUE_POTION)
@@ -175,7 +174,7 @@ public class ObjectManager {
 			playing.getPlayer().changeExp(PEACH_VALUE);
 		if (go.getObjType() == SWORD) 
 			playing.getPlayer().setPlayerDamage(playing.getPlayer().getPlayerDamage() + SWORD_VALUE);
->>>>>>> ce31541510580e7acae249913a508bc52283abe4
+
 	}
 
 	public void checkObjectHit(Rectangle2D.Float attackbox) {
