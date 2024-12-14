@@ -34,9 +34,9 @@ public class LoadSave {
     //public static final String BIG_CLOUDS ="big_clouds.png";
     //public static final String SMALL_CLOUDS ="small_clouds.png";
 
-    public static final String LEVEL_1_BACKGROUND = "background1.png";
+    public static final String LEVEL_1_BACKGROUND = "background3.png";
     public static final String LEVEL_2_BACKGROUND = "background2.png";
-    public static final String LEVEL_3_BACKGROUND = "background3.png";
+    public static final String LEVEL_3_BACKGROUND = "background1.png";
     public static final String LEVEL_4_BACKGROUND = "background4.png";
     public static final String LEVEL_5_BACKGROUND = "background5.png";
     public static final String LEVEL_UP_IMG = "levelUp.png";

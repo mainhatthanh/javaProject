@@ -113,10 +113,12 @@ public class ObjectManager {
 	}
     
     public void applyEffectToPlayer(GameObjects go) {
-		if (go.getObjType() == RED_POTION)
+		if (go.getObjType() == RED_POTION) 
 			playing.getPlayer().changeHealth(RED_POTION_VALUE);
-		if (go.getObjType() == BLUE_POTION)
+		if (go.getObjType() == BLUE_POTION) {
 			playing.getPlayer().changeStamina(BLUE_POTION_VALUE);
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HEAL_MANA);
+		}
 	}
 
 	public void checkObjectHit(Rectangle2D.Float attackbox) {

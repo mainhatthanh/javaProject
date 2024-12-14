@@ -461,9 +461,11 @@ public class Playing extends State implements Statemethods {
                     player.setRight(true);
                     break;
                 case KeyEvent.VK_ENTER:
+                    getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
                 	textIndex += 1;
                 	break;
                 case KeyEvent.VK_Q:
+                    getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
                 	count = 1;
                 	break;
                 case KeyEvent.VK_L:
