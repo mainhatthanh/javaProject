@@ -383,6 +383,7 @@ public class Playing extends State implements Statemethods {
        // bulletManager.resetBullets();
 
         objectManager.resetAllObjects();
+       // this.resetSpawn();
          /*if(player.isCurving())
             curveManager.resetCurve(player);*/
 
@@ -686,13 +687,17 @@ public class Playing extends State implements Statemethods {
     }
 
     public void restoreStaminaDefault(){
-        player.changeStamina(100);
+        player.changeStamina(5);
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
      public void setSpawn() {
     	 player.setSpawn(levelManager.getCurrentLevel().getFlag1());
      }
+     public void resetSpawn(){
+        player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
+     }
+
 
      public void setIntro(int intro) {
     	 this.intro = intro;

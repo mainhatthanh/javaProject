@@ -3,6 +3,7 @@ package entities;
 import audio.AudioPlayer;
 import gameState.Gamestate;
 import gameState.Playing;
+import levels.LevelManager;
 import main.Game;
 import utilz.LoadSave;
 import java.awt.*;
@@ -115,6 +116,8 @@ public class Player extends Entity {
 
     //Run sound
     private boolean isStepSoundPlaying = false;
+
+    private LevelManager levelManager;
 
     //Chi so to len
     /*private int giantUp=0;
@@ -244,8 +247,11 @@ public class Player extends Entity {
 	                aniIndex = 0;
 	                playing.setPlayerDying(true);
 	                playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
+                    playing.resetAll();
 	            } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
+                    this.setSpawn(playing.getLevelManager().getCurrentLevel().getPlayerSpawn());
 	                playing.setGameOver(true);
+
 	                playing.getGame().getAudioPlayer().stopSong();
 	                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
 	            } else {
@@ -265,6 +271,7 @@ public class Player extends Entity {
             		playing.setSpawn();
             		currentHealth = maxHealth;
             		playing.setCountRev(playing.CountRev() - 1);
+
             		
         	}
 
@@ -415,8 +422,8 @@ public class Player extends Entity {
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
         drawUI(g);
-         drawAttackHitbox(g, xlvlOffset);
-         //drawHitbox(g, xlvlOffset);
+        //  drawAttackHitbox(g, xlvlOffset);
+        //  drawHitbox(g, xlvlOffset);
     	
     }
     
@@ -861,9 +868,9 @@ public class Player extends Entity {
     public void powerAttack() {
         if(powerAttackActive)
             return;
-        if(currentStamina>=40){
+        if(currentStamina>=60){
             powerAttackActive=true;
-            changeStamina(-40);
+            changeStamina(-60);
         }
     }
 
@@ -1004,6 +1011,7 @@ public class Player extends Entity {
     public Stick getStick(){
         return stick;
     }
+
 
 
 }

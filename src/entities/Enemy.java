@@ -207,7 +207,7 @@ public abstract class Enemy extends Entity {
         g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset),
                 (int) (hitbox.y + hitbox.height - hitbox.height - 4 * Game.SCALE), enemyHealthWidth,
                 enemyHealthBarHeight);
-        g.setColor(Color.LIGHT_GRAY);
+        g.setColor(Color.white);
         g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset),
                 (int) (hitbox.y + hitbox.height - hitbox.height - 4 * Game.SCALE),
                 enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
