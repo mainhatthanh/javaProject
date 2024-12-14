@@ -15,7 +15,12 @@ import audio.AudioPlayer;
 import static utilz.Constants.EnemyConstants.*;
 
 public class EnemyManager {
-	
+	private int count1 = 0;
+    private int count2 = 0;
+    private int count3 = 0;
+    private int count4 = 0;
+    private int count5 = 0;
+    
 	private int expUp;
 	private int enemyCheck;
 	
@@ -170,8 +175,14 @@ public class EnemyManager {
             for (Toro t : toros) 
                 if (t.isActive()) {
                 	enemyCheck = TORO;
-                    if(t.isAttacking()) 
+                    if(t.isAttacking()) {
                         playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS1_ATTACK1);
+                    }
+                    if(t.currentHealth < 0.5*t.maxHealth) {
+                        count3++;
+                        if (count3 == 1)
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS1);
+                    }
                     t.updateHealthBar();
                     t.update(lvlData, player);
                     isAnyActiveToro = true;
@@ -180,8 +191,13 @@ public class EnemyManager {
             for (Boss2 b2 : boss2)
                 if (b2.isActive()) {
                     enemyCheck = BOSS2;
-                    if(b2.isAttacking()) 
+                    if(b2.isAttacking())
                         playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS2_ATTACK);
+                    if(b2.currentHealth < 0.5*b2.maxHealth) {
+                        count2++;
+                        if (count2 == 1)
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS2);
+                        }
                     b2.update(lvlData, player);
                     b2.updateHealthBar();
                     isAnyActiveBoss2 = true;
@@ -192,6 +208,11 @@ public class EnemyManager {
                 	enemyCheck = BOSS3;		
                     if(b3.isAttacking()) 
                         playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS3_ATTACK);
+                    if(b3.currentHealth < 0.5*b3.maxHealth) {
+                        count1++;
+                        if (count1 == 1)
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS3);
+                    }
                     b3.update(lvlData, player);
                     b3.updateHealthBar();
                     isAnyActiveBoss3 = true;
@@ -200,8 +221,14 @@ public class EnemyManager {
             for (Boss4 b4 : boss4)
                 if (b4.isActive()) {
                     enemyCheck = BOSS4;
-                    if(b4.isAttacking()) 
+                    if(b4.isAttacking()) {
                         playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS4_ATTACK);
+                    }
+                    if(b4.currentHealth < 0.5*b4.maxHealth) {
+                        count4++;
+                        if (count4 == 1)
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSS4);
+                    }
                     b4.update(lvlData, player);
                     b4.updateHealthBar();
                     isAnyActiveBoss4 = true;
@@ -209,8 +236,14 @@ public class EnemyManager {
             
             for (BossFinal bf : bossFinal)
                 if (bf.isActive()) {
-                    if(bf.isAttacking()) 
+                    if(bf.isAttacking()) {
                         playing.getGame().getAudioPlayer().playAttackSound();
+                    }
+                    if(bf.currentHealth < 0.5*bf.maxHealth) {
+                        count5++;
+                        if (count5 == 1)
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.BOSSFL);
+                    }
                     enemyCheck = BOSSFINAL;
                 	bf.updateHealthBar();
                     bf.update(lvlData, player);

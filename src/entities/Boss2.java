@@ -12,7 +12,7 @@ import main.Game;
 
 public class Boss2 extends Enemy {
 	
-	 private boolean change = true;
+    private boolean change = true;
     private boolean isAttacking;
     
    

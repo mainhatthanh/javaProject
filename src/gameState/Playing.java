@@ -296,10 +296,11 @@ public class Playing extends State implements Statemethods {
             gameOverOverlay.draw(g);
         }
         else if(check() && count == 0) {
-        		ui.drawDialogueScreen(g2, textIndex,enemyManager.getEnemyCheck());
-        		player.renderIDLE(g, xLvlOffset);
-        		enemyManager.drawIDLE(g, xLvlOffset);
-
+        		if(textIndex >= 0 ) {
+        			ui.drawDialogueScreen(g2, textIndex,enemyManager.getEnemyCheck());
+            		player.renderIDLE(g, xLvlOffset);
+            		enemyManager.drawIDLE(g, xLvlOffset);
+        		}
         }
         else if(fly1) {
         	player.render(g, xLvlOffset);
@@ -464,6 +465,8 @@ public class Playing extends State implements Statemethods {
                     break;
                 case KeyEvent.VK_ENTER:
                 	textIndex += 1;
+                	this. getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
+                	
                 	if(textIndex < GetNumberMessageBoss(enemyManager.getEnemyCheck())) {
                 		ui.setCheckChat(!ui.getCheckChat());
                 	}
@@ -473,6 +476,7 @@ public class Playing extends State implements Statemethods {
                 	intro+=1;
                 	break;
                 case KeyEvent.VK_Q:
+                	this. getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
                 	if(textIndex >= GetNumberMessageBoss(enemyManager.getEnemyCheck())-1)
                 		count = 1;
                 	break;

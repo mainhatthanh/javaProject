@@ -100,6 +100,9 @@ public class UI {
 	//hien thi khung tro chuyen giua nhan vat va boss
 	public void drawDialogueScreen(Graphics2D g2, int textIndex, int enemyType) {
 		
+		if(textIndex <0 )	
+			textIndex =0;
+		
 		int x = Game.GAME_WIDTH /12;
 		int y = Game.GAME_HEIGHT/2  - (int)(160 *Game.SCALE);
 		int width = Game.GAME_WIDTH - (Game.TILES_SIZE*4);

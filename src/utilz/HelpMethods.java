@@ -8,19 +8,7 @@ import java.util.ArrayList;
 import entities.*;
 import gameState.Playing;
 import main.Game;
-import objects.FlyWukong;
-import objects.GameContainer;
-import objects.Potion;
-import objects.Projectile;
-import objects.Trap1;
-import objects.Trap2;
-import objects.Arrow;
-import objects.ArrowTrap;
-import objects.Cannon;
-import objects.Chest;
-import objects.Flag;
-import objects.Scroll;
-import objects.Sword;
+import objects.*;
 
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.ObjectsConstants.*;
@@ -296,6 +284,45 @@ public class HelpMethods {
                 int value = color.getBlue();
                 if (value == FLAG)
                     list.add(new Flag(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+    
+    public static ArrayList<Explosion> GetExplos(BufferedImage img) {
+        ArrayList<Explosion> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == EXPLOSION)
+                    list.add(new Explosion(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+
+    public static ArrayList<Peach> GetPeaches(BufferedImage img) {
+        ArrayList<Peach> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == PEACH)
+                    list.add(new Peach(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+
+    }
+    
+    public static ArrayList<Banana> GetBananas(BufferedImage img) {
+        ArrayList<Banana> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == BANANA)
+                    list.add(new Banana(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
             }
         return list;
 

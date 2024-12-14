@@ -101,17 +101,31 @@ public class Constants {
         public static final int TRAP2_RIGHT = 12;
         public static final int PEACH = 13;
         public static final int FLAG = 14;
+        public static final int EXPLOSION = 15;
+        public static final int BANANA = 16;
 
 
         public static final int RED_POTION_VALUE = 15;
         public static final int BLUE_POTION_VALUE = 100;
         public static final int TRAP1_VALUE = 20;
         public static final int SWORD_VALUE = 20;
+        public static final int PEACH_VALUE = 100;
+        public static final int EXPLOSION_VALUE = 30;
+        
+        public static final int EXPLOSION_WIDTH_DEFAULT = 64;
+        public static final int EXPLOSION_HEIGHT_DEFAULT = 64;
+        public static final int EXPLOSION_WIDTH = (int) (EXPLOSION_WIDTH_DEFAULT * Game.SCALE);
+        public static final int EXPLOSION_HEIGHT = (int) (EXPLOSION_HEIGHT_DEFAULT * Game.SCALE);
         
         public static final int PEACH_WIDTH_DEFAULT = 15;
         public static final int PEACH_HEIGHT_DEFAULT = 15;
         public static final int PEACH_WIDTH = (int) (PEACH_WIDTH_DEFAULT * Game.SCALE);
         public static final int PEACH_HEIGHT = (int) (PEACH_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int BANANA_WIDTH_DEFAULT = 15;
+        public static final int BANANA_HEIGHT_DEFAULT = 15;
+        public static final int BANANA_WIDTH = (int) (BANANA_WIDTH_DEFAULT * Game.SCALE);
+        public static final int BANANA_HEIGHT = (int) (BANANA_HEIGHT_DEFAULT * Game.SCALE);
         
         public static final int FLAG_WIDTH_DEFAULT = 35;
         public static final int FLAG_HEIGHT_DEFAULT = 35;
@@ -165,6 +179,8 @@ public class Constants {
 
         public static int getSpriteAmount(int objType) {
             switch (objType) {
+            	case EXPLOSION:
+            		return 12;
             	case TRAP2_LEFT, TRAP2_RIGHT:
             		return 10;
             	case ARROW_TRAP:
