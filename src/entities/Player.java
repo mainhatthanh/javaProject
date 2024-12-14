@@ -122,8 +122,8 @@ public class Player extends Entity {
         this.state = IDLE;
         this.maxHealth = 100;
         this.currentHealth = maxHealth;
-        this.maxShield = 50;
-        this.currentShield = 0;
+        this.Shield = 0;
+        this.maxShield = 8;
         this.maxStamina = 100;
         this.currentStamina = maxStamina;
         this.currentExp = 0;
@@ -513,17 +513,33 @@ public class Player extends Entity {
     }
 
     public void changeHealth(int value) {
-        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
-        currentHealth += value;
-        if (currentHealth <= 0) {
-            currentHealth = 0;
+    	if (Shield != 0 && value < 0) {
+	        Shield -= 1;
+    }
+    	else {
+    		playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
+	        currentHealth += value;
+	        if (currentHealth <= 0) {
+	            currentHealth = 0;
+	            // gameOver();
+	        } else if (currentHealth >= maxHealth) {
+	            currentHealth = maxHealth;
+	        }
+    	}
+    }
+    
+    public void changeShield(int value) {
+    	Shield += value;
+        if (Shield <= 0) {
+            Shield = 0;
             // gameOver();
-        } else if (currentHealth >= maxHealth) {
-            currentHealth = maxHealth;
+        } else if (Shield >= maxShield) {
+            Shield = maxShield;
         }
     }
     
-    public void kill(int value) {
+
+	public void kill(int value) {
     	 currentHealth -= value;
          if (currentHealth <= 0) {
              currentHealth = 0;
