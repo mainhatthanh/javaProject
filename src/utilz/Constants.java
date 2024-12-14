@@ -26,6 +26,28 @@ public class Constants {
         }
     }
     
+    public static final String getIntroText(int index) {
+    	switch(index) {
+    	case 0:
+    		return "Chào mừng bạn đến với Black Myth Wukong";
+    	case 1:
+    		return "Thế giới đang chìm trong hỗn loạn,nơi chỉ\nkẻ mạnh nhất mới có thể đứng trên đỉnh cao\nvinh quang.";
+    	case 2:
+    		return "Bạn đã được định mệnh lựa chọn để hóa thân\nthành Tôn Ngộ Không – vị vua khỉ huyền thoại.\nVới cây gậy Như Ý uy lực trong tay và trí\ntuệ sắc bén, bạn có khả năng đánh bại và\ntiêu diệt kẻ thù nhanh chóng.";
+    	case 3:
+    		return "Nhưng hãy nhớ: con đường đến ngôi vị bá chủ\nkhông hề dễ dàng. Kẻ thù thì đông, hiểm nguy\nluôn rình rập, và bạn… chỉ có một mình. Liệu\nbạn có đủ bản lĩnh để đối đầu?";
+    	case 4:
+    		return "Hãy tận dụng tất cả kỹ năng và sự thông minh\ncủa mình, chinh phục những thử thách khắc\nnghiệt, đánh bại thế lực bóng tối và khắc tên\nmình vào huyền thoại. Vận mệnh của một bá\nchủ giờ đây nằm trong tay bạn!";
+    	case 5:
+    		return "Để sử dụng kỹ năng hiệu quả, bạn hãy nhấn\nnút R để ôn luyện lại combo chiêu nhé!";
+    	case 6:
+    		return "CHÚC BẠN SỐNG DAI THÀNH HUYỀN THOẠI!";
+    	default:
+    		return "Chúc may mắn";
+    			
+    	}
+    }
+    
 
     public static class Curve{
         public static final int STICK_WIDTH_DEFAULT = 40;
@@ -396,75 +418,95 @@ public class Constants {
         public static int GetExperience(int enemy_type){
             switch (enemy_type) {
                 case CRABBY:
-                      return 10;
-                  case MINOTAUR:
-                      return 50;
-                  case SHARK:
-                      return 15;
-                  case TORO:
-                      return 35;
-                  default:
-                      return 20;
+                    return 10;
+                case MINOTAUR:
+                    return 55;
+                case SHARK:
+                    return 5;
+                case MONSTER_EYE1:
+                    return 20;
+                case MONSTER2:
+                    return 20;
+                case SPIDER:
+                    return 25;
+                case BOSS1:
+                    return 40;
+                case BOSS5:
+                    return 80;
+                case TORO:  
+                    return 35;
+                case BOSS2:
+                    return 50;
+                case BOSS3:
+                    return 60;
+                case BOSS4:
+                    return 65;
+                case BOSSFINAL:
+                    return 100;
+                default:
+                    return 20;
               }
         }
 
         public static int GetMaxHealth(int enemy_type) {
             switch (enemy_type) {
-              case CRABBY:
-                    return 50;
-                case MINOTAUR:
-                    return 50;
-                case SHARK:
-                    return 50;
-                case TORO: 
-                	return 50;
-                case BOSS1:
-                	return 50;
-                case BOSS2:
-                	return 50;
-                case BOSS3:
-                	return 50;
-                case BOSS4:
-                	return 50;
-                case BOSS5:
-                	return 50;
-                case MONSTER_EYE1:
-                	return 50;
-                case MONSTER2:
-                	return 50;
-                case SPIDER:
-                	return 50;
-                default:
-                    return 50;
-            }
+                    case CRABBY:
+                        return 15;
+                    case MINOTAUR:
+                        return 105;
+                    case SHARK:
+                        return 10;
+                    case MONSTER_EYE1:
+                        return 35;
+                    case MONSTER2:
+                        return 45;
+                    case SPIDER:
+                        return 25;
+                    case BOSS1:
+                        return 80;
+                    case BOSS5:
+                        return 280;
+                    case TORO:  
+                        return 70;
+                    case BOSS2:
+                        return 100;
+                    case BOSS3:
+                        return 150;
+                    case BOSS4:
+                        return 200;
+                    case BOSSFINAL:
+                        return 300;
+                    default:
+                        return 20;
+                  }
         }
 
         public static int GetEnemyDmg(int enemy_type) {
             switch (enemy_type) {
                case CRABBY:
-                   return 2;
+                   return 5;
                 case MINOTAUR:
                    return 20;
                case SHARK:
-              	return 2;
+              	return 5;
                 case TORO:
-               	return 10;
+               	return 15;
                 case BOSS1:
-               	return 2;
+               	return 10;
                 case BOSS2:
-               		return 10;
+               		return 15;
                 case BOSS3:
-                	return 2;
+                	return 15;
                 case BOSS4:
-                	return 2;
+                	return 20;
                 case BOSS5:
-                	return 2;
+                	return 20;
                 case MONSTER_EYE1:
-                	return 2;
-                case SPIDER :
-                	return 2;
-                case BOSSFINAL:
                 	return 10;
+                case SPIDER :
+                	return 5;
+                case BOSSFINAL:
+                	return 25;
                 default:
                 	return 0;
             }
@@ -474,11 +516,15 @@ public class Constants {
         public static int GetNumberMessageBoss(int enemy_type) {
         	switch(enemy_type) {
         	case TORO:
+        		return 5;
         	case BOSS2:
+        		return 5;
         	case BOSS3:
+        		return 5;
         	case BOSS4:
-        		return 3;
-        	case BOSS5:
+        		return 6;
+        	case BOSSFINAL:
+        		return 11;
         	default:
         		return 3;
         	}
@@ -486,7 +532,45 @@ public class Constants {
         
         public static String[] GetMessageEnemy(int enemy_type) {
         	switch(enemy_type) {
-        	
+        	case BOSS2:
+        		return new String[] {"Này, kẻ kỳ lạ kia, nhìn ngươi giống như cây cỏ sống dậy. Rừng này\nngươi cai quản à? Đừng nói rằng ngươi định ngăn lão Tôn qua đây nhé!",
+        				"Ngươi là kẻ gây náo loạn trời đất, lòng đầy kiêu ngạo, không biết\nkính sợ thiên nhiên. Ta là Mộc Vân Kiếm Linh, linh hồn của cánh rừng này.\nNơi đây là cội nguồn của sự sống, không dung thứ cho kẻ xấc láo phá hoại",
+        				"Ha! Thiên cung còn chẳng giữ được lão Tôn này, ngươi chỉ là một cái\ncây biết đi mà cũng muốn làm khó ta sao? Hay ngươi muốn thử sức với cây\ngậy Như Ý này?",
+        				"Sự kiêu ngạo của ngươi đã làm ô uế rừng sâu này. Thanh kiếm này là\nhiện thân của thiên nhiên, mỗi nhát kiếm sẽ là lời phán xét. Ngươi có sẵn\nsàng đối mặt chưa?",
+        				"Tốt, tốt! Đã lâu rồi lão Tôn chưa gặp được đối thủ thú vị. Được, để\nxem cội nguồn của ngươi mạnh đến đâu!"};
+        	case BOSS3:
+        		return new String[] {"Một tên quái vật mặt đỏ, dám cản đường Đại Thánh ta! Mau xưng tên\nđể ta còn đưa ngươi về Tây Thiên làm quà!",
+        				"Bật Mã Ôn,ngươi chỉ là một con khỉ vô dụng.Ta là Hắc Thủy Hành Giả,\nkẻ cai quản dòng nước sâu thẳm, nơi mà ánh sáng cũng không dám bén mảng",
+        				"Nói nhiều vô ích! Có giỏi thì ra đây, lão Tôn ta đánh một gậy, xem\ndòng nước của ngươi chảy được đến đâu!",
+        				"Sức mạnh của dòng nước là vô giá. Tôn Ngộ Không, đừng coi thường ta...\nNhững kẻ chống lại dòng nước của ta trước đây đều bị nhấn chìm\nbởi dòng nước này!",
+        				"Để xem là nước chìm ta, hay gậy Như Ý đập vỡ đầu ngươi trước!"};
+        	case TORO:
+        		return new String[] {"Một con trâu to xác nữa cản đường lão Tôn ta à? Không biết ngươi\ntừ đâu bò ra vậy?",
+        							"Kẻ ngạo mạn! Ta là Ngưu Ma Vương, thần thú của đại địa, người giữ cân\nbằng cho đất trời. Còn ngươi chỉ là con khỉ phá phách, dám xâm phạm\n lãnh thổ của ta!",
+        				"Đất này của lão Tôn muốn đi thì đi, muốn đứng thì đứng. Đừng tưởng thân\n to xác thì lão Tôn sợ ngươi nhé! Ngươi có giỏi thì tới đây thử xem!",
+        				"Ta là đất, ta là núi, không gì có thể phá vỡ được! Thạch Hầu,\nhôm nay ngươi sẽ bị chôn vùi dưới chân ta!",
+        				"Chà, nặng lời thế làm gì! Lão Tôn ta chẳng sợ núi, lại càng\nkhông ngán đất! Lên đi, xem ai mới là kẻ bị đè bẹp!"};
+        	case BOSS4:
+        		return new String[] {"Hừm, nơi này oi bức quá! Ngươi là kẻ nào mà dám làm càn trong cõi\nnày? Chẳng lẽ muốn thử sức với Tề Thiên Đại Thánh ta sao?",
+        				"Thật to gan, con khỉ kia ngươi là ai mà dám đến đấy quậy phá\nnơi ở của ta! Ta là Xích Diệm Ma Vương, thống lĩnh lửa ngục.\nĐịa ngục ba nghìn năm cháy dữ, nay ta bước ra để thiêu rụi mọi kẻ\ndám xâm phạm nơi này.",
+        				"Bất hạnh cho nhà ngươi khi không biết đến ta. Xin tự giới thiệu ta\nlà Tề Thiên Đại Thánh, 500 năm trước đại náo thiên cung,Ngọc Hoàng\ncòn phải kinh sợ trước ta. Ngươi nghĩ mình đủ khả năng để cản bước\nđược ta sao?",
+        				"Hahaha hoá ra là nhà ngươi. Nhưng mà câu chuyện đó là 500 năm trước\nrồi, bây giờ ngươi cũng chỉ là một con khỉ vô dụng thôi.Để ta cho\nngươi thành tro bụi dưới thanh Hoả Đồ Đao này!",
+        				"Ngươi nghĩ chút lửa này làm khó được Tề Thiên Đại Thánh à? Cả trời\nđất còn không trói được lão Tôn ta, huống chi một ngọn lửa tàn lụi\nnhư ngươi",
+        				"Lửa của ta không bao giờ tắt! Hãy xem Hỏa Thiên Cuồng Bạo thiêu\ncháy linh hồn ngươi!"};
+        	case BOSSFINAL:
+        		return new String[] {"Chúc mừng. chúc mừng nhà ngươi đã đặt chân được đến đây. Quả không\n hổ danh là Tề Thiên Đại Thánh!",
+        				"Nhà ngươi quá khen rồi. Nhưng ngươi là ai mà dám to tiếng ở đây,\nchưa kể ngươi còn có ngoại hình rất giống ta nữa",
+        				"Giống ư? Ta chính là hình bóng mà ngươi sợ hãi nhất. Kim Diện Hành Giả\n— kẻ phản chiếu ngươi trong bản thể hoàn hảo nhất",
+        				"Ha! Hoàn hảo? Bản thể này của lão Tôn đâu có thứ nào thay thế được.\nBỏ mặt nạ xuống xem, ta đánh một gậy vỡ mặt nạ vàng của ngươi bây giờ!",
+        				"Đây đâu phải mặt nạ của ta. Khả năng của ta là hấp thụ mọi tinh hoa\ntrời đất để hội tụ lại thành một sức mạnh vô song, không gì có thể đánh\nbại được",
+        				"Vậy hoá ra ngươi đã học được kĩ năng của ta?",
+        				"Đúng, ta không chỉ học được mà còn tu luyện thêm để nó trở nên mạnh\nmẽ và đáng sợ hơn rất nhiều so với nhà ngươi",
+        				"Chà chà, nghe có vẻ đáng sợ đấy, nhưng những kẻ cản đường ta trước đó\nđều chịu chung số phận là chết! Mau tránh ra nếu không muốn có chung\nsố phận đó",
+        				"Ngươi nghĩ chừng đó đủ doạ ta sao. Kim khắc đá, lửa tôi luyện, ta sẽ\nnghiền nát khỉ đá ngạo mạn như ngươi!",
+        				"Cái thứ mặt nạ lạnh lẽo này chỉ dọa được trẻ con thôi!Đến đây, xem\nthử bản lĩnh của nhà ngươi đến đâu!",
+        				"Ngươi sẽ tan thành bụi dưới cây gậy của ta. Gậy sắt không biết đau,\nvà ta cũng vậy"};
+        		
+        		
         	default:
         		return new String[] {"Khá lắm khá lắm, cuối cùng ngươi cũng đã đến được đây",
         				"Tôn Ngộ Không, người thật to gan, dám đến quậy phá nơi ở của ta,\n tội ngươi xứng đáng chết"
@@ -592,13 +676,13 @@ public class Constants {
         public static int GetStamina(int player_action){
             switch(player_action){
                 case JUMP:
-                    return 5;
+                    return 1;
                 case ATTACK:
                     return 3;
                 case ULTI :
-                    return 20;
+                    return 40;
                 case THROW:
-                    return 25;
+                    return 5;
                 default: 
                     return 0;
             }
@@ -608,9 +692,9 @@ public class Constants {
                 case ATTACK:
                     return 10;
                 case ULTI :
-                    return 40;
+                    return 40   ;
                 case THROW:
-                    return 25;
+                    return 15;
                 default:
                     return 0;
             }
@@ -635,9 +719,12 @@ public class Constants {
         public static boolean NeedToCheckStamina(KeyEvent e){
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_SPACE:
-                case KeyEvent.VK_F:
+                case KeyEvent.VK_A:
+                case KeyEvent.VK_D:
                 case KeyEvent.VK_W:
-                case KeyEvent.VK_G:
+                case KeyEvent.VK_J:
+                case KeyEvent.VK_K:
+                case KeyEvent.VK_L:
                     return true;
                 default: 
                     return false;

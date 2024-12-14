@@ -67,16 +67,29 @@ public class ObjectManager {
     			p.kill(TRAP1_VALUE);
     		
     }
-	public void checkScrollTouched(Player player) {
+	/*public void checkScrollTouched(Player player) {
 		for(Scroll sc : scrolls)
 			if(sc.isActive())
 			if(sc.getHitbox().intersects(player.getHitBox())) {
+				System.out.println("cham");
 				playing.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
-				sc.setActive(false);
 				playing.getPlot().setPlot(true);
+				sc.setActive(false);
+
 			}
 
-	}
+	}*/
+
+	/*public void checkSwordtouched(Player player) {
+		for(Sword sw : swords)
+			if(sw.isActive())
+				if(sw.getHitbox().intersects(player.getHitBox())) {
+					System.out.println("cham");
+					player.setGiantUp(6);
+					sw.setActive(false);
+				}
+
+	}*/
 
 
 	public ArrayList<Scroll> getScrolls() {
@@ -97,8 +110,10 @@ public class ObjectManager {
 		for (Scroll s : scrolls) {
 			if (s.isActive()) {
 				if (hitbox.intersects(s.getHitbox())) {
+					playing.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
+					playing.getPlot().setPlot(true);
 					s.setActive(false);
-					applyEffectToPlayer(s);
+					//applyEffectToPlayer(s);
 				}
 			}
 		}
@@ -144,16 +159,27 @@ public class ObjectManager {
 	}
     }
     public void applyEffectToPlayer(GameObjects go) {
-		if (go.getObjType() == RED_POTION)
+		if (go.getObjType() == RED_POTION) 
 			playing.getPlayer().changeHealth(RED_POTION_VALUE);
-		if (go.getObjType() == EXPLOSION)
-			playing.getPlayer().kill(EXPLOSION_VALUE);
-		if (go.getObjType() == BLUE_POTION)
+
+
+		if (go.getObjType() == BLUE_POTION) {
 			playing.getPlayer().changeStamina(BLUE_POTION_VALUE);
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HEAL_MANA);
+		}
+
+		if (go.getObjType() == EXPLOSION) {
+			playing.getPlayer().kill(EXPLOSION_VALUE);
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.SWORD);
+		}
 		if (go.getObjType() == PEACH)
 			playing.getPlayer().changeExp(PEACH_VALUE);
-		if (go.getObjType() == SWORD) 
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HEAL_MANA);
+		if (go.getObjType() == SWORD) {
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.SWORD);
 			playing.getPlayer().setPlayerDamage(playing.getPlayer().getPlayerDamage() + SWORD_VALUE);
+		}
+
 	}
 
 	public void checkObjectHit(Rectangle2D.Float attackbox) {
@@ -327,7 +353,8 @@ public class ObjectManager {
         
         updateCannons(lvlData, player);
         updateProjectiles(lvlData, player);
-	    checkScrollTouched(player);
+
+		//checkSwordtouched(player);
 
         
         for (Flag f : flags) {
