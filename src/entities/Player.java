@@ -156,7 +156,6 @@ public class Player extends Entity {
      void initAttackBox() {
         attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) (30 * Game.SCALE), (int) (20 * Game.SCALE));
         resetAttackBox();
-
     }
 
     private void resetAttackBox() {
