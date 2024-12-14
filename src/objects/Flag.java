@@ -8,7 +8,7 @@ public class Flag extends GameObjects {
 		initHitbox(15, 35);
 		xDrawOffset = 0;
 		yDrawOffset = (int) (5*Game.SCALE);
-		hitbox.y += yDrawOffset;
+		hitbox.y += yDrawOffset ;
 	}
 	
 	public void update() {

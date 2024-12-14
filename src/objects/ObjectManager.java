@@ -571,7 +571,7 @@ public class ObjectManager {
     		if (f.isActive()) {
 			g.drawImage(flagImgs[f.getAniIndex()],
 					    (int) (f.getHitbox().x - xLvlOffset),
-					    (int) (f.getHitbox().y - f.getyDrawOffset()),
+					    (int) (f.getHitbox().y - f.getyDrawOffset() + 5 *Game.SCALE),
 						FLAG_WIDTH,
 						FLAG_HEIGHT, null);
     		}

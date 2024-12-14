@@ -204,7 +204,8 @@ public class Playing extends State implements Statemethods {
         }
         else if (gameOver) {
             gameOverOverlay.update();
-        	
+            player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
+
         }
         else if(check() && count ==0) {
         	player.updateIDLE();
@@ -383,7 +384,6 @@ public class Playing extends State implements Statemethods {
        // bulletManager.resetBullets();
 
         objectManager.resetAllObjects();
-       // this.resetSpawn();
          /*if(player.isCurving())
             curveManager.resetCurve(player);*/
 

@@ -123,15 +123,15 @@ public class Player extends Entity {
     /*private int giantUp=0;
     private int firstWidth=width;
     private int firstHeight=height;*/
-    
+
     public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, width, height);
         this.playing = playing;
         this.state = IDLE;
         this.maxHealth = 100;
         this.currentHealth = maxHealth;
-        this.maxShield = 50;
-        this.currentShield = 0;
+        this.Shield = 0;
+        this.maxShield = 8;
         this.maxStamina = 100;
         this.currentStamina = maxStamina;
         this.currentExp = 0;
@@ -251,7 +251,6 @@ public class Player extends Entity {
 	            } else if (aniIndex == GetSpriteAmount(DEAD) - 1 && aniTick >= ANI_SPEED - 1) {
                     this.setSpawn(playing.getLevelManager().getCurrentLevel().getPlayerSpawn());
 	                playing.setGameOver(true);
-
 	                playing.getGame().getAudioPlayer().stopSong();
 	                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
 	            } else {
@@ -574,7 +573,7 @@ public class Player extends Entity {
     }
 
     public void changeHealth(int value) {
-        
+
         currentHealth += value;
         if (value < 0) {
             playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
@@ -590,7 +589,8 @@ public class Player extends Entity {
         }
     }
     
-    public void kill(int value) {
+
+	public void kill(int value) {
     	 currentHealth -= value;
          if (currentHealth <= 0) {
              currentHealth = 0;
