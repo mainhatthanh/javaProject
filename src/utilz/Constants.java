@@ -182,8 +182,8 @@ public class Constants {
         public static final int ATTACK = 2;
         public static final int HIT = 3;
         public static final int DEAD = 4;
-        public static final int IDLE_2 = 5;
-        public static final int ATTACK2 = 6;
+        public static final int ATTACK2 = 5;
+        public static final int IDLE_2 = 6;
         
         
         
@@ -358,12 +358,18 @@ public class Constants {
                 case IDLE_2:
                 	if(enemy_type ==TORO)
                 		return 6;
+                	else if(enemy_type == BOSSFINAL)
+                		return 4;
                 	return 0;
                 	
                 	
                 case ATTACK2:
-                if(enemy_type == TORO)
+                if(enemy_type == TORO || enemy_type == BOSS3)
                 	return 4;
+                else if(enemy_type == BOSS2)
+                	return 6;
+                else if(enemy_type == BOSSFINAL)
+                	return 8;
                 return 0;
             }
 
@@ -429,8 +435,8 @@ public class Constants {
                	return 10;
                 case BOSS1:
                	return 2;
-               case BOSS2:
-               	return 2;
+                case BOSS2:
+               		return 10;
                 case BOSS3:
                 	return 2;
                 case BOSS4:
@@ -441,6 +447,8 @@ public class Constants {
                 	return 2;
                 case SPIDER :
                 	return 2;
+                case BOSSFINAL:
+                	return 10;
                 default:
                 	return 0;
             }

@@ -1,17 +1,21 @@
 package entities;
 
+import static entities.Player.expThatChange;
 import static utilz.Constants.ANI_SPEED;
 import static utilz.Constants.Directions.RIGHT;
 
-import static utilz.Constants.EnemyConstants.ATTACK;
+import static utilz.Constants.EnemyConstants.*;
+import static utilz.Constants.EnemyConstants.ATTACK2;
 import static utilz.Constants.EnemyConstants.BOSS4;
 import static utilz.Constants.EnemyConstants.BOSS4_HEIGHT;
 import static utilz.Constants.EnemyConstants.BOSS4_WIDTH;
 import static utilz.Constants.EnemyConstants.DEAD;
 import static utilz.Constants.EnemyConstants.GetEnemyDmg;
+import static utilz.Constants.EnemyConstants.GetExperience;
 import static utilz.Constants.EnemyConstants.GetSpriteAmount;
 import static utilz.Constants.EnemyConstants.HIT;
 import static utilz.Constants.EnemyConstants.IDLE;
+import static utilz.Constants.EnemyConstants.IDLE_2;
 import static utilz.Constants.EnemyConstants.RUNNING;
 
 import java.awt.Color;
@@ -21,6 +25,7 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Boss4 extends Enemy {
+	
 	private boolean isAttacking;
 	
 	public Boss4(float x, float y) {
@@ -44,16 +49,32 @@ public class Boss4 extends Enemy {
 	        updateAttackBoxFlip();
 	        updateHealthBar();
 
+	        getCrazy(18, 0.5f);
+	    }
+	    
+	    
+	    protected void getCrazy(int speedUp, float walkUp) {
+	    	if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
+	    		this.currentHealth = GetMaxHealth(BOSS4);
+	    		this.lowHealth = true;
+	        	this.speed = speedUp;
+	        	this.walkSpeed = walkUp * Game.SCALE;
+
+	    	}
 	    }
 	    
 	    
 	    protected void updateAnimationTick() {
 	        aniTick++;
-	        if (aniTick >= ANI_SPEED) {
+	        if (aniTick >= speed) {
 	            aniTick = 0;
 	            aniIndex++;
 	            if (aniIndex >= GetSpriteAmount(enemyType, state)) {
-	                aniIndex = 0;
+	            	
+	            	if(lowHealth && state == ATTACK)
+	            		aniIndex = 8;
+	            	else
+	            		aniIndex = 0;
 
 	                switch (state) {
 	                    case ATTACK , HIT -> state = IDLE;
@@ -64,6 +85,28 @@ public class Boss4 extends Enemy {
 
 	        }
 	    }
+	    
+	    public void hurt(int amount, Player player) {
+	    	
+	    	if(lowHealth)
+	    		amount = (int)(0);
+	    	expUpdate = 0;
+	    	System.out.println(amount);
+	    	currentHealth -= amount;
+	        
+	        if (currentHealth <= 0){
+	        	lowHealth = false;
+	            newState(DEAD);
+	            player.changeExp(GetExperience(enemyType));
+	            expThatChange += GetExperience(enemyType);
+	            expUpdate = GetExperience(enemyType);
+	        }
+	        else if(lowHealth)
+	            newState(ATTACK);
+	        else
+	        	newState(HIT);
+	    }
+	    
 	    
 	    public void checkEnmyHit(Rectangle2D.Float attackBox, Player player) {
 	        if (attackBox.intersects(player.hitbox)) {
@@ -104,23 +147,29 @@ public class Boss4 extends Enemy {
 	        }else{
 	            switch (state){
 	                case IDLE :
-	                    newState(RUNNING);
+	                	if(canSeePlayer(lvlData,player)) {
+	                		newState(RUNNING);
+	                		turnTowardsPlayer(player);
+	                	}
 	                    break;
-
 	                case RUNNING:
-	                    if(canSeePlayer(lvlData,player)) {
-	                        turnTowardsPlayer(player);
 	                        if (isPlayerCloseAttack(player))
 	                            newState(ATTACK);
-	                    }
+	                        if(!canSeePlayer(lvlData,player)) 
+		                		newState(IDLE);
 	                    move(lvlData);
 	                    break;
 	                case ATTACK:
 	                    if(aniIndex==0)
 	                        attackChecked = false;
-
+	                    
 	                    if(aniIndex== 9 &&!attackChecked)
-	                    	checkEnmyHit(attackBox,player);
+	                    	if(attackBox.intersects(player.getHitbox())) {
+	                    		checkEnmyHit(attackBox,player);
+	                    		
+	                    	}else 
+	                    		newState(RUNNING);
+	                    	
 	                    if(aniIndex ==10)
 	                    	player.setJump(false);
 
@@ -138,6 +187,8 @@ public class Boss4 extends Enemy {
 	        }
 
 	    }
+	    
+
 	    
 	    public void drawHealthBar(Graphics g, int xLvlOffset) {
 	        g.setColor(Color.red);

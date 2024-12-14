@@ -69,7 +69,8 @@ public class Playing extends State implements Statemethods {
     
     //kiểm tra xem nhân vật đã đủ gần với boss chưa để hiện dialogue
     private int count  =0;
-
+    
+    private boolean intro;
 
 	private boolean playerDying;
     int[][] lvlData;
@@ -136,11 +137,13 @@ public class Playing extends State implements Statemethods {
         objectManager = new ObjectManager(this);
 
 
-
         player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this);
         player.loadLvlData(levelManager.getCurrentLevel().getLvlData());
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
-
+        
+        
+        if(levelManager.getLevelIndex() == 0 )
+    		intro= true;
         ui = new UI(this);
         pauseOverlay = new PauseOverlay(this); 
         gameOverOverlay = new GameOverOverlay(this);
@@ -157,6 +160,8 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void update() {
+    	
+    	
 
         // Nếu nhân vật chạm đáy màn hình, nhân vật DEAD
         if ((int) (player.getHitBox().y + player.getHitBox().height + 2) >= Game.GAME_HEIGHT) {
@@ -277,7 +282,10 @@ public class Playing extends State implements Statemethods {
 //            player.drawSticks(g,xLvlOffset);
 //            enemyManager.draw(g, xLvlOffset);
 //            objectManager.draw(g, xLvlOffset);
-        } else if (gameOver) {
+        }else if(intro) {
+        	ui.drawIntro();
+        	intro = false;
+        }else if (gameOver) {
 			player.stopStepSound();
             gameOverOverlay.draw(g);
         }
@@ -296,7 +304,7 @@ public class Playing extends State implements Statemethods {
         	objectManager.drawFlyWukong(g, xLvlOffset);
         	if(objectManager.getXPos() >= Game.GAME_WIDTH+ 20 + xLvlOffset) {
         		levelCompletedOverlay.draw(g);
-        		expThatChange = 0;
+//        		expThatChange = 0;
         		player.stopStepSound();
         	}
         	
@@ -361,10 +369,6 @@ public class Playing extends State implements Statemethods {
 
          /*if(player.isCurving())
             curveManager.resetCurve(player);*/
-
-
-
-
 
     }
 
@@ -437,8 +441,7 @@ public class Playing extends State implements Statemethods {
                 case KeyEvent.VK_R:
                     tutorial.setTutorial(!tutorial.isShowTutorial());
                    break;
-                	
-                	
+	
                 case KeyEvent.VK_SPACE:
                     if(player.getCurrentStamina() >= GetStamina(JUMP)){
                         player.setJump(true);
