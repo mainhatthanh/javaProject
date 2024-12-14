@@ -209,6 +209,8 @@ public class EnemyManager {
             
             for (BossFinal bf : bossFinal)
                 if (bf.isActive()) {
+                    if(bf.isAttacking()) 
+                        playing.getGame().getAudioPlayer().playAttackSound();
                     enemyCheck = BOSSFINAL;
                 	bf.updateHealthBar();
                     bf.update(lvlData, player);
@@ -249,10 +251,10 @@ public class EnemyManager {
             if (bf.isActive()) {
                 g.drawImage(bossFinalArr[bf.getState()][bf.getAniIndex()],
                         (int) (bf.getHitBox().x - xLvlOffset - BOSSFINAL_DRAWOFFSET_X + bf.flipX()),
-                        (int) (bf.getHitBox().y - BOSSFINAL_DRAWOFFSET_Y -35),
-                        (int) (BOSSFINAL_WIDTH * bf.flipY() * 2), (int) (BOSSFINAL_HEIGHT*2), null);
-                bf.drawHitbox(g, xLvlOffset);
-                bf.drawAttackBox(g, xLvlOffset);
+                        (int) (bf.getHitBox().y - BOSSFINAL_DRAWOFFSET_Y - bf.getYPos()),
+                        (int) (BOSSFINAL_WIDTH * bf.flipY() * bf.getSize()), (int) (BOSSFINAL_HEIGHT * bf.getSize()) , null);
+//                bf.drawHitbox(g, xLvlOffset);
+//                bf.drawAttackBox(g, xLvlOffset);
                 bf.drawHealthBar(g, xLvlOffset);
             }
         }
@@ -349,7 +351,7 @@ public class EnemyManager {
                         (int) (spi.getHitBox().y - SPIDER_DRAWOFFSET_Y - 100),
                         (int) (SPIDER_WIDTH * spi.flipY() * 3), (int) (SPIDER_HEIGHT * 3), null);
 //            spi.drawAttackHitbox(g, xLvlOffset);
-           spi.drawHitbox(g, xLvlOffset);
+//           spi.drawHitbox(g, xLvlOffset);
             spi.drawHealthBar(g, xLvlOffset);
             }
         }
@@ -548,7 +550,7 @@ public class EnemyManager {
             if (b5.isActive())
                 if (b5.getCurrentHealth() > 0)
                     if (attackBox.intersects(b5.getHitBox())) {
-                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
+                       
                         b5.hurt(player.playerDamage, player);
                         expUp = b5.getExpUpdate();
                         return;
@@ -556,24 +558,18 @@ public class EnemyManager {
         
         for (BossFinal bf : bossFinal)
             if (bf.isActive())
-                if (bf.getCurrentHealth() > 0)
+                if (bf.getCurrentHealth() > 0) 
                     if (attackBox.intersects(bf.getHitBox())) {
+                        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
                         bf.hurt(10, player);
+                        if (bf.getCurrentHealth() <= 0) {
+                            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.DIE);
+                        }
                         expUp = bf.getExpUpdate();
                         return;
                     }
 
     }
-    
-    private void loadEnemyImgsBossFinal() {
-    	bossFinalArr = new BufferedImage[9][8];
-        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSSFINAL_ATLAS);
-        for (int j = 0; j < bossFinalArr.length; j++)
-            for (int i = 0; i < bossFinalArr[j].length; i++)
-            	bossFinalArr[j][i] = temp.getSubimage(i * BOSSFINAL_WIDTH_DEFAULT, j * BOSSFINAL_HEIGHT_DEFAULT,
-                        BOSSFINAL_WIDTH_DEFAULT, BOSSFINAL_HEIGHT_DEFAULT);
-    }
-
 
     public boolean isStickHitEnemy(Rectangle2D.Float stickHitBox ,Player player) {
         for (Crabby c : crabbies)
@@ -742,7 +738,7 @@ public class EnemyManager {
     }
 
     private void loadEnemyImgsBoss2() {
-        boss2Arr = new BufferedImage[5][7];
+        boss2Arr = new BufferedImage[6][7];
         BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSS2_ATLAS);
         for (int j = 0; j < boss2Arr.length; j++)
             for (int i = 0; i < boss2Arr[j].length; i++)
@@ -751,7 +747,7 @@ public class EnemyManager {
     }
 
     private void loadEnemyImgsBoss3() {
-        boss3Arr = new BufferedImage[5][7];
+        boss3Arr = new BufferedImage[6][7];
         BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSS3_ATLAS);
         for (int j = 0; j < boss3Arr.length; j++)
             for (int i = 0; i < boss3Arr[j].length; i++)
@@ -766,6 +762,15 @@ public class EnemyManager {
             for (int i = 0; i < boss4Arr[j].length; i++)
                 boss4Arr[j][i] = temp.getSubimage(i * BOSS4_WIDTH_DEFAULT, j * BOSS4_HEIGHT_DEFAULT,
                         BOSS4_WIDTH_DEFAULT, BOSS4_HEIGHT_DEFAULT);
+    }
+    
+    private void loadEnemyImgsBossFinal() {
+    	bossFinalArr = new BufferedImage[9][8];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.BOSSFINAL_ATLAS);
+        for (int j = 0; j < bossFinalArr.length; j++)
+            for (int i = 0; i < bossFinalArr[j].length; i++)
+            	bossFinalArr[j][i] = temp.getSubimage(i * BOSSFINAL_WIDTH_DEFAULT, j * BOSSFINAL_HEIGHT_DEFAULT,
+                        BOSSFINAL_WIDTH_DEFAULT, BOSSFINAL_HEIGHT_DEFAULT);
     }
 
     private void loadEnemyImgsBoss5() {
@@ -835,7 +840,7 @@ public class EnemyManager {
 	public void drawIDLE(Graphics g, int xLvlOffset) {
 		
 		for (Toro t : toros){
-                g.drawImage(toroArr[5][t.getAniIndex()],
+                g.drawImage(toroArr[IDLE_2][t.getAniIndex()],
                         (int) (t.getHitBox().x - xLvlOffset - TORO_DRAWOFFSET_X + t.flipX()),
                         (int) (t.getHitBox().y - TORO_DRAWOFFSET_Y  ),
                         (int) (TORO_WIDTH * t.flipY() * 1.2), (int) (TORO_HEIGHT * 1.2), null);
@@ -866,7 +871,7 @@ public class EnemyManager {
 		}    
 		
         for (Boss4 b4 : boss4) {
-                g.drawImage(boss4Arr[0][b4.getAniIndex()],
+                g.drawImage(boss4Arr[IDLE][b4.getAniIndex()],
                         (int) (b4.getHitBox().x - xLvlOffset - BOSS4_DRAWOFFSET_X + b4.flipX()),
                         (int) (b4.getHitBox().y - BOSS4_DRAWOFFSET_Y - 100),
                         (int) (BOSS4_WIDTH * b4.flipY()), (int) (BOSS4_HEIGHT), null);
@@ -877,7 +882,7 @@ public class EnemyManager {
         }
         
         for (BossFinal bf : bossFinal) {
-        	 g.drawImage(bossFinalArr[6][bf.getAniIndex()],
+        	 g.drawImage(bossFinalArr[IDLE_2][bf.getAniIndex()],
                      (int) (bf.getHitBox().x - xLvlOffset - BOSSFINAL_DRAWOFFSET_X + bf.flipX()),
                      (int) (bf.getHitBox().y - BOSSFINAL_DRAWOFFSET_Y  - 40),
                      (int) (BOSSFINAL_WIDTH * bf.flipY()*2), (int) (BOSSFINAL_HEIGHT*2), null);

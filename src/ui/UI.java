@@ -3,9 +3,10 @@ package ui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
-
+import java.io.IOException;
+import java.io.InputStream;
 
 import gameState.Playing;
 import main.Game;
@@ -16,7 +17,8 @@ import static utilz.Constants.EnemyConstants.GetNumberMessageBoss;
 public class UI {
 	Playing playing;
 	Font arial_40;
-	Font arial_5;
+	Font vt323;
+	
 	public boolean messageOn = false;
 	public String message;
 	private int counter =0;
@@ -28,14 +30,24 @@ public class UI {
 	public UI(Playing playing) {
 		this.playing = playing ;
 		arial_40 = new Font("Arial", Font.BOLD, 25);
-		arial_5 = new Font("Arial", Font.ITALIC, 15);
 		text1 = new String[10];	
+		
+		
+		try {
+			InputStream is = getClass().getResourceAsStream("/font/VT323.ttf");
+			vt323 = Font.createFont(Font.TRUETYPE_FONT, is);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void showMessage(String text) {
 		message = text;
 		messageOn = true;
 	}
+	
 	
 	//hien thi FPS va phan tang kinh nghiem
 	public void draw(Graphics2D g2) {
@@ -50,7 +62,7 @@ public class UI {
 			g2.setColor(Color.green);
 			g2.drawString(message, Game.GAME_WIDTH/2 - 20, 40);
 			
-			if( counter > 115) {
+			if( counter > 120) {
 				counter =0;
 				messageOn = false;
 			}
@@ -59,7 +71,7 @@ public class UI {
 	
 	public void setText(String[] text, int enemyCheck) {
 		textLength = GetNumberMessageBoss(enemyCheck) ;
-		for(int i=0; i < 3; i++) {
+		for(int i=0; i < textLength; i++) {
 			this.text1[i] = text[i];
 
 		}
@@ -94,13 +106,15 @@ public class UI {
 		
 		//chỉ dẫn người chơi
 		if(textIndex >= textLength-1) {
-			g2.setFont(arial_5);
+			g2.setFont(vt323);
 			g2.setColor(Color.red);
-			g2.drawString(intro2, x + 800, y + 150);
+			g2.setFont(g2.getFont().deriveFont(30F));
+			g2.drawString(intro2, x + 700, y + 150);
 		}else {
-			g2.setFont(arial_5);
+			g2.setFont(vt323);
 			g2.setColor(Color.red);
-			g2.drawString(intro1, x + 800, y + 150);
+			g2.setFont(g2.getFont().deriveFont(30F));
+			g2.drawString(intro1, x + 700, y + 150);
 		}	
 		
 		
@@ -113,12 +127,19 @@ public class UI {
 	}
 	
 	private void drawText(String[] text, int index, Graphics2D g2, int x, int y) {
-		g2.setFont(g2.getFont().deriveFont(25F));
+		g2.setFont(vt323);
+		g2.setFont(g2.getFont().deriveFont(40F));
 		g2.setColor(Color.green);
 		
 		for(String line: text[index].split("\n")) {
-			g2.drawString(line, x + 10, y);
-			y+= 26;
+			g2.drawString(line, x + 20 *Game.SCALE, y);
+			y+= 40;
 		}
+	}
+
+	public void drawIntro() {
+		String intro1 = "Chào mừng bạn đến với BLACK MYTH WUKONG";
+		
+		
 	}
 }
