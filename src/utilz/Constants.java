@@ -418,75 +418,95 @@ public class Constants {
         public static int GetExperience(int enemy_type){
             switch (enemy_type) {
                 case CRABBY:
-                      return 10;
-                  case MINOTAUR:
-                      return 50;
-                  case SHARK:
-                      return 15;
-                  case TORO:
-                      return 35;
-                  default:
-                      return 20;
+                    return 10;
+                case MINOTAUR:
+                    return 55;
+                case SHARK:
+                    return 5;
+                case MONSTER_EYE1:
+                    return 20;
+                case MONSTER2:
+                    return 20;
+                case SPIDER:
+                    return 25;
+                case BOSS1:
+                    return 40;
+                case BOSS5:
+                    return 80;
+                case TORO:  
+                    return 35;
+                case BOSS2:
+                    return 50;
+                case BOSS3:
+                    return 60;
+                case BOSS4:
+                    return 65;
+                case BOSSFINAL:
+                    return 100;
+                default:
+                    return 20;
               }
         }
 
         public static int GetMaxHealth(int enemy_type) {
             switch (enemy_type) {
-              case CRABBY:
-                    return 50;
-                case MINOTAUR:
-                    return 50;
-                case SHARK:
-                    return 50;
-                case TORO: 
-                	return 50;
-                case BOSS1:
-                	return 50;
-                case BOSS2:
-                	return 50;
-                case BOSS3:
-                	return 50;
-                case BOSS4:
-                	return 50;
-                case BOSS5:
-                	return 50;
-                case MONSTER_EYE1:
-                	return 50;
-                case MONSTER2:
-                	return 50;
-                case SPIDER:
-                	return 50;
-                default:
-                    return 50;
-            }
+                    case CRABBY:
+                        return 15;
+                    case MINOTAUR:
+                        return 105;
+                    case SHARK:
+                        return 10;
+                    case MONSTER_EYE1:
+                        return 35;
+                    case MONSTER2:
+                        return 45;
+                    case SPIDER:
+                        return 25;
+                    case BOSS1:
+                        return 80;
+                    case BOSS5:
+                        return 280;
+                    case TORO:  
+                        return 70;
+                    case BOSS2:
+                        return 100;
+                    case BOSS3:
+                        return 150;
+                    case BOSS4:
+                        return 200;
+                    case BOSSFINAL:
+                        return 300;
+                    default:
+                        return 20;
+                  }
         }
 
         public static int GetEnemyDmg(int enemy_type) {
             switch (enemy_type) {
                case CRABBY:
-                   return 2;
+                   return 5;
                 case MINOTAUR:
                    return 20;
                case SHARK:
-              	return 2;
+              	return 5;
                 case TORO:
-               	return 10;
+               	return 15;
                 case BOSS1:
-               	return 2;
+               	return 10;
                 case BOSS2:
-               		return 10;
+               		return 15;
                 case BOSS3:
-                	return 2;
+                	return 15;
                 case BOSS4:
-                	return 2;
+                	return 20;
                 case BOSS5:
-                	return 2;
+                	return 20;
                 case MONSTER_EYE1:
-                	return 2;
-                case SPIDER :
-                	return 2;
-                case BOSSFINAL:
                 	return 10;
+                case SPIDER :
+                	return 5;
+                case BOSSFINAL:
+                	return 25;
                 default:
                 	return 0;
             }
@@ -656,13 +676,13 @@ public class Constants {
         public static int GetStamina(int player_action){
             switch(player_action){
                 case JUMP:
-                    return 5;
+                    return 1;
                 case ATTACK:
                     return 3;
                 case ULTI :
-                    return 20;
+                    return 40;
                 case THROW:
-                    return 25;
+                    return 5;
                 default: 
                     return 0;
             }
@@ -672,9 +692,9 @@ public class Constants {
                 case ATTACK:
                     return 10;
                 case ULTI :
-                    return 40;
+                    return 40   ;
                 case THROW:
-                    return 25;
+                    return 15;
                 default:
                     return 0;
             }
@@ -699,9 +719,12 @@ public class Constants {
         public static boolean NeedToCheckStamina(KeyEvent e){
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_SPACE:
-                case KeyEvent.VK_F:
+                case KeyEvent.VK_A:
+                case KeyEvent.VK_D:
                 case KeyEvent.VK_W:
-                case KeyEvent.VK_G:
+                case KeyEvent.VK_J:
+                case KeyEvent.VK_K:
+                case KeyEvent.VK_L:
                     return true;
                 default: 
                     return false;

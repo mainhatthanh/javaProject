@@ -204,6 +204,7 @@ public class Playing extends State implements Statemethods {
         }
         else if (gameOver) {
             gameOverOverlay.update();
+            player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
         	
         }
         else if(check() && count ==0) {
@@ -382,7 +383,6 @@ public class Playing extends State implements Statemethods {
         textIndex =0;
        // bulletManager.resetBullets();
 
-        objectManager.resetAllObjects();
          /*if(player.isCurving())
             curveManager.resetCurve(player);*/
 
@@ -686,7 +686,7 @@ public class Playing extends State implements Statemethods {
     }
 
     public void restoreStaminaDefault(){
-        player.changeStamina(100);
+        player.changeStamina(5);
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
