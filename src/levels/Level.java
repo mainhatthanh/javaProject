@@ -15,17 +15,7 @@ import entities.Spider;
 import entities.Toro;
 import gameState.Playing;
 import main.Game;
-import objects.FlyWukong;
-import objects.GameContainer;
-import objects.Potion;
-import objects.Scroll;
-import objects.Sword;
-import objects.Trap1;
-import objects.Trap2;
-import objects.ArrowTrap;
-import objects.Cannon;
-import objects.Chest;
-import objects.Flag;
+import objects.*;
 import utilz.HelpMethods;
 
 import java.awt.*;
@@ -49,13 +39,15 @@ public class Level {
     private ArrayList<Chest> chests;
     private ArrayList<Scroll> scrolls;
     private ArrayList<Flag> flags;
-
+    private ArrayList<Banana> bananas;
+    private ArrayList<Peach> peaches;
     //trap
     private ArrayList<Trap1> trap1;
     private ArrayList<Sword> swords;
     private ArrayList<Cannon> cannons;
     private ArrayList<ArrowTrap> arrowTraps;
     private ArrayList<Trap2> trap2;
+    private ArrayList<Explosion> explos;
     
     //cân đẩu vân
     private ArrayList<FlyWukong> flyWukong ;
@@ -95,6 +87,9 @@ public class Level {
      createPotions();
      createChest();
      createScroll();
+     createPeach();
+     createBanana();
+     createExplo();
      
      createTrap1();
      createSword();
@@ -110,8 +105,22 @@ public class Level {
      calcPlayerSpawn();
      calcPlayerMeet();
  }
- 
- 	private void createFlags() {
+
+    private void createBanana() {
+    	bananas = HelpMethods.GetBananas(img);
+	
+}
+
+	private void createExplo() {
+    	explos = HelpMethods.GetExplos(img);
+	
+}
+
+	private void createPeach() {
+        peaches = HelpMethods.GetPeaches(img);
+    }
+
+    private void createFlags() {
  		flags = HelpMethods.GetFlags(img);
 	
 }
@@ -242,6 +251,9 @@ public class Level {
     public ArrayList<Potion> getPotions() 			{ return 	potions;}
     public ArrayList<Flag> getFlag() 				{return 	flags;}
     public ArrayList<Scroll> getScrolls() 			{return 	scrolls; }
+    public ArrayList<Peach> getPeaches()            {return     peaches;}
+    public ArrayList<Banana> getBananas()			{return		bananas;}
+    public ArrayList<Explosion> getExplos()            {return     explos;}
 
 
     public ArrayList<Sword> getSwords()				{return 	swords;}

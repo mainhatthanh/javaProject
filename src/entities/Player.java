@@ -122,6 +122,8 @@ public class Player extends Entity {
         this.state = IDLE;
         this.maxHealth = 100;
         this.currentHealth = maxHealth;
+        this.maxShield = 50;
+        this.currentShield = 0;
         this.maxStamina = 100;
         this.currentStamina = maxStamina;
         this.currentExp = 0;
