@@ -154,8 +154,27 @@ public class Player extends Entity {
     }
 
      void initAttackBox() {
-        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width+100, y , (int) (30 * Game.SCALE), (int) (20 * Game.SCALE));
+        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) (30 * Game.SCALE), (int) (20 * Game.SCALE));
+        resetAttackBox();
+
     }
+
+    private void resetAttackBox() {
+        if (flipW == 1)
+            setAttackBoxOnRightSide();
+        else
+            setAttackBoxOnLeftSide();
+    }
+
+    private void setAttackBoxOnLeftSide() {
+        attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 10);
+    }
+
+    private void setAttackBoxOnRightSide() {
+        attackBox.x = hitbox.x + hitbox.width - (int) (Game.SCALE * 5);
+    }
+
+
     /*private void updateBiggerAttackBox(){
         if (right||(powerAttackActive&&flipW==1))
         attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) ((30+getGiantUp()) * Game.SCALE), (int) (20 * Game.SCALE));
@@ -274,7 +293,7 @@ public class Player extends Entity {
                 tileY = (int) (hitbox.y / Game.TILES_SIZE);
                 if(powerAttackActive){
                     powerAttackTick++;
-                    if(powerAttackTick>=50){
+                    if(powerAttackTick>=35){
                         powerAttackTick=0;
                         powerAttackActive=false;
                     }
@@ -285,6 +304,7 @@ public class Player extends Entity {
 
 
             }
+
 
 
 
@@ -329,8 +349,7 @@ public class Player extends Entity {
             if(powerAttackActive)
                 attackChecked=false;
     
-            /*if(curveAttackActive)
-                attackChecked=false;*/
+
     
             playing.checkEnemyHit(attackBox);
             playing.getGame().getAudioPlayer().playAttackSound();
@@ -344,17 +363,23 @@ public class Player extends Entity {
                 playing.getGame().getAudioPlayer().playAttackSound();
             }
         }
+
     }
 
     private void updateAttackBox() {
-        if (right||(powerAttackActive&&flipW==1)) {
-            attackBox.x = hitbox.x + hitbox.width + (int) (Game.SCALE * 8);
+        if (right && left) {
+            if (flipW == 1) {
+                setAttackBoxOnRightSide();
+            } else {
+                setAttackBoxOnLeftSide();
+            }
 
-        } else if (left||(powerAttackActive&&flipW==-1)) {
-            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 20);
-        }
+        } else if (right || (powerAttackActive && flipW == 1))
+            setAttackBoxOnRightSide();
+        else if (left || (powerAttackActive && flipW == -1))
+            setAttackBoxOnLeftSide();
 
-        attackBox.y = hitbox.y + (int) (Game.SCALE * 10);
+        attackBox.y = hitbox.y + (Game.SCALE * 10);
 
     }
 
@@ -391,7 +416,7 @@ public class Player extends Entity {
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
         drawUI(g);
-        // drawAttackHitbox(g, xlvlOffset);
+         drawAttackHitbox(g, xlvlOffset);
          //drawHitbox(g, xlvlOffset);
     	
     }
@@ -460,8 +485,6 @@ public class Player extends Entity {
      if(powerAttackActive){
          if((!left&&!right)||(left&&right)){
              if(flipW==-1){
-
-             
                  xSpeed=-walkSpeed;
              }
              else
@@ -759,6 +782,7 @@ public class Player extends Entity {
         inAir = false;
         attacking = false;
         ultiSkill = false;
+        powerAttackActive=false;
         for(Stick st:sticks){
             if(st.isActive()){
                 st.setActive(false);
