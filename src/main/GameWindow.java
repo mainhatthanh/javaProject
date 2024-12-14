@@ -17,6 +17,8 @@ public class GameWindow  {
         jframe.add(gamePanel);
         jframe.setResizable(false);
         jframe.pack();
+        
+        jframe.setTitle("Black Myth Wukong");
         jframe.setLocationRelativeTo(null);
         jframe.setVisible(true);
         jframe.addWindowFocusListener(new WindowFocusListener() {
