@@ -162,14 +162,23 @@ public class ObjectManager {
 		if (go.getObjType() == RED_POTION) 
 			playing.getPlayer().changeHealth(RED_POTION_VALUE);
 
-		if (go.getObjType() == EXPLOSION)
-			playing.getPlayer().kill(EXPLOSION_VALUE);
-		if (go.getObjType() == BLUE_POTION)
+
+		if (go.getObjType() == BLUE_POTION) {
 			playing.getPlayer().changeStamina(BLUE_POTION_VALUE);
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HEAL_MANA);
+		}
+
+		if (go.getObjType() == EXPLOSION) {
+			playing.getPlayer().kill(EXPLOSION_VALUE);
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.SWORD);
+		}
 		if (go.getObjType() == PEACH)
 			playing.getPlayer().changeExp(PEACH_VALUE);
-		if (go.getObjType() == SWORD) 
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HEAL_MANA);
+		if (go.getObjType() == SWORD) {
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.SWORD);
 			playing.getPlayer().setPlayerDamage(playing.getPlayer().getPlayerDamage() + SWORD_VALUE);
+		}
 
 	}
 

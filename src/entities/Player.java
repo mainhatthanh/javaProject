@@ -136,6 +136,7 @@ public class Player extends Entity {
         this.walkSpeed = Game.SCALE * 1.0f;
 
 
+
         // this.playerDamage = 10;
         this.levelUp=false;
         loadAnimations();
@@ -153,9 +154,7 @@ public class Player extends Entity {
     }
 
      void initAttackBox() {
-
-        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) (30 * Game.SCALE), (int) (20 * Game.SCALE));
-
+        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width+100, y , (int) (30 * Game.SCALE), (int) (20 * Game.SCALE));
     }
     /*private void updateBiggerAttackBox(){
         if (right||(powerAttackActive&&flipW==1))
@@ -187,6 +186,7 @@ public class Player extends Entity {
         updateHealthBar();
         updateStaminaBar();
         playerUpdateLevel(levelUp);
+
         //updateIsShowLvlUp(isShowLevelUp);
         //System.out.println(maxHealth + " " + maxStamina + " "+ playerDamage);
 
@@ -352,7 +352,6 @@ public class Player extends Entity {
 
         } else if (left||(powerAttackActive&&flipW==-1)) {
             attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 20);
-
         }
 
         attackBox.y = hitbox.y + (int) (Game.SCALE * 10);
@@ -393,7 +392,7 @@ public class Player extends Entity {
 
         drawUI(g);
          drawAttackHitbox(g, xlvlOffset);
-         drawHitbox(g, xlvlOffset);
+         //drawHitbox(g, xlvlOffset);
     	
     }
     
