@@ -392,8 +392,8 @@ public class Player extends Entity {
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
         drawUI(g);
-         drawAttackHitbox(g, xlvlOffset);
-         drawHitbox(g, xlvlOffset);
+        //  drawAttackHitbox(g, xlvlOffset);
+        //  drawHitbox(g, xlvlOffset);
     	
     }
     
@@ -839,9 +839,9 @@ public class Player extends Entity {
     public void powerAttack() {
         if(powerAttackActive)
             return;
-        if(currentStamina>=40){
+        if(currentStamina>=60){
             powerAttackActive=true;
-            changeStamina(-40);
+            changeStamina(-60);
         }
     }
 
