@@ -18,6 +18,8 @@ public abstract class Entity {
     protected boolean inAir = false;
     protected int maxHealth;
     protected int currentHealth;
+    protected int maxShield;
+    protected int currentShield;
     protected int maxStamina;
     protected int currentStamina;
     protected int maxExp;

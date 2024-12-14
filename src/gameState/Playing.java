@@ -90,6 +90,7 @@ public class Playing extends State implements Statemethods {
 
     public Playing(Game game) {
         super(game);
+
         initClasses();
 
         if ((getLevelManager().getLevelIndex()) == 0) {
@@ -325,6 +326,7 @@ public class Playing extends State implements Statemethods {
             player.stopStepSound();
         }
         else if(plot.isShowPlot()){
+
             plot.draw(g,levelManager.getLevelIndex());
             player.stopStepSound();
         }

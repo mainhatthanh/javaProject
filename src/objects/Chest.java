@@ -8,7 +8,7 @@ public class Chest extends GameObjects {
 		initHitbox(32, 32);
 		xDrawOffset = (int) (2*Game.SCALE);
 		yDrawOffset = (int) (4*Game.SCALE);
-		hitbox.y += yDrawOffset + (int) (Game.SCALE * 8) ;
+		hitbox.y += yDrawOffset + (int) (Game.SCALE * 30) ;
         
 	}
 	
