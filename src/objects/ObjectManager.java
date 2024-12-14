@@ -113,7 +113,7 @@ public class ObjectManager {
 					playing.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
 					playing.getPlot().setPlot(true);
 					s.setActive(false);
-					applyEffectToPlayer(s);
+					//applyEffectToPlayer(s);
 				}
 			}
 		}

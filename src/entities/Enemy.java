@@ -52,6 +52,9 @@ public abstract class Enemy extends Entity {
         attackBox.y = hitbox.y;
     }
 
+
+
+
     protected void updateAttackBoxFlip() {
         if (walkDir == RIGHT)
             attackBox.x = hitbox.x + hitbox.width;
