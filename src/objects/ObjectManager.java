@@ -67,18 +67,20 @@ public class ObjectManager {
     			p.kill(TRAP1_VALUE);
     		
     }
-	public void checkScrollTouched(Player player) {
+	/*public void checkScrollTouched(Player player) {
 		for(Scroll sc : scrolls)
 			if(sc.isActive())
 			if(sc.getHitbox().intersects(player.getHitBox())) {
+				System.out.println("cham");
 				playing.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
-				sc.setActive(false);
 				playing.getPlot().setPlot(true);
+				sc.setActive(false);
+
 			}
 
-	}
+	}*/
 
-	public void checkSwordtouched(Player player) {
+	/*public void checkSwordtouched(Player player) {
 		for(Sword sw : swords)
 			if(sw.isActive())
 				if(sw.getHitbox().intersects(player.getHitBox())) {
@@ -87,7 +89,7 @@ public class ObjectManager {
 					sw.setActive(false);
 				}
 
-	}
+	}*/
 
 
 	public ArrayList<Scroll> getScrolls() {
@@ -108,6 +110,8 @@ public class ObjectManager {
 		for (Scroll s : scrolls) {
 			if (s.isActive()) {
 				if (hitbox.intersects(s.getHitbox())) {
+					playing.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
+					playing.getPlot().setPlot(true);
 					s.setActive(false);
 					applyEffectToPlayer(s);
 				}
@@ -338,8 +342,8 @@ public class ObjectManager {
         
         updateCannons(lvlData, player);
         updateProjectiles(lvlData, player);
-	    checkScrollTouched(player);
-		checkSwordtouched(player);
+
+		//checkSwordtouched(player);
 
         
         for (Flag f : flags) {

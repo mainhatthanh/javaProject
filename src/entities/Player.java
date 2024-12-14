@@ -117,9 +117,9 @@ public class Player extends Entity {
     private boolean isStepSoundPlaying = false;
 
     //Chi so to len
-    private int giantUp=0;
+    /*private int giantUp=0;
     private int firstWidth=width;
-    private int firstHeight=height;
+    private int firstHeight=height;*/
     
     public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, width, height);
@@ -152,36 +152,36 @@ public class Player extends Entity {
         hitbox.y = y ;
     }
 
-    private void initAttackBox() {
+     void initAttackBox() {
 
         attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) (30 * Game.SCALE), (int) (20 * Game.SCALE));
 
     }
-    private void updateBiggerAttackBox(){
+    /*private void updateBiggerAttackBox(){
         if (right||(powerAttackActive&&flipW==1))
         attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) ((30+getGiantUp()) * Game.SCALE), (int) (20 * Game.SCALE));
 
         else if (left||(powerAttackActive&&flipW==-1))
             attackBox = new Rectangle2D.Float(hitbox.x - hitbox.width, y , (int) ((30+getGiantUp()) * Game.SCALE), (int) (20 * Game.SCALE));
-    }
+    }*/
 
   /*  private void updateBiggerHitBox(){
         hitbox = new Rectangle2D.Float(x, y, (int) (width * Game.SCALE), (int) (height * Game.SCALE));
     }*/
 
-    private void updateBiggerPlayer(){
+   /* private void updateBiggerPlayer(){
         this.width=firstWidth+getGiantUp();
         this.height=firstHeight+getGiantUp();
 
-    }
+    }*/
 
-    public void setGiantUp(int x){
+    /*public void setGiantUp(int x){
         giantUp+=x;
     }
 
     public int getGiantUp(){
         return giantUp;
-    }
+    }*/
 
     public void update() {
         updateHealthBar();
@@ -256,9 +256,9 @@ public class Player extends Entity {
 
             updateExpBar();
 
-         updateBiggerPlayer();
+         //updateBiggerPlayer();
          //updateBiggerHitBox();
-        updateBiggerAttackBox();
+        //updateBiggerAttackBox();
         updateAttackBox();
         updateStick(lvlData);
         updatePlayerShoot(this);
@@ -351,7 +351,7 @@ public class Player extends Entity {
             attackBox.x = hitbox.x + hitbox.width + (int) (Game.SCALE * 8);
 
         } else if (left||(powerAttackActive&&flipW==-1)) {
-            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 20)-(int)(getGiantUp()*1.5);
+            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 20);
 
         }
 

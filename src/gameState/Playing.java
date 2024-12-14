@@ -326,6 +326,7 @@ public class Playing extends State implements Statemethods {
             player.stopStepSound();
         }
         else if(plot.isShowPlot()){
+
             plot.draw(g,levelManager.getLevelIndex());
             player.stopStepSound();
         }
