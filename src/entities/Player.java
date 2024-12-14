@@ -754,7 +754,11 @@ public class Player extends Entity {
         inAir = false;
         attacking = false;
         ultiSkill = false;
-        sticking=false;
+        for(Stick st:sticks){
+            if(st.isActive()){
+                st.setActive(false);
+            }
+        }
         moving = false;
         state = IDLE;
         currentHealth = maxHealth;
