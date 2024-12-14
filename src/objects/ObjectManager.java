@@ -168,7 +168,7 @@ public class ObjectManager {
 		}
 		if (go.getObjType() == EXPLOSION) {
 			playing.getPlayer().kill(EXPLOSION_VALUE);
-			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.SWORD);
+			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.EXPLOSION);
 		}
 		if (go.getObjType() == PEACH)
 			playing.getPlayer().changeExp(PEACH_VALUE);
