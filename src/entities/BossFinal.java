@@ -1,16 +1,9 @@
 package entities;
 
+
 import static utilz.Constants.ANI_SPEED;
-import static utilz.Constants.Directions.RIGHT;
-import static utilz.Constants.EnemyConstants.ATTACK;
-import static utilz.Constants.EnemyConstants.BOSSFINAL;
-import static utilz.Constants.EnemyConstants.BOSSFINAL_HEIGHT;
-import static utilz.Constants.EnemyConstants.BOSSFINAL_WIDTH;
-import static utilz.Constants.EnemyConstants.DEAD;
-import static utilz.Constants.EnemyConstants.GetSpriteAmount;
-import static utilz.Constants.EnemyConstants.HIT;
-import static utilz.Constants.EnemyConstants.IDLE;
-import static utilz.Constants.EnemyConstants.RUNNING;
+import static utilz.Constants.Directions.*;
+import static utilz.Constants.EnemyConstants.*;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,7 +13,12 @@ import main.Game;
 
 public class BossFinal extends Enemy {
 	
-		private int attackBoxOffsetX;
+
+		private boolean recovery = true;
+	
+		private boolean change = true;
+		private boolean isAttacking;
+
 
 	    public BossFinal(float x, float y) {
 	        super(x, y, BOSSFINAL_WIDTH, BOSSFINAL_HEIGHT, BOSSFINAL);
@@ -41,30 +39,15 @@ public class BossFinal extends Enemy {
 	        updateAnimationTick();
 	        updateAttackBoxFlip();
 	        updateHealthBar();
+	        
+	        getCrazy(20, 0.45f);
 
 	    }
 	    
-	    protected void updateAnimationTick() {
-	        aniTick++;
-	        if (aniTick >= ANI_SPEED) {
-	            aniTick = 0;
-	            aniIndex++;
-	            
-	            if (aniIndex >= GetSpriteAmount(enemyType, state)) {
-	                aniIndex = 0;
-	                switch (state) {
-	                    case ATTACK, HIT -> state = IDLE;
-	                    case DEAD -> active = false;
-	                }
-
-	            }
-
-	        }
-	    }
 	    
 	    public void updateAnimaIDLE() {
 	        aniTick++;
-	        if (aniTick >= 40) {
+	        if (aniTick >= 30) {
 	            aniTick = 0;
 	            aniIndex++;
 	            if (aniIndex >=  4)
@@ -96,23 +79,66 @@ public class BossFinal extends Enemy {
 	        }else{
 	            switch (state){
 	                case IDLE :
-	                    newState(RUNNING);
+	                	if(canSeePlayer(lvlData,player)) {
+	                		newState(RUNNING);
+	                		turnTowardsPlayer(player);
+	                	}
+	                		
 	                    break;
-
-	                case RUNNING:
-	                    if(canSeePlayer(lvlData,player)) {
-	                        turnTowardsPlayer(player);
-	                        if (isPlayerCloseAttack(player))
-	                            newState(ATTACK);
+	                case IDLE_2 :
+	                	if(canSeePlayer(lvlData,player)) {
+	                		newState(RUNNING);
+	                		turnTowardsPlayer(player);
+	                	}        		
+	                    break;
+	                case RUNNING:    	
+	                    if (isPlayerCloseAttack(player)) {
+	                        	if(change)
+	                        		newState(ATTACK);
+	                        	else
+	                        		newState(ATTACK2);
+	                        	change = !change;  
 	                    }
+	                    
+	                    if(!canSeePlayer(lvlData,player)) 
+	                		newState(IDLE_2);
+	                		 
 	                    move(lvlData);
 	                    break;
 	                case ATTACK:
 	                    if(aniIndex==0)
 	                        attackChecked = false;
-
+	                    
 	                    if(aniIndex== 1 &&!attackChecked)
+	                    	if(attackBox.intersects(player.getHitbox())) {
+	                    		checkEnmyHit(attackBox,player);
+	                    		setAttacking(true);
+	                    		
+	                    	}else 
+	                    		newState(RUNNING);
+	                    if (aniIndex == 2) 
+							setAttacking(false);
+	                    break;
+	                    
+	                case ATTACK2:
+	                	if(aniIndex==0)
+	                        attackChecked = false;
+
+	                    if( aniIndex == 4 &&!attackChecked)
+	                    	//nhân vật trong tầm chiêu mới đánh
+	                    	if(attackBox.intersects(player.getHitbox())) {
+	                    		checkEnmyHit(attackBox,player);
+	                    		
+	                    	}else 
+	                    		newState(RUNNING);
+
+	                    if(aniIndex== 1 &&!attackChecked) {
 	                        checkEnmyHit(attackBox,player);
+							setAttacking(true);
+						}
+						if (aniIndex == 2) 
+							setAttacking(false);
+						
 	                    break;
 	                case HIT:
 	                    break;
@@ -121,23 +147,55 @@ public class BossFinal extends Enemy {
 	        }
 
 	    }
+	    
+	    
+	    protected void getCrazy(int speedUp, float walkUp) {
+	    	if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
+	    		hitbox.width = 35*Game.SCALE;
+	    		attackBox.width = 45 *Game.SCALE;
+	    		attackBoxOffsetX = (int)(45 * Game.SCALE);
+	    		this.lowHealth = true;
+	        	this.speed = speedUp;
+	        	this.walkSpeed = walkUp * Game.SCALE;
+	        	if(recovery) {
+	        		this.currentHealth = GetMaxHealth(BOSSFINAL);
+	        		recovery = false;
+	        	}
+
+	    	}
+	    }
 
 		public void drawHealthBar(Graphics g, int xLvlOffset) {
 	        g.setColor(Color.red);
 	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
-	                (int) (hitbox.y + hitbox.height - attackBox.height - 25 * Game.SCALE), enemyHealthWidth,
+	                (int) (hitbox.y + hitbox.height - attackBox.height - flipflipp()), enemyHealthWidth,
 	                enemyHealthBarHeight);
 	        g.setColor(Color.WHITE);
 	        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 + enemyHealthWidth - xLvlOffset + this.flipHealth()),
-	                (int) (hitbox.y + hitbox.height - attackBox.height - 25 * Game.SCALE),
+	                (int) (hitbox.y + hitbox.height - attackBox.height - flipflipp()),
 	                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
 		}
 		private int flipHealth() {
-	    	if(walkDir == RIGHT)
-	    		return -5;
-	    	else
-	    		return 2;
+			if(lowHealth) {
+		    	if(walkDir == RIGHT)
+		    		return (int)(-30* Game.SCALE);
+		    	else
+		    		return (int)(30* Game.SCALE);
+			}else {
+				if(walkDir == RIGHT)
+		    		return -5;
+		    	else
+		    		return 2;
+			}
 	    }
+		
+		private int flipflipp() {
+			if(lowHealth) {
+		    	return (int)(40 * Game.SCALE);
+			}else {
+				return (int)(25* Game.SCALE);
+			}
+		}
 
 
 	    public void drawAttackBox(Graphics g,int xLvlOffset){
@@ -146,10 +204,18 @@ public class BossFinal extends Enemy {
 
 	    }
 	    public int flipX(){
-	        if(walkDir==RIGHT)
-	            return -10;
-	        else
-	            return  width + 69  ;
+	    	if(lowHealth) {
+		    	if(walkDir == RIGHT)
+		    		return (int)(-50*Game.SCALE);
+		    	else
+		    		return (int)(160*Game.SCALE);
+			}else {
+				if(walkDir==RIGHT)
+		            return -10;
+		        else
+		            return  width + 69  ;
+			}
+	        
 	    }
 	    public int flipY(){
 	          if(walkDir==RIGHT)
@@ -158,7 +224,62 @@ public class BossFinal extends Enemy {
 	              return -1;
 	          }
 	    }
+	    
+	    public int getSize() {
+	    	if(lowHealth)
+	    		return 3;
+	    	else
+	    		return 2;
+	    
+	    }
+	    
+	    public int getYPos() {
+	    	if(lowHealth)
+	    		return 100;
+	    	else if(state != DEAD)
+	    		return 35;
+	    	
+	    	else
+	    		return 25;
+	    }
+	    
+	    public void resetEnemy() {
+	        hitbox.x = x;
+	        hitbox.y = y;
+	        firstUpdate = true;
+	        currentHealth = maxHealth;
+	        newState(IDLE);
+	        active = true;
+	        airSpeed = 0;
+	        
+	        lowHealth = false;
+	        speed = ANI_SPEED;
+	        dmg = GetEnemyDmg(enemyType);
+	        recovery = true;
+	    }
+	    
+	    public void checkEnmyHit(Rectangle2D.Float attackBox, Player player) {
+	        if (attackBox.intersects(player.hitbox)) {
+	        	if(enemyType == TORO || enemyType == BOSS2||enemyType == BOSS3||enemyType == BOSS4||enemyType == BOSSFINAL)
+	        		if(lowHealth)
+	        			dmg = (int)(1.35 * dmg);
+	        	player.changeHealth(-dmg);
+	            attackChecked = true;
+
+	        }
+	        
+	    }
+
+		public boolean isAttacking() {
+			return isAttacking;
+		}
+		
+		public void setAttacking(boolean isAttacking) {
+			this.isAttacking = isAttacking;
+		}
+
 	}
+	
 
 
 

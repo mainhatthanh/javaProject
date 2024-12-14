@@ -66,7 +66,7 @@ public class Constants {
         public static final int BARREL = 2;
         public static final int BOX = 3;
 
-        public static final int FLYWUKONG = 4;
+        public static final int FLYWUKONG = 15;
 
         public static final int TRAP1 = 4;
         public static final int CHEST = 5;
@@ -79,17 +79,31 @@ public class Constants {
         public static final int TRAP2_RIGHT = 12;
         public static final int PEACH = 13;
         public static final int FLAG = 14;
+        public static final int EXPLOSION = 15;
+        public static final int BANANA = 16;
 
 
         public static final int RED_POTION_VALUE = 15;
         public static final int BLUE_POTION_VALUE = 100;
         public static final int TRAP1_VALUE = 20;
         public static final int SWORD_VALUE = 20;
+        public static final int PEACH_VALUE = 100;
+        public static final int EXPLOSION_VALUE = 30;
+        
+        public static final int EXPLOSION_WIDTH_DEFAULT = 64;
+        public static final int EXPLOSION_HEIGHT_DEFAULT = 64;
+        public static final int EXPLOSION_WIDTH = (int) (EXPLOSION_WIDTH_DEFAULT * Game.SCALE);
+        public static final int EXPLOSION_HEIGHT = (int) (EXPLOSION_HEIGHT_DEFAULT * Game.SCALE);
         
         public static final int PEACH_WIDTH_DEFAULT = 15;
         public static final int PEACH_HEIGHT_DEFAULT = 15;
         public static final int PEACH_WIDTH = (int) (PEACH_WIDTH_DEFAULT * Game.SCALE);
         public static final int PEACH_HEIGHT = (int) (PEACH_HEIGHT_DEFAULT * Game.SCALE);
+        
+        public static final int BANANA_WIDTH_DEFAULT = 15;
+        public static final int BANANA_HEIGHT_DEFAULT = 15;
+        public static final int BANANA_WIDTH = (int) (BANANA_WIDTH_DEFAULT * Game.SCALE);
+        public static final int BANANA_HEIGHT = (int) (BANANA_HEIGHT_DEFAULT * Game.SCALE);
         
         public static final int FLAG_WIDTH_DEFAULT = 35;
         public static final int FLAG_HEIGHT_DEFAULT = 35;
@@ -143,6 +157,8 @@ public class Constants {
 
         public static int getSpriteAmount(int objType) {
             switch (objType) {
+            	case EXPLOSION:
+            		return 12;
             	case TRAP2_LEFT, TRAP2_RIGHT:
             		return 10;
             	case ARROW_TRAP:
@@ -182,8 +198,8 @@ public class Constants {
         public static final int ATTACK = 2;
         public static final int HIT = 3;
         public static final int DEAD = 4;
-        public static final int IDLE_2 = 5;
-        public static final int ATTACK2 = 6;
+        public static final int ATTACK2 = 5;
+        public static final int IDLE_2 = 6;
         
         
         
@@ -358,12 +374,18 @@ public class Constants {
                 case IDLE_2:
                 	if(enemy_type ==TORO)
                 		return 6;
+                	else if(enemy_type == BOSSFINAL)
+                		return 4;
                 	return 0;
                 	
                 	
                 case ATTACK2:
-                if(enemy_type == TORO)
+                if(enemy_type == TORO || enemy_type == BOSS3)
                 	return 4;
+                else if(enemy_type == BOSS2)
+                	return 6;
+                else if(enemy_type == BOSSFINAL)
+                	return 8;
                 return 0;
             }
 
@@ -429,8 +451,8 @@ public class Constants {
                	return 10;
                 case BOSS1:
                	return 2;
-               case BOSS2:
-               	return 2;
+                case BOSS2:
+               		return 10;
                 case BOSS3:
                 	return 2;
                 case BOSS4:
@@ -441,6 +463,8 @@ public class Constants {
                 	return 2;
                 case SPIDER :
                 	return 2;
+                case BOSSFINAL:
+                	return 10;
                 default:
                 	return 0;
             }

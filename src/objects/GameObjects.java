@@ -28,9 +28,11 @@ public class GameObjects {
             aniTick =0;
             aniIndex++;
             if(aniIndex>=getSpriteAmount(objType)){
-            	if (objType != CHEST)
-            		aniIndex = 0;
-            	else aniIndex = 2;
+            	aniIndex = 0;
+            	if (objType == EXPLOSION)
+            		aniIndex = 11;
+            	if (objType == CHEST)
+            		aniIndex = 2;
                 if (objType == BARREL || objType == BOX || objType == TRAP1 || objType == CHEST ) {
                     doAnimation = false;
                     active = false;

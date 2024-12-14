@@ -30,8 +30,8 @@ public class ObjectManager {
 
     Playing playing;
     
-    private BufferedImage trap1Img, scrollImg, swordImg, cannonBallImg, arrowImg;
-    private BufferedImage[] chestImgs, cannonImgs, arrowTrapImgs, trap2Imgs, flagImgs;
+    private BufferedImage trap1Img, scrollImg, swordImg, cannonBallImg, arrowImg, peachImg, bananaImg;
+    private BufferedImage[] chestImgs, cannonImgs, arrowTrapImgs, trap2Imgs, flagImgs, exploImgs;
     private BufferedImage[][] potionImgs, containerImgs, flyImgs;
 
     
@@ -40,7 +40,9 @@ public class ObjectManager {
     private ArrayList<Flag> flags;
     private ArrayList<Chest> chests;
     private ArrayList<Scroll> scrolls;
-    
+	private ArrayList<Peach> peaches;
+	private ArrayList<Explosion> explos;
+    private ArrayList<Banana> bananas;
     private ArrayList<Trap1> trap1;
     private ArrayList<Sword> swords;
     private ArrayList<Cannon> cannons;
@@ -95,6 +97,7 @@ public class ObjectManager {
 
     
     public void checkObjectTouched(Rectangle2D.Float hitbox) {
+    	boolean touchObj = false;
 		for (Potion p : potions)
 			if (p.isActive()) {
 				if (hitbox.intersects(p.getHitbox())) {
@@ -120,14 +123,48 @@ public class ObjectManager {
 				}
 			}
 		}
+		for (Peach p : peaches)
+			if (p.isActive()) {
+				if (hitbox.intersects(p.getHitbox())) {
+					p.setActive(false);
+					applyEffectToPlayer(p);
+				}
+			}
+		for (Banana b : bananas)
+			if (b.isActive()) {
+				if (hitbox.intersects(b.getHitbox())) {
+					b.setActive(false);
+					applyEffectToPlayer(b);
+				}
+			}
+		for (Sword s : swords)
+			if (s.isActive()) {
+				if (hitbox.intersects(s.getHitbox())) {
+					s.setActive(false);
+					applyEffectToPlayer(s);
+				}
+			}
+		for (Explosion e : explos)
+			if (e.isActive()) {
+				if (hitbox.intersects(e.getHitbox())) {
+					
+					applyEffectToPlayer(e);
+					if (e.getAniIndex() == 11) e.setActive(false);
+			}
 		
 	}
-    
+    }
     public void applyEffectToPlayer(GameObjects go) {
 		if (go.getObjType() == RED_POTION)
 			playing.getPlayer().changeHealth(RED_POTION_VALUE);
+		if (go.getObjType() == EXPLOSION)
+			playing.getPlayer().kill(EXPLOSION_VALUE);
 		if (go.getObjType() == BLUE_POTION)
 			playing.getPlayer().changeStamina(BLUE_POTION_VALUE);
+		if (go.getObjType() == PEACH)
+			playing.getPlayer().changeExp(PEACH_VALUE);
+		if (go.getObjType() == SWORD) 
+			playing.getPlayer().setPlayerDamage(playing.getPlayer().getPlayerDamage() + SWORD_VALUE);
 	}
 
 	public void checkObjectHit(Rectangle2D.Float attackbox) {
@@ -150,15 +187,16 @@ public class ObjectManager {
 			if (c.isActive()){
 				if (hitbox.intersects(c.getHitbox())) {
 					c.setAnimation(true);
-					int type = (int) (Math.random() * 10);
-					if ((type % 2) == 0) {
-						type = 1;
-						potions.add(new Potion((int) (c.getHitbox().x + c.getHitbox().width / 2), (int) (c.getHitbox().y - c.getHitbox().height / 2), type));
-					}
-					else swords.add(new Sword((int) (c.getHitbox().x + c.getHitbox().width / 2), (int) (c.getHitbox().y - c.getHitbox().height / 2), 7));
-				}
+					int type = (int) (Math.random() * 20);
+					if (type <= 5)
+						explos.add(new Explosion((int) (c.getHitbox().x - 12*Game.SCALE ), (int) (c.getHitbox().y - 16*Game.SCALE  ), 15));
+					if ((type > 5) && (type <=13))
+						peaches.add(new Peach((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 13));
+					if (type > 13)
+						swords.add(new Sword((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 7));
 			}
 		}
+	}
 
 
 
@@ -178,6 +216,9 @@ public class ObjectManager {
         cannons = new ArrayList<>(newLevel.getCannons());
         arrowTraps = new ArrayList<>(newLevel.getArrowTraps());
         trap2 = new ArrayList<>(newLevel.getTrap2());
+		peaches = new ArrayList<>(newLevel.getPeaches());
+		explos = new ArrayList<>(newLevel.getExplos());
+		bananas = new ArrayList<>(newLevel.getBananas());
 
         projectiles.clear();
         arrows.clear();
@@ -214,6 +255,14 @@ public class ObjectManager {
 		for (int i = 0; i < cannonImgs.length; i++)
 			cannonImgs[i] = cannonSprite.getSubimage(i * 40, 0, 40, 26);
 		
+		exploImgs = new BufferedImage[12];
+		BufferedImage exploSprite = LoadSave.GetSpriteAtlas(LoadSave.EXPLO_ATLAS);
+
+		for (int i = 0; i < exploImgs.length; i++) {
+			if (i == 0)
+				exploImgs[i] = exploSprite.getSubimage(i * 40, 0, 40, 26);
+			else exploImgs[i] = exploSprite.getSubimage((i + 6) * 48, 0, 48, 48);
+		}
 		flagImgs = new BufferedImage[5];
 		BufferedImage flagSprite = LoadSave.GetSpriteAtlas(LoadSave.FLAG_ATLAS);
 
@@ -240,6 +289,9 @@ public class ObjectManager {
         }
         
         swordImg = LoadSave.GetSpriteAtlas(LoadSave.SWORD_ATLAS);
+
+		peachImg = LoadSave.GetSpriteAtlas(LoadSave.PEACH_ATLAS);
+		bananaImg = LoadSave.GetSpriteAtlas(LoadSave.BANANA_ATLAS);
         
         scrollImg = LoadSave.GetSpriteAtlas(LoadSave.SCROLL_ATLAS);
         
@@ -258,6 +310,23 @@ public class ObjectManager {
                 p.update();
             }
         }
+        
+        for (Explosion e : explos) {
+        	if (e.active) {
+        		e.update();
+        	}
+        }
+        for (Banana b : bananas) {
+        	if(b.active) {
+        		b.update();
+        	}
+        }
+
+		for (Peach p : peaches) {
+			if (p.active) {
+				p.update();
+			}
+		}
         for (GameContainer gc : containers) {
             if (gc.active){
                 gc.update();
@@ -451,10 +520,38 @@ public class ObjectManager {
         drawArrow(g, xLvlOffset);
         drawTrap2(g, xLvlOffset);
         drawFlag(g, xLvlOffset);
+		drawPeach(g, xLvlOffset);
+		drawBanana(g, xLvlOffset);
+		drawExplo(g, xLvlOffset);
         drawProjectiles(g, xLvlOffset);
     }
-    
-    private void drawFlag(Graphics g, int xLvlOffset) {
+
+	private void drawBanana(Graphics g, int xLvlOffset) {
+		for (Banana b : bananas) {
+			if (b.isActive()) {
+				g.drawImage(bananaImg,
+						(int) (b.getHitbox().x - xLvlOffset),
+						(int) (b.getHitbox().y - b.getyDrawOffset()),
+						BANANA_WIDTH,
+						BANANA_HEIGHT, null);
+			}
+		
+	}
+	}
+	private void drawPeach(Graphics g, int xLvlOffset) {
+		for (Peach p : peaches) {
+			if (p.isActive()) {
+				g.drawImage(peachImg,
+						(int) (p.getHitbox().x - xLvlOffset),
+						(int) (p.getHitbox().y - p.getyDrawOffset()),
+						PEACH_WIDTH,
+						PEACH_HEIGHT, null);
+			}
+
+		}
+	}
+
+	private void drawFlag(Graphics g, int xLvlOffset) {
     	for (Flag f : flags) {
     		if (f.isActive()) {
 			g.drawImage(flagImgs[f.getAniIndex()],
@@ -462,7 +559,6 @@ public class ObjectManager {
 					    (int) (f.getHitbox().y - f.getyDrawOffset()),
 						FLAG_WIDTH,
 						FLAG_HEIGHT, null);
-			f.drawHitbox(g, xLvlOffset);
     		}
 		
     	}
@@ -479,7 +575,6 @@ public class ObjectManager {
 			}
 
 			g.drawImage(trap2Imgs[t2.getAniIndex()], x, (int) (t2.getHitbox().y), width, TRAP2_HEIGHT, null);
-			t2.drawHitbox(g, xLvlOffset);
 		}
 	}
 
@@ -521,7 +616,15 @@ public class ObjectManager {
 			}
 
 			g.drawImage(cannonImgs[c.getAniIndex()], x, (int) (c.getHitbox().y), width, CANNON_HEIGHT, null);
-			c.drawHitbox(g, xLvlOffset);
+		}
+
+	}
+    
+    private void drawExplo(Graphics g, int xLvlOffset) {
+		for (Explosion e : explos) {
+			
+
+			g.drawImage(exploImgs[e.getAniIndex()], (int) (e.getHitbox().x - xLvlOffset), (int) (e.getHitbox().y), EXPLOSION_WIDTH, EXPLOSION_HEIGHT, null);
 		}
 
 	}
@@ -537,7 +640,6 @@ public class ObjectManager {
 					    (int) (sw.getHitbox().y - sw.getyDrawOffset()),
 						SWORD_WIDTH,
 						SWORD_HEIGHT, null);
-			sw.drawHitbox(g, xLvlOffset);
     		}
 		
 	}
@@ -551,7 +653,6 @@ public class ObjectManager {
 					    (int) (s.getHitbox().y - s.getyDrawOffset()),
 						SCROLL_WIDTH,
 						SCROLL_HEIGHT, null);
-			s.drawHitbox(g, xLvlOffset);
     		}
     	}
 		
@@ -561,10 +662,9 @@ public class ObjectManager {
     	for (Chest c : chests) {
 			g.drawImage(chestImgs[c.getAniIndex()],
 					    (int) (c.getHitbox().x - c.getxDrawOffset() - xLvlOffset),
-					    (int) (c.getHitbox().y - c.getyDrawOffset()),
+					    (int) (c.getHitbox().y - c.getyDrawOffset() + (8*Game.SCALE)),
 						CHEST_WIDTH,
 						CHEST_HEIGHT, null);
-    	c.drawHitbox(g, xLvlOffset);
     	}
 		
 	}
@@ -625,6 +725,11 @@ public class ObjectManager {
 		for(FlyWukong fwk : flyWukong)
 			fwk.reset();
 
+		for (Peach p : peaches)
+			p.reset();
+		for (Banana b : bananas)
+			b.reset();
+
     	for (Flag f : flags) {
     		f.reset();
     	}
@@ -635,6 +740,9 @@ public class ObjectManager {
     	
     	for (Scroll s : scrolls) {
     		s.reset();
+    	}
+    	for (Explosion e : explos) {
+    		e.reset();
     	}
     	
     	for (Sword sw : swords) {

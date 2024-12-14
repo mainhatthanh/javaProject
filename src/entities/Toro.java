@@ -14,7 +14,7 @@ import main.Game;
 
 public class Toro extends Enemy {
 
-	private int speed;
+	private boolean change = true;
 	private boolean isAttacking;
 	private int attackBoxOffsetX;
 
@@ -26,8 +26,6 @@ public class Toro extends Enemy {
         this.enemyHealthWidth = enemyHealthBarWidth;
         this.walkSpeed = 0.38f * Game.SCALE;
 		initAttackBox();
-		
-		speed =ANI_SPEED;
 	}
 	
 	//khai bao attackbox
@@ -37,53 +35,40 @@ public class Toro extends Enemy {
 		
 	}
 
+
 	public void update(int[][] lvlData, Player player) {
-        	
-            
-            if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
-            	speed = 20;
-            	walkSpeed = 0.45f * Game.SCALE;
-            	updateBehaviour(lvlData,player);
-                updateAnimationTick1(speed);
-                updateAttackBoxFlip1();
-                updateHealthBar();
-            }
-            
-            else {
+        
             	updateBehaviour(lvlData,player);
                 updateAnimationTick();
                 updateAttackBoxFlip();
                 updateHealthBar();
-            }
+                
+                getCrazy(20, 0.45f);
         
 	}
 	
-	private void updateAttackBoxFlip1() {
-        attackBox.x = hitbox.x - attackBoxOffsetX;
-        attackBox.y = hitbox.y ;
-        attackBox.width = 120* Game.SCALE;
-        
-    }
 	
-	private void updateAnimationTick1(int n) {
-        aniTick++;
-        if (aniTick >= n) {
-            aniTick = 0;
-            aniIndex++;
-            if (aniIndex >= GetSpriteAmount(enemyType, state)) {
-                aniIndex = 0;
-
-                switch (state) {
-                    case ATTACK, HIT -> state = IDLE;
-                    case DEAD -> active = false;
-                }
-
-            }
-
-        }
+	protected void getCrazy(int speedUp, float walkUp) {
+    	if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
+    		
+    		this.lowHealth = true;
+        	this.speed = speedUp;
+        	this.walkSpeed = walkUp * Game.SCALE;
+        	initBox1();
+    	}
     }
 	
 	
+
+	private void initBox1() {
+		if (walkDir == RIGHT)
+            attackBox.x = hitbox.x - (int)(40*Game.SCALE);
+        else
+            attackBox.x = hitbox.x - attackBoxOffsetX;
+		
+		this.attackBox.width = (int)(120 * Game.SCALE);
+		
+	}
 
 	protected void updateAttackBoxFlip() {
         if (walkDir == RIGHT)
@@ -102,46 +87,66 @@ public class Toro extends Enemy {
 		}else {
 			switch(state) {
 			case IDLE:
-				newState(RUNNING);
-				if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
-					newState(ATTACK2);
-					
-				}
+				if(canSeePlayer(lvlData,player)) {
+            		newState(RUNNING);
+            		turnTowardsPlayer(player);
+            	}
 				break;
+				
+			case IDLE_2 :
+            	if(canSeePlayer(lvlData,player)) {
+            		newState(RUNNING);
+            		turnTowardsPlayer(player);
+            	}        		
+                break;
+                
 			case RUNNING:
-				if(canSeePlayer(lvlData, player)) {
-					turnTowardsPlayer(player);
-				if(isPlayerCloseAttack(player))
-					newState(ATTACK);
-				}
+
+				if(isPlayerCloseAttack(player)) {
+					if(change && !lowHealth)
+                		newState(ATTACK);
+                	else
+                		newState(ATTACK2);
+                	change = !change; 
+				}if(!canSeePlayer(lvlData, player))
+					newState(IDLE_2);
+				
 				move(lvlData);
 				break;
 			case ATTACK:
 				if(aniIndex ==0)
-					attackChecked = false;
+					attackChecked = false;		
 				
-				if(aniIndex == 3  && !attackChecked) {
-
-					setAttacking(false);
-					checkEnmyHit(attackBox, player);
-				}
-				if(aniIndex == 2  ) {
+				if( aniIndex == 3 &&!attackChecked)
 					setAttacking(true);
-					
-					
-				}
-				
+				//Nhân vật trong tầm đánh mới tung chiêu
+                	if(attackBox.intersects(player.getHitbox())) {
+                		checkEnmyHit(attackBox,player);
+                		
+                	}else 
+                		newState(RUNNING);
+
+                	if(aniIndex==4)
+    					setAttacking(false);
 				break;
 				
 			case ATTACK2:
-				if(canSeePlayer(lvlData, player)) 
-					turnTowardsPlayer(player);
-				move(lvlData);
 				if(aniIndex ==0)
 					attackChecked = false;
 				
-				if(aniIndex == 1  && !attackChecked)
-					checkEnmyHit(attackBox, player);
+				if(aniIndex == 0  ) {
+					setAttacking(true);
+				}
+				
+				if(aniIndex== 1 &&!attackChecked)
+                	if(attackBox.intersects(player.getHitbox())) {
+                		checkEnmyHit(attackBox,player);
+                		
+                	}else {
+                		newState(RUNNING);
+                		
+                	}
+				
 				break;
 			case HIT:
 				break;

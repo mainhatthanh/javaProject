@@ -127,6 +127,8 @@ public class Player extends Entity {
         this.state = IDLE;
         this.maxHealth = 100;
         this.currentHealth = maxHealth;
+        this.maxShield = 50;
+        this.currentShield = 0;
         this.maxStamina = 100;
         this.currentStamina = maxStamina;
         this.currentExp = 0;
@@ -243,7 +245,9 @@ public class Player extends Entity {
         	}
         	else {
             		playing.setSpawn();
+            		currentHealth = maxHealth;
             		playing.setCountRev(playing.CountRev() - 1);
+            		
         	}
 
 	            return;
@@ -275,6 +279,8 @@ public class Player extends Entity {
                         powerAttackActive=false;
                     }
                 }
+                checkTrapTouched();
+                checkObjectTouched();
 
 
 
@@ -289,6 +295,15 @@ public class Player extends Entity {
         updateAnimationTick();
         setAnimation();
 
+    }
+    
+    private void checkTrapTouched() {
+		playing.checkTrapTouched(this);
+
+	}
+
+	private void checkObjectTouched() {
+    	playing.checkObjectTouched(hitbox);
     }
 
 
@@ -319,6 +334,7 @@ public class Player extends Entity {
     
             playing.checkEnemyHit(attackBox);
             playing.getGame().getAudioPlayer().playAttackSound();
+            playing.checkObjectHit(attackBox);
         } else {
             if(aniIndex>=6 && !attackChecked){
                 attackChecked = true;
@@ -344,6 +360,9 @@ public class Player extends Entity {
     }
 
     private void updateHealthBar() {
+        if(currentHealth>=maxHealth){
+            currentHealth = maxHealth;
+        }
         healthWidth = (int) ((currentHealth / (float) maxHealth) * healthBarWith);
     }
 
@@ -393,6 +412,8 @@ public class Player extends Entity {
     private void drawUI(Graphics g) {
         g.drawImage(statusBarImg, statusBarX, statusBarY, statusBarWidth, statusBarHeight, null);
         g.setColor(Color.red);
+        if(healthWidth>=healthBarWith)
+            healthWidth = healthBarWith;
         g.fillRect(healthBarXStart + statusBarX, healthBarYStart + statusBarY, healthWidth, healthBarHeigth);
         g.setColor(Color.YELLOW);
         g.fillRect(staminaBarXStart + statusBarX, staminaBarYStart + statusBarY, staminaWidth, staminaBarHeight);

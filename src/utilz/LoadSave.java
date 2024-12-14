@@ -77,6 +77,9 @@ public class LoadSave {
 	public static final String ARROWTRAP_ATLAS = "arrowtrap.png";
 	public static final String ARROW_ATLAS = "arrow.png";
 	public static final String TRAP2_ATLAS = "trap2.png";
+    public static final String PEACH_ATLAS = "peach.png";
+    public static final String BANANA_ATLAS = "banana.png";
+    public static final String EXPLO_ATLAS = "explo.png";
 
 
     public static final String TUTORIAL_PAPER = "tutorial.png";
