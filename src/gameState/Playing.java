@@ -26,6 +26,7 @@ import static entities.Player.levelUpTime;
 import static utilz.Constants.PlayerConstants.*;
 
 import static utilz.Constants.EnemyConstants.GetMessageEnemy;
+import static utilz.Constants.EnemyConstants.GetNumberMessageBoss;;
 
 public class Playing extends State implements Statemethods {
 	
@@ -70,7 +71,7 @@ public class Playing extends State implements Statemethods {
     //kiểm tra xem nhân vật đã đủ gần với boss chưa để hiện dialogue
     private int count  =0;
     
-    private boolean intro;
+    private int intro = 0;
 
 	private boolean playerDying;
     int[][] lvlData;
@@ -93,7 +94,7 @@ public class Playing extends State implements Statemethods {
         initClasses();
 
         if ((getLevelManager().getLevelIndex()) == 0) {
-            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_1_BACKGROUND);
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_3_BACKGROUND);
         }
 
         caclcLvlOffset();
@@ -104,11 +105,12 @@ public class Playing extends State implements Statemethods {
     public void loadNextLevel() {
         resetAll();
         levelManager.loadNextLevel();
+        	
         if ((levelManager.getLevelIndex() ) == 1) {
-            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_2_BACKGROUND);
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_1_BACKGROUND);
         }
         if ((levelManager.getLevelIndex() ) == 2) {
-            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_3_BACKGROUND);
+            backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_2_BACKGROUND);
         }
         if ((levelManager.getLevelIndex()) == 3) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_4_BACKGROUND);
@@ -135,6 +137,8 @@ public class Playing extends State implements Statemethods {
     }
 
     private void initClasses() {
+    	
+    	
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
         objectManager = new ObjectManager(this);
@@ -145,8 +149,6 @@ public class Playing extends State implements Statemethods {
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
         
         
-        if(levelManager.getLevelIndex() == 0 )
-    		intro= true;
         ui = new UI(this);
         pauseOverlay = new PauseOverlay(this); 
         gameOverOverlay = new GameOverOverlay(this);
@@ -165,7 +167,6 @@ public class Playing extends State implements Statemethods {
     @Override
     public void update() {
     	
-    	
 
         // Nếu nhân vật chạm đáy màn hình, nhân vật DEAD
         if ((int) (player.getHitBox().y + player.getHitBox().height + 2) >= Game.GAME_HEIGHT) {
@@ -176,7 +177,9 @@ public class Playing extends State implements Statemethods {
         if (paused) {
             pauseOverlay.update();
 
-        }else if(fly1) {
+        }else if(intro <7) {
+//        	ui.update(intro);
+        } else if(fly1) {
         	player.update();
         	objectManager.updateFlyWukong(player);
         	if(objectManager.getFly()) {
@@ -286,15 +289,14 @@ public class Playing extends State implements Statemethods {
 //            player.drawSticks(g,xLvlOffset);
 //            enemyManager.draw(g, xLvlOffset);
 //            objectManager.draw(g, xLvlOffset);
-        }else if(intro) {
-        	ui.drawIntro();
-        	intro = false;
+        }else if(intro <7) {
+        	ui.drawIntro(g2, intro);
         }else if (gameOver) {
 			player.stopStepSound();
             gameOverOverlay.draw(g);
         }
         else if(check() && count == 0) {
-        		ui.drawDialogueScreen(g2, textIndex);
+        		ui.drawDialogueScreen(g2, textIndex,enemyManager.getEnemyCheck());
         		player.renderIDLE(g, xLvlOffset);
         		enemyManager.drawIDLE(g, xLvlOffset);
 
@@ -462,9 +464,17 @@ public class Playing extends State implements Statemethods {
                     break;
                 case KeyEvent.VK_ENTER:
                 	textIndex += 1;
+                	if(textIndex < GetNumberMessageBoss(enemyManager.getEnemyCheck())) {
+                		ui.setCheckChat(!ui.getCheckChat());
+                	}
+                	
+                	break;
+                case KeyEvent.VK_F:
+                	intro+=1;
                 	break;
                 case KeyEvent.VK_Q:
-                	count = 1;
+                	if(textIndex >= GetNumberMessageBoss(enemyManager.getEnemyCheck())-1)
+                		count = 1;
                 	break;
                 case KeyEvent.VK_L:
                     player.powerAttack();
@@ -680,6 +690,10 @@ public class Playing extends State implements Statemethods {
     	 player.setSpawn(levelManager.getCurrentLevel().getFlag1());
      }
 
+     public void setIntro(int intro) {
+    	 this.intro = intro;
+     }
+     
      public Tutorial getTutorial(){
         return tutorial;
      }
