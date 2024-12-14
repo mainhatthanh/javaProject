@@ -546,8 +546,14 @@ public class Player extends Entity {
     }
 
     public void changeHealth(int value) {
-        playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
+        
         currentHealth += value;
+        if (value < 0) {
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HIT);
+        }
+        if (value > 0) {
+            playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HEAL_MANA);
+        }
         if (currentHealth <= 0) {
             currentHealth = 0;
             // gameOver();

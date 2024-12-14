@@ -159,8 +159,9 @@ public class ObjectManager {
 	}
     }
     public void applyEffectToPlayer(GameObjects go) {
-		if (go.getObjType() == RED_POTION)
+		if (go.getObjType() == RED_POTION) 
 			playing.getPlayer().changeHealth(RED_POTION_VALUE);
+
 		if (go.getObjType() == EXPLOSION)
 			playing.getPlayer().kill(EXPLOSION_VALUE);
 		if (go.getObjType() == BLUE_POTION)
@@ -169,6 +170,7 @@ public class ObjectManager {
 			playing.getPlayer().changeExp(PEACH_VALUE);
 		if (go.getObjType() == SWORD) 
 			playing.getPlayer().setPlayerDamage(playing.getPlayer().getPlayerDamage() + SWORD_VALUE);
+
 	}
 
 	public void checkObjectHit(Rectangle2D.Float attackbox) {
