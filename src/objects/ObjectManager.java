@@ -76,6 +76,17 @@ public class ObjectManager {
 
 	}
 
+	public void checkSwordtouched(Player player) {
+		for(Sword sw : swords)
+			if(sw.isActive())
+				if(sw.getHitbox().intersects(player.getHitBox())) {
+					System.out.println("cham");
+					player.setGiantUp(6);
+					sw.setActive(false);
+				}
+
+	}
+
 
 	public ArrayList<Scroll> getScrolls() {
 		return scrolls;
@@ -259,6 +270,7 @@ public class ObjectManager {
         updateCannons(lvlData, player);
         updateProjectiles(lvlData, player);
 	    checkScrollTouched(player);
+		checkSwordtouched(player);
 
         
         for (Flag f : flags) {

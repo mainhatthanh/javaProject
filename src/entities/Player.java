@@ -115,6 +115,11 @@ public class Player extends Entity {
 
     //Run sound
     private boolean isStepSoundPlaying = false;
+
+    //Chi so to len
+    private int giantUp=0;
+    private int firstWidth=width;
+    private int firstHeight=height;
     
     public Player(float x, float y, int width, int height, Playing playing) {
         super(x, y, width, height);
@@ -127,6 +132,7 @@ public class Player extends Entity {
         this.currentExp = 0;
         this.maxExp = 100;
         this.walkSpeed = Game.SCALE * 1.0f;
+
 
         // this.playerDamage = 10;
         this.levelUp=false;
@@ -149,6 +155,31 @@ public class Player extends Entity {
         attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) (30 * Game.SCALE), (int) (20 * Game.SCALE));
 
     }
+    private void updateBiggerAttackBox(){
+        if (right||(powerAttackActive&&flipW==1))
+        attackBox = new Rectangle2D.Float(hitbox.x + hitbox.width, y , (int) ((30+getGiantUp()) * Game.SCALE), (int) (20 * Game.SCALE));
+
+        else if (left||(powerAttackActive&&flipW==-1))
+            attackBox = new Rectangle2D.Float(hitbox.x - hitbox.width, y , (int) ((30+getGiantUp()) * Game.SCALE), (int) (20 * Game.SCALE));
+    }
+
+  /*  private void updateBiggerHitBox(){
+        hitbox = new Rectangle2D.Float(x, y, (int) (width * Game.SCALE), (int) (height * Game.SCALE));
+    }*/
+
+    private void updateBiggerPlayer(){
+        this.width=firstWidth+getGiantUp();
+        this.height=firstHeight+getGiantUp();
+
+    }
+
+    public void setGiantUp(int x){
+        giantUp+=x;
+    }
+
+    public int getGiantUp(){
+        return giantUp;
+    }
 
     public void update() {
         updateHealthBar();
@@ -160,7 +191,7 @@ public class Player extends Entity {
             updateDirStick();
 
         if (currentHealth <= 0) {
-//<<<<<<< HEAD
+
 //            if (state != DEAD) {
 //                state = DEAD;
 //                aniTick = 0;
@@ -182,11 +213,11 @@ public class Player extends Entity {
 //                    } else
 //                        inAir = false;
 //            }
-//
-//            return;
-//=======
+
+ //           return;
+
         	if ( playing.CountRev() == 0) {
-        	
+
 	            if (state != DEAD) {
 	                state = DEAD;
 	                aniTick = 0;
@@ -199,7 +230,7 @@ public class Player extends Entity {
 	                playing.getGame().getAudioPlayer().playEffect((AudioPlayer.GAMEOVER));
 	            } else {
 	                updateAnimationTick();
-	
+
 	                //fall if in air
 	                if (inAir)
 	                    if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
@@ -207,21 +238,23 @@ public class Player extends Entity {
 	                        airSpeed += GRAVITY;
 	                    } else
 	                        inAir = false;
-	
+
 	            }
         	}
         	else {
             		playing.setSpawn();
             		playing.setCountRev(playing.CountRev() - 1);
         	}
-	
+
 	            return;
 
         }
-           	updateAttackBox();
+
             updateExpBar();
 
-
+         updateBiggerPlayer();
+         //updateBiggerHitBox();
+        updateBiggerAttackBox();
         updateAttackBox();
         updateStick(lvlData);
         updatePlayerShoot(this);
@@ -302,7 +335,7 @@ public class Player extends Entity {
             attackBox.x = hitbox.x + hitbox.width + (int) (Game.SCALE * 8);
 
         } else if (left||(powerAttackActive&&flipW==-1)) {
-            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 20);
+            attackBox.x = hitbox.x - hitbox.width - (int) (Game.SCALE * 20)-(int)(getGiantUp()*1.5);
 
         }
 
@@ -340,8 +373,8 @@ public class Player extends Entity {
                 (int) (hitbox.y - yDrawOffset), (int) (width * flipW * 1.5), (int) (height * 1.5), null);
 
         drawUI(g);
-//         drawAttackHitbox(g, xlvlOffset);
-//         drawHitbox(g, xlvlOffset);
+         drawAttackHitbox(g, xlvlOffset);
+         drawHitbox(g, xlvlOffset);
     	
     }
     
