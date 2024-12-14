@@ -27,6 +27,7 @@ import main.Game;
 public class Boss4 extends Enemy {
 	
 	private boolean isAttacking;
+	private boolean recovery = true;
 	
 	public Boss4(float x, float y) {
 		 super(x, y, BOSS4_WIDTH, BOSS4_HEIGHT, BOSS4);
@@ -55,10 +56,14 @@ public class Boss4 extends Enemy {
 	    
 	    protected void getCrazy(int speedUp, float walkUp) {
 	    	if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
-	    		this.currentHealth = GetMaxHealth(BOSS4);
 	    		this.lowHealth = true;
 	        	this.speed = speedUp;
 	        	this.walkSpeed = walkUp * Game.SCALE;
+	        	
+	        	if(recovery) {
+		    		this.currentHealth = GetMaxHealth(BOSS4);
+		    		recovery = false;
+	        	}
 
 	    	}
 	    }
@@ -89,9 +94,8 @@ public class Boss4 extends Enemy {
 	    public void hurt(int amount, Player player) {
 	    	
 	    	if(lowHealth)
-	    		amount = (int)(0);
+	    		amount = (int)(0.6 *amount);
 	    	expUpdate = 0;
-	    	System.out.println(amount);
 	    	currentHealth -= amount;
 	        
 	        if (currentHealth <= 0){

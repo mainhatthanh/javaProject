@@ -136,9 +136,8 @@ public abstract class Enemy extends Entity {
     public void hurt(int amount, Player player) {
     	
     	if(lowHealth)
-    		amount = (int)(0.8*amount);
+    		amount = (int)(0.7*amount);
     	expUpdate = 0;
-    	System.out.println(amount);
     	currentHealth -= amount;
         
         if (currentHealth <= 0){

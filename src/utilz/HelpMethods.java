@@ -214,7 +214,7 @@ public class HelpMethods {
                 Color color = new Color(img.getRGB(i, j));
                 int value = color.getBlue();
                 if (value == SCROLL)
-                    list.add(new Scroll(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+                    list.add(new Scroll(i* Game.TILES_SIZE, j* Game.TILES_SIZE+35, value));
             }
         return list;
 

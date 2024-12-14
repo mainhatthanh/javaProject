@@ -13,10 +13,12 @@ import main.Game;
 
 public class BossFinal extends Enemy {
 	
+
 		private boolean recovery = true;
 	
 		private boolean change = true;
 		private boolean isAttacking;
+
 
 	    public BossFinal(float x, float y) {
 	        super(x, y, BOSSFINAL_WIDTH, BOSSFINAL_HEIGHT, BOSSFINAL);
@@ -106,16 +108,16 @@ public class BossFinal extends Enemy {
 	                case ATTACK:
 	                    if(aniIndex==0)
 	                        attackChecked = false;
-
+	                    
 	                    if(aniIndex== 1 &&!attackChecked)
 	                    	if(attackBox.intersects(player.getHitbox())) {
 	                    		checkEnmyHit(attackBox,player);
+	                    		setAttacking(true);
 	                    		
-	                    	}else {
+	                    	}else 
 	                    		newState(RUNNING);
-	                    		
-	                    	}
-
+	                    if (aniIndex == 2) 
+							setAttacking(false);
 	                    break;
 	                    
 	                case ATTACK2:
@@ -123,13 +125,20 @@ public class BossFinal extends Enemy {
 	                        attackChecked = false;
 
 	                    if( aniIndex == 4 &&!attackChecked)
+	                    	//nhân vật trong tầm chiêu mới đánh
 	                    	if(attackBox.intersects(player.getHitbox())) {
 	                    		checkEnmyHit(attackBox,player);
 	                    		
-	                    	}else {
+	                    	}else 
 	                    		newState(RUNNING);
-	                    		
-	                    	}
+
+	                    if(aniIndex== 1 &&!attackChecked) {
+	                        checkEnmyHit(attackBox,player);
+							setAttacking(true);
+						}
+						if (aniIndex == 2) 
+							setAttacking(false);
+						
 	                    break;
 	                case HIT:
 	                    break;
@@ -260,7 +269,17 @@ public class BossFinal extends Enemy {
 	        }
 	        
 	    }
+
+		public boolean isAttacking() {
+			return isAttacking;
+		}
+		
+		public void setAttacking(boolean isAttacking) {
+			this.isAttacking = isAttacking;
+		}
+
 	}
+	
 
 
 

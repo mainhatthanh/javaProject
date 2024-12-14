@@ -85,32 +85,35 @@ public class Boss2 extends Enemy {
                     move(lvlData);
                     break;
                 case ATTACK:
-//                    if(aniIndex==0){
-//                        setAttacking(true);  
-//                    }
                 	if(aniIndex ==0)
     					attackChecked = false;
-                    if(aniIndex== 4 &&!attackChecked){
-                        setAttacking(false);
+                	if(aniIndex== 4 &&!attackChecked)
                         checkEnmyHit(attackBox,player);
-                    }
-                    if(aniIndex == 2) {
+
+                    if(aniIndex == 2) 
                         setAttacking(true);
-                    }
+                    
+                    if(aniIndex==5)
+                        setAttacking(false);
+                       
+                    
                     break;
+                    
+                    
                 case ATTACK2:
 //                	if(aniIndex==0){
 //                        setAttacking(true);  
 //                    }
                 	if(aniIndex ==0)
-    					attackChecked = false;
+    					attackChecked = false; 	
+                	if(aniIndex == 2) 
+                        setAttacking(true);
+                    
                     if(aniIndex== 4 &&!attackChecked){
                         setAttacking(false);
                         checkEnmyHit(attackBox,player);
                     }
-                    if(aniIndex == 2) {
-                        setAttacking(true);
-                    }
+                    
                     
                     break;
                 case HIT:

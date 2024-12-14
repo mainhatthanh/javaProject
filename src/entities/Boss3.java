@@ -84,11 +84,11 @@ public class Boss3 extends Enemy {
 							attackChecked = false;
 						}
 	                    if(aniIndex== 2 &&!attackChecked) {
-							setAttacking(false);
+							setAttacking(true);
 	                        checkEnmyHit(attackBox,player);
 						}
-						if(aniIndex == 1) {
-							setAttacking(true);
+						if(aniIndex == 3) {
+							setAttacking(false);
 						}
 						
 	                    break;

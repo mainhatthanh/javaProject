@@ -1,9 +1,11 @@
 package objects;
 
+import audio.AudioPlayer;
 import gameState.Playing;
 import levels.Level;
 import main.Game;
 
+import ui.Tutorial;
 import utilz.Constants.ObjectsConstants;
 
 import utilz.LoadSave;
@@ -49,13 +51,12 @@ public class ObjectManager {
     private ArrayList<Arrow> arrows = new ArrayList<>();
     
     private ArrayList<FlyWukong> flyWukong ;
+	private Tutorial tutorial;
 
 
     public ObjectManager(Playing playing) {
         this.playing = playing;
         loadImgs();
-        
-
     }
     
     public void checkTrapTouched(Player p) {
@@ -64,6 +65,23 @@ public class ObjectManager {
     			p.kill(TRAP1_VALUE);
     		
     }
+	public void checkScrollTouched(Player player) {
+		for(Scroll sc : scrolls)
+			if(sc.isActive())
+			if(sc.getHitbox().intersects(player.getHitBox())) {
+				playing.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
+				sc.setActive(false);
+				playing.getPlot().setPlot(true);
+			}
+
+	}
+
+
+	public ArrayList<Scroll> getScrolls() {
+		return scrolls;
+	}
+
+
     
     public void checkObjectTouched(Rectangle2D.Float hitbox) {
 		for (Potion p : potions)
@@ -240,6 +258,8 @@ public class ObjectManager {
         
         updateCannons(lvlData, player);
         updateProjectiles(lvlData, player);
+	    checkScrollTouched(player);
+
         
         for (Flag f : flags) {
         	if (f.active) {
@@ -271,7 +291,6 @@ public class ObjectManager {
 	    		fly = fw.getCheck();
 	    		if(!fly)
 	    			fw.checkTouched(player);
-	    		
 	    		fw.update(fw.getRowIndex());
 	//    		if(fw.getCheck()) {
 	//    			fw.setRowIndex(0);

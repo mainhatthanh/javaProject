@@ -38,8 +38,8 @@ public class LoadSave {
     public static final String LEVEL_2_BACKGROUND = "background2.png";
     public static final String LEVEL_3_BACKGROUND = "background3.png";
     public static final String LEVEL_4_BACKGROUND = "background4.png";
-    public static final String LEVEL_UP_IMG = "levelUp.png";
     public static final String LEVEL_5_BACKGROUND = "background5.png";
+    public static final String LEVEL_UP_IMG = "levelUp.png";
 //    public static final String COMPLETED_IMG = "completed_sprite.png";
 //    public static final String DEATH_SCREEN = "death_screen.png";
     
@@ -78,7 +78,14 @@ public class LoadSave {
 	public static final String ARROW_ATLAS = "arrow.png";
 	public static final String TRAP2_ATLAS = "trap2.png";
 
-    public static final String TUTORIAL_PAPER = "testPaper.png";
+
+    public static final String TUTORIAL_PAPER = "tutorial.png";
+
+    public static final String PLOT1 = "plot1.png";
+    public static final String PLOT2 = "plot2.png";
+    public static final String PLOT3 = "plot3.png";
+    public static final String PLOT4 = "plot4.png";
+    public static final String PLOT5 = "plot5.png";
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage img = null;

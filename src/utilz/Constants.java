@@ -66,7 +66,7 @@ public class Constants {
         public static final int BARREL = 2;
         public static final int BOX = 3;
 
-        public static final int FLYWUKONG = 4;
+        public static final int FLYWUKONG = 15;
 
         public static final int TRAP1 = 4;
         public static final int CHEST = 5;
@@ -126,8 +126,8 @@ public class Constants {
         public static final int SWORD_WIDTH = (int) (SWORD_WIDTH_DEFAULT * Game.SCALE);
         public static final int SWORD_HEIGHT = (int) (SWORD_HEIGHT_DEFAULT * Game.SCALE);
         
-        public static final int SCROLL_WIDTH_DEFAULT = 13;
-        public static final int SCROLL_HEIGHT_DEFAULT = 13;
+        public static final int SCROLL_WIDTH_DEFAULT = 20;
+        public static final int SCROLL_HEIGHT_DEFAULT = 20;
         public static final int SCROLL_WIDTH = (int) (SCROLL_WIDTH_DEFAULT * Game.SCALE);
         public static final int SCROLL_HEIGHT = (int) (SCROLL_HEIGHT_DEFAULT * Game.SCALE);
         

@@ -116,19 +116,18 @@ public class Toro extends Enemy {
 			case ATTACK:
 				if(aniIndex ==0)
 					attackChecked = false;		
-
-				if(aniIndex == 2  ) {
-					setAttacking(true);
-				}
 				
 				if( aniIndex == 3 &&!attackChecked)
+					setAttacking(true);
+				//Nhân vật trong tầm đánh mới tung chiêu
                 	if(attackBox.intersects(player.getHitbox())) {
                 		checkEnmyHit(attackBox,player);
                 		
-                	}else {
+                	}else 
                 		newState(RUNNING);
-                		
-                	}	
+
+                	if(aniIndex==4)
+    					setAttacking(false);
 				break;
 				
 			case ATTACK2:

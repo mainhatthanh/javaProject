@@ -212,7 +212,9 @@ public class Player extends Entity {
         	}
         	else {
             		playing.setSpawn();
+            		currentHealth = maxHealth;
             		playing.setCountRev(playing.CountRev() - 1);
+            		
         	}
 	
 	            return;
@@ -242,6 +244,8 @@ public class Player extends Entity {
                         powerAttackActive=false;
                     }
                 }
+                checkTrapTouched();
+                checkObjectTouched();
 
 
 
@@ -256,6 +260,15 @@ public class Player extends Entity {
         updateAnimationTick();
         setAnimation();
 
+    }
+    
+    private void checkTrapTouched() {
+		playing.checkTrapTouched(this);
+
+	}
+
+	private void checkObjectTouched() {
+    	playing.checkObjectTouched(hitbox);
     }
 
 
@@ -286,6 +299,7 @@ public class Player extends Entity {
     
             playing.checkEnemyHit(attackBox);
             playing.getGame().getAudioPlayer().playAttackSound();
+            playing.checkObjectHit(attackBox);
         } else {
             if(aniIndex>=6 && !attackChecked){
                 attackChecked = true;
@@ -823,7 +837,7 @@ public class Player extends Entity {
         for(Stick st:sticks) {
             if (st.isActive())
                 g.drawImage(stickImg, (int) (st.getHitbox().x - xLvlOffset), (int) (st.getHitbox().y), STICK_WIDTH, STICK_HEIGHT, null);
-            //st.drawStickHitbox(g,xLvlOffset);
+           // st.drawStickHitbox(g,xLvlOffset);
         }
 
     }
