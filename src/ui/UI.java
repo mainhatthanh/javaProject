@@ -75,7 +75,7 @@ public class UI {
 		
 		g2.setFont(arial_40);
 		g2.setColor(Color.white);
-		g2.drawString("FPS: " + playing.getGame().getFPS(),  1050, 50);
+		g2.drawString("FPS: " + playing.getGame().getFPS(), (23*Game.TILES_SIZE) + 30, 50);
 		
 		if(messageOn) {
 			counter ++;
@@ -226,9 +226,9 @@ public class UI {
 			g2.setColor(Color.pink);
 			g2.setFont(g2.getFont().deriveFont(30F));
 			if(index < 6)
-				g2.drawString(next1, x + 700, y + (int)(200*Game.SCALE));
+				g2.drawString(next1, x +1100, y + (int)(200*Game.SCALE));
 			else
-				g2.drawString(next2, x + 700, y + (int)(200*Game.SCALE));
+				g2.drawString(next2, x +1100, y + (int)(200*Game.SCALE));
 			
 			
 			
