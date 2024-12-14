@@ -176,11 +176,13 @@ public class ObjectManager {
 			if (c.isActive()){
 				if (hitbox.intersects(c.getHitbox())) {
 					c.setAnimation(true);
-					int type = (int) (Math.random() * 10);
-					if (type % 2 == 0)
+					int type = (int) (Math.random() * 20);
+					if (type <= 5)
 						explos.add(new Explosion((int) (c.getHitbox().x - 12*Game.SCALE ), (int) (c.getHitbox().y - 16*Game.SCALE  ), 15));
-					else peaches.add(new Peach((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 13));
-					
+					if ((type > 5) && (type <=13))
+						peaches.add(new Peach((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 13));
+					if (type > 13)
+						swords.add(new Sword((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 7));
 			}
 		}
 	}
@@ -545,7 +547,6 @@ public class ObjectManager {
 					    (int) (f.getHitbox().y - f.getyDrawOffset()),
 						FLAG_WIDTH,
 						FLAG_HEIGHT, null);
-			f.drawHitbox(g, xLvlOffset);
     		}
 		
     	}
@@ -562,7 +563,6 @@ public class ObjectManager {
 			}
 
 			g.drawImage(trap2Imgs[t2.getAniIndex()], x, (int) (t2.getHitbox().y), width, TRAP2_HEIGHT, null);
-			t2.drawHitbox(g, xLvlOffset);
 		}
 	}
 
@@ -604,7 +604,6 @@ public class ObjectManager {
 			}
 
 			g.drawImage(cannonImgs[c.getAniIndex()], x, (int) (c.getHitbox().y), width, CANNON_HEIGHT, null);
-			c.drawHitbox(g, xLvlOffset);
 		}
 
 	}
@@ -614,7 +613,6 @@ public class ObjectManager {
 			
 
 			g.drawImage(exploImgs[e.getAniIndex()], (int) (e.getHitbox().x - xLvlOffset), (int) (e.getHitbox().y), EXPLOSION_WIDTH, EXPLOSION_HEIGHT, null);
-			e.drawHitbox(g, xLvlOffset);
 		}
 
 	}
@@ -630,7 +628,6 @@ public class ObjectManager {
 					    (int) (sw.getHitbox().y - sw.getyDrawOffset()),
 						SWORD_WIDTH,
 						SWORD_HEIGHT, null);
-			sw.drawHitbox(g, xLvlOffset);
     		}
 		
 	}
@@ -644,7 +641,6 @@ public class ObjectManager {
 					    (int) (s.getHitbox().y - s.getyDrawOffset()),
 						SCROLL_WIDTH,
 						SCROLL_HEIGHT, null);
-			s.drawHitbox(g, xLvlOffset);
     		}
     	}
 		
@@ -657,7 +653,6 @@ public class ObjectManager {
 					    (int) (c.getHitbox().y - c.getyDrawOffset() + (8*Game.SCALE)),
 						CHEST_WIDTH,
 						CHEST_HEIGHT, null);
-    	c.drawHitbox(g, xLvlOffset);
     	}
 		
 	}
