@@ -16,7 +16,6 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Monster2 extends Enemy {
-	private int attackBoxOffsetX;
 
     public Monster2(float x, float y) {
         super(x, y, MON2_WIDTH, MON2_HEIGHT, MONSTER2);
@@ -30,7 +29,7 @@ public class Monster2 extends Enemy {
     
     private void initAttackBox(){
         attackBox=new Rectangle2D.Float(x,y ,(int)(15 *Game.SCALE),(int)(20*Game.SCALE));
-        attackBoxOffsetX = (int)(Game.SCALE*15);
+        this.attackBoxOffsetX = (int)(Game.SCALE*15);
     }
     
     public void update(int[][] lvlData,Player player){
@@ -96,13 +95,6 @@ public class Monster2 extends Enemy {
 	                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
     }
 
-    public void drawAttackBox(Graphics g,int xLvlOffset){
-        g.setColor(Color.green);
-        g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
-
-    }
-    
-    
     private int flipHealth() {
     	if(walkDir == RIGHT)
     		return 10;

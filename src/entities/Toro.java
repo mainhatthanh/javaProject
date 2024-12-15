@@ -16,7 +16,6 @@ public class Toro extends Enemy {
 
 	private boolean change = true;
 	private boolean isAttacking;
-	private int attackBoxOffsetX;
 
 	public Toro(float x, float y) {
 		super(x , y, TORO_WIDTH, TORO_HEIGHT, TORO);
@@ -28,29 +27,24 @@ public class Toro extends Enemy {
 		initAttackBox();
 	}
 	
-	//khai bao attackbox
 	private void initAttackBox() {
 		attackBox = new Rectangle2D.Float(x , y, (int)(Game.SCALE * 40),(int)(Game.SCALE * 30));
-		attackBoxOffsetX = (int)(Game.SCALE *40);
-		
+		this.attackBoxOffsetX = (int)(Game.SCALE *40);
 	}
 
 
 	public void update(int[][] lvlData, Player player) {
-        
             	updateBehaviour(lvlData,player);
                 updateAnimationTick();
                 updateAttackBoxFlip();
                 updateHealthBar();
                 
                 getCrazy(20, 0.45f);
-        
 	}
 	
 	
 	protected void getCrazy(int speedUp, float walkUp) {
-    	if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {
-    		
+    	if(currentHealth <= 0.4 *maxHealth && currentHealth >0) {	
     		this.lowHealth = true;
         	this.speed = speedUp;
         	this.walkSpeed = walkUp * Game.SCALE;

@@ -69,7 +69,7 @@ public class ObjectManager {
         loadImgs();
         loadEnemyImgsMinotaur();
     }
-    
+
     private void loadEnemyImgsMinotaur() {
         minotaurArr = new BufferedImage[5][23];
         BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.MINOTAUR_ATLAS);
@@ -78,9 +78,9 @@ public class ObjectManager {
                 minotaurArr[j][i] = temp.getSubimage(i * MINOTAUR_WIDTH_DEFAULT, j * MINOTAUR_HEIGHT_DEFAULT,
                         MINOTAUR_WIDTH_DEFAULT, MINOTAUR_HEIGHT_DEFAULT);
     }
-    
+
     private void drawMinotaurs(Graphics g, int xLvloffset) {
-        for (Minotaur mino : minotaurs) 
+        for (Minotaur mino : minotaurs)
             if (mino.isActive()) {
                 g.drawImage(minotaurArr[mino.getState()][mino.getAniIndex()],
                         (int) mino.getHitBox().x - xLvloffset - MINOTAUR_DRAWOFFSET_X + mino.flipX(),
@@ -89,7 +89,7 @@ public class ObjectManager {
 //                mino.drawHitbox(g, xLvloffset);
 //                mino.drawAttackBox(g, xLvloffset);
                 mino.drawHealthBar(g, xLvloffset);
-                
+
             }
     }
 
@@ -328,7 +328,7 @@ public class ObjectManager {
 		cannonBallImg = LoadSave.GetSpriteAtlas(LoadSave.CANNON_BALL);
 		arrowImg = LoadSave.GetSpriteAtlas(LoadSave.ARROW_ATLAS);
 		arrow2Img = LoadSave.GetSpriteAtlas(LoadSave.ARROW2_ATLAS);
-        
+
         
         
         BufferedImage chestSprite = LoadSave.GetSpriteAtlas(LoadSave.CHEST_ATLAS);
@@ -360,12 +360,12 @@ public class ObjectManager {
             }
         }
         
-        for (Minotaur mino : minotaurs) 
+        for (Minotaur mino : minotaurs)
             if (mino.isActive()) {
                 mino.updateHealthBar();
                 mino.update(lvlData, player);
             }
-        
+
         for (Explosion e : explos) {
         	if (e.active) {
         		e.update();
@@ -455,9 +455,9 @@ public class ObjectManager {
 
 	private void shootArrow2(Trap2 t2) {
 		int dir = 1;
-		if (t2.getObjType() == TRAP2_LEFT) 
+		if (t2.getObjType() == TRAP2_LEFT)
 			dir = -1;
-			
+
 
 		arrows.add(new Arrow((int) t2.getHitbox().x, (int) t2.getHitbox().y, dir));
 		
@@ -641,7 +641,7 @@ public class ObjectManager {
 				if (a.getDir() == 1)
 					g.drawImage(arrowImg, (int) (a.getHitbox().x - xLvlOffset), (int) (a.getHitbox().y), ARROW_WIDTH, ARROW_HEIGHT, null);
 				else g.drawImage(arrow2Img, (int) (a.getHitbox().x - xLvlOffset), (int) (a.getHitbox().y), ARROW_WIDTH, ARROW_HEIGHT, null);
-    	
+
 
 		
 	}

@@ -198,6 +198,7 @@ public class Constants {
     }
     public static class EnemyConstants {
     	
+    	//Quái thường
         public static final int CRABBY = 0;
         public static final int MINOTAUR = 1;
         public static final int SHARK = 2;        
@@ -206,15 +207,15 @@ public class Constants {
         public static final int SPIDER = 5;
         public static final int BOSS1 = 7;
         public static final int BOSS5 = 11;
-        
+           
+        //Boss của từng level
         public static final int TORO = 6;
         public static final int BOSS2 = 8;
         public static final int BOSS3 = 9;
         public static final int BOSS4 = 10;
         public static final int BOSSFINAL = 12;
        
-        
-        
+  
         public static final int IDLE = 0;
         public static final int RUNNING = 1;
         public static final int ATTACK = 2;
@@ -223,15 +224,13 @@ public class Constants {
         public static final int ATTACK2 = 5;
         public static final int IDLE_2 = 6;
         
-        
-        
+
         public static final int	BOSSFINAL_WIDTH_DEFAULT = 64;
         public static final int BOSSFINAL_HEIGHT_DEFAULT = 40;
         public static final int BOSSFINAL_WIDTH = (int) (BOSSFINAL_WIDTH_DEFAULT * Game.SCALE);
         public static final int BOSSFINAL_HEIGHT = (int) (BOSSFINAL_HEIGHT_DEFAULT * Game.SCALE);
         public static final int BOSSFINAL_DRAWOFFSET_X = (int) (38 * Game.SCALE);
         public static final int BOSSFINAL_DRAWOFFSET_Y = (int) (15 * Game.SCALE);
-        
         
         public static final int	BOSS5_WIDTH_DEFAULT = 96;
         public static final int BOSS5_HEIGHT_DEFAULT = 64;
@@ -489,6 +488,8 @@ public class Constants {
                    return 20;
                case SHARK:
               	return 5;
+               case MONSTER2:
+            	   return 5;
                 case TORO:
                	return 15;
                 case BOSS1:
@@ -682,7 +683,7 @@ public class Constants {
                 case ULTI :
                     return 40;
                 case THROW:
-                    return 5;
+                    return 20;
                 default: 
                     return 0;
             }

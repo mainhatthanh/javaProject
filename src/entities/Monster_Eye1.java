@@ -17,9 +17,7 @@ import main.Game;
 
 public class Monster_Eye1 extends Enemy {
 
-	private int attackBoxOffsetX;
-	
-	    public Monster_Eye1(float x, float y) {
+	   public Monster_Eye1(float x, float y) {
 	        super(x, y, MONEYE1_WIDTH, MONEYE1_HEIGHT, MONSTER_EYE1);
 	        initHitbox(30,30);
 	        initAttackBox();
@@ -31,7 +29,7 @@ public class Monster_Eye1 extends Enemy {
 	    
 	    private void initAttackBox(){
 	        attackBox=new Rectangle2D.Float(x,y,(int)(35*Game.SCALE),(int)(30*Game.SCALE));
-	        attackBoxOffsetX = (int)(Game.SCALE*35);
+	        this.attackBoxOffsetX = (int)(Game.SCALE*35);
 	    }
 
 	    public void update(int[][] lvlData,Player player){
@@ -49,11 +47,6 @@ public class Monster_Eye1 extends Enemy {
 
 	        attackBox.y = hitbox.y;
 	    }
-
-	protected void updateAttackBox() {
-		attackBox.x= hitbox.x-attackBoxOffsetX;
-		attackBox.y=hitbox.y;
-	}
 
 	private void updateBehaviour(int[][] lvlData,Player player) {
 		if (firstUpdate){
@@ -85,13 +78,11 @@ public class Monster_Eye1 extends Enemy {
 					break;
 			}
 
-
 		}
 	}
 
 	    
 	    public void drawHealthBar(Graphics g, int xLvlOffset) {
-
 		        g.setColor(Color.red);
 		        g.fillRect((int) (hitbox.x + hitbox.width / 2 - enemyHealthBarWidth / 2 - xLvlOffset + this.flipHealth()),
 		                (int) (hitbox.y + hitbox.height - attackBox.height - 8 * Game.SCALE), enemyHealthWidth,
@@ -101,11 +92,6 @@ public class Monster_Eye1 extends Enemy {
 		                (int) (hitbox.y + hitbox.height - attackBox.height - 8 * Game.SCALE),
 		                enemyHealthBarWidth - enemyHealthWidth, enemyHealthBarHeight);
 	    	
-	    }
-
-	public void drawAttackBox(Graphics g,int xLvlOffset){
-		g.setColor(Color.red);
-		g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
 	    }
 	    
 	    private int flipHealth() {

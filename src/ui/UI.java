@@ -16,9 +16,6 @@ import static utilz.Constants.EnemyConstants.GetNumberMessageBoss;
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.getIntroText;
 
-	
-	
-
 
 public class UI {
 	
@@ -31,8 +28,7 @@ public class UI {
 	
 	public boolean messageOn = false;
 	public String message;
-	private int counter =0;
-	
+	private int count =0;
 	
 	private String player;
 	private String enemy;
@@ -41,17 +37,19 @@ public class UI {
 	private String[] text1;
 	private int textLength;
 	
+	//cốt truyện
 	private String[] textIntro;
 	
 	public UI(Playing playing) {
 		this.playing = playing ;
+		
 		arial_40 = new Font("Arial", Font.BOLD, 25);
 		text1 = new String[20];	
-		
-		checkChat = true;
-	
+
+		checkChat = true;	
 		player= "Tôn Ngộ Không";
 		
+		//lấy phông chữ vt323
 		try {
 			InputStream is = getClass().getResourceAsStream("/font/VT323.ttf");
 			vt323 = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -60,42 +58,32 @@ public class UI {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 
 	}
 	
-	public void showMessage(String text) {
-		message = text;
-		messageOn = true;
-	}
 	
-	
-	//hien thi FPS va phan tang kinh nghiem
 	public void draw(Graphics2D g2) {
 		
+		//hiển thị FPS ở góc phải trên cùng
 		g2.setFont(arial_40);
 		g2.setColor(Color.white);
-		g2.drawString("FPS: " + playing.getGame().getFPS(),  1050, 50);
+		g2.drawString("FPS: " + playing.getGame().getFPS(), (23*Game.TILES_SIZE) + 30, 50);
 		
+		
+		//hiển thị phần tăng kinh nghiệm 
 		if(messageOn) {
-			counter ++;
+			count ++;
 			g2.setFont(g2.getFont().deriveFont(20F));
 			g2.setColor(Color.green);
 			g2.drawString(message, Game.GAME_WIDTH/2 - 20, 40);
 			
-			if( counter > 120) {
-				counter =0;
+			if( count > 120) {
+				count =0;
 				messageOn = false;
 			}
 		}
 	}
 	
-	public void setText(String[] text, int enemyCheck) {
-		textLength = GetNumberMessageBoss(enemyCheck) ;
-		for(int i=0; i < textLength; i++) {
-			this.text1[i] = text[i];
-		}
-	}
 	
 	//hien thi khung tro chuyen giua nhan vat va boss
 	public void drawDialogueScreen(Graphics2D g2, int textIndex, int enemyType) {
@@ -115,7 +103,7 @@ public class UI {
 		String intro1 = "Nhấn nút ENTER để tiếp tục";
 		String intro2 = "Nhấn nút Q để chiến đấu";
 		
-		
+		//điểu chỉnh lời thoại theo từng BOSS
 		if(enemyType == TORO)
 			enemy = "Ngưu Ma Vương";
 		else if(enemyType == BOSS2)
@@ -129,7 +117,6 @@ public class UI {
 			checkChat = false;
 		}
 
-		
 		//nen cua dialogue
 		Color c = new Color(0,0,0,100);
 		g2.setColor(c);
@@ -141,7 +128,7 @@ public class UI {
 		g2.setStroke(new BasicStroke(5));
 		g2.drawRoundRect(x+5, y + 5, width -10, height -10, 40, 25);
 		
-		//hiển thị hội thoại của ai
+		//hiển thị nhân vật trả lời hội thoại
 		if(checkChat) {
 			g2.setFont(vt323);
 			g2.setColor(Color.red);
@@ -153,7 +140,8 @@ public class UI {
 			g2.setFont(g2.getFont().deriveFont(40F));
 			g2.drawString(enemy, x + 12*Game.SCALE, y + 25*Game.SCALE);
 		}			
-		//chỉ dẫn người chơi
+		
+		//hướng dẫn thao tác cho người chơi
 		if(textIndex >= textLength-1) {
 			g2.setFont(vt323);
 			g2.setColor(Color.pink);
@@ -166,8 +154,8 @@ public class UI {
 			g2.drawString(intro1, x + 700, y + (int)(180*Game.SCALE));
 		}	
 		
-		
-		//hiển thị cuộc trò chuyện
+
+		//hiển thị nội dung cuộc hôi thoại
 		if(textIndex >= textLength)
 			textIndex = textLength -1;
 		drawText(text1, textIndex, g2, x + 10, y + (int)(65*Game.SCALE));
@@ -186,6 +174,46 @@ public class UI {
 		}
 	}
 	
+
+	//hiển thị đoạn giới thiệu cốt truyện
+	public void drawIntro(Graphics2D g2, int index) {
+		 String introText = getIntroText(index);
+		 
+		 String next1 = "Nhấn F để tiếp tục";
+		 String next2 = "Nhấn F để bắt đầu";
+		 
+		 //kích thước của khung cốt truyện
+		 int x = Game.GAME_WIDTH /12 - (int)(5*Game.SCALE);
+		 int y = Game.GAME_HEIGHT/2  - (int)(160 *Game.SCALE);
+		 int width = Game.GAME_WIDTH - (Game.TILES_SIZE* 3);
+		 int height =(int)( Game.TILES_SIZE * 7) ;
+		 
+		//nen cua khung cốt truyện
+		Color c = new Color(0,0,0,100);
+		g2.setColor(c);
+		g2.fillRoundRect(x, y, width, height, 50, 35);
+			
+		//viền cua khung cốt truyện
+		c=new Color(255, 255, 255);
+		g2.setColor(c);
+		g2.setStroke(new BasicStroke(5));
+		g2.drawRoundRect(x+5, y + 5, width -10, height -10, 40, 25);
+		 
+		//thiết kế phần chữ hướng dẫn thao tác
+		g2.setFont(vt323);
+		g2.setColor(Color.pink);
+		g2.setFont(g2.getFont().deriveFont(30F));
+		if(index < 6)
+			g2.drawString(next1, x +1100, y + (int)(200*Game.SCALE));
+		else
+			g2.drawString(next2, x +1100, y + (int)(200*Game.SCALE));
+				
+		//hiển thị phần cốt truyện
+		drawText1(x, y + (int)(5*Game.SCALE), width, height, g2,index, introText);
+			
+			
+	}
+	
 	private void drawText1(int x, int y, int width, int height, Graphics2D g2, int index, String introText) {
 		g2.setFont(vt323);
 		g2.setFont(g2.getFont().deriveFont(60F));
@@ -197,42 +225,17 @@ public class UI {
 		
 		
 	}
-
-	public void drawIntro(Graphics2D g2, int index) {
-		 String introText = getIntroText(index);
-		 
-		 String next1 = "Nhấn F để tiếp tục";
-		 String next2 = "Nhấn F để bắt đầu";
-		 
-		 int x = Game.GAME_WIDTH /12 - (int)(5*Game.SCALE);
-		 int y = Game.GAME_HEIGHT/2  - (int)(160 *Game.SCALE);
-		 int width = Game.GAME_WIDTH - (Game.TILES_SIZE* 3);
-		 int height =(int)( Game.TILES_SIZE * 7) ;
-		 
-		//nen cua dialogue
-			Color c = new Color(0,0,0,100);
-			g2.setColor(c);
-			g2.fillRoundRect(x, y, width, height, 50, 35);
-			
-			//viền cua dialogue
-			c=new Color(255, 255, 255);
-			g2.setColor(c);
-			g2.setStroke(new BasicStroke(5));
-			g2.drawRoundRect(x+5, y + 5, width -10, height -10, 40, 25);
-		 
-		 drawText1(x, y + (int)(5*Game.SCALE), width, height, g2,index, introText);
-		 
-		 g2.setFont(vt323);
-			g2.setColor(Color.pink);
-			g2.setFont(g2.getFont().deriveFont(30F));
-			if(index < 6)
-				g2.drawString(next1, x + 700, y + (int)(200*Game.SCALE));
-			else
-				g2.drawString(next2, x + 700, y + (int)(200*Game.SCALE));
-			
-			
-			
-			
+	
+	public void showMessage(String text) {
+		message = text;
+		messageOn = true;
+	}
+	
+	public void setText(String[] text, int enemyCheck) {
+		textLength = GetNumberMessageBoss(enemyCheck) ;
+		for(int i=0; i < textLength; i++) {
+			this.text1[i] = text[i];
+		}
 	}
 	
 	public boolean getCheckChat() {
