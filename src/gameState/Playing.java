@@ -464,13 +464,14 @@ public class Playing extends State implements Statemethods {
                     player.setRight(true);
                     break;
                 case KeyEvent.VK_ENTER:
-                	textIndex += 1;
-                	this. getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
-                	
-                	if(textIndex < GetNumberMessageBoss(enemyManager.getEnemyCheck())) {
-                		ui.setCheckChat(!ui.getCheckChat());
+                	if(check()) {
+                		textIndex += 1;
+                    	this. getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
+                    	
+                    	if(textIndex < GetNumberMessageBoss(enemyManager.getEnemyCheck())) 
+                    		ui.setCheckChat(!ui.getCheckChat());
                 	}
-                	
+
                 	break;
                 case KeyEvent.VK_F:
                 	intro+=1;

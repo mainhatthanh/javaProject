@@ -10,9 +10,6 @@ import static utilz.Constants.EnemyConstants.*;
 
 public class Spider extends Enemy{
 
-	
-    private int attackBoxOffsetX;
-
     public Spider(float x, float y) {
 
         super(x, y, SPIDER_WIDTH, SPIDER_HEIGHT, SPIDER);
@@ -26,19 +23,17 @@ public class Spider extends Enemy{
     }
     private void initAttackBox(){
         attackBox=new Rectangle2D.Float(x,y,(int)(20*Game.SCALE),(int)(12*Game.SCALE));
-        attackBoxOffsetX = (int)(Game.SCALE*20);
+        this.attackBoxOffsetX = (int)(Game.SCALE*20);
     }
 
-    
     public void update(int[][] lvlData,Player player){
         updateBehaviour(lvlData,player);
         updateAnimationTick();
-        updateAttackBoxFlip1();
+        updateAttackBoxFlip();
         updateHealthBar();
-
     }
     
-    private void updateAttackBoxFlip1() {
+    protected void updateAttackBoxFlip() {
     	if (walkDir == RIGHT)
             attackBox.x = hitbox.x + hitbox.width ;
         else
@@ -50,7 +45,6 @@ public class Spider extends Enemy{
     private void updateBehaviour(int[][] lvlData,Player player) {
         if (firstUpdate){
          firstUpdateCheck(lvlData);
-
         }
         if(inAir) {
            updateInAir(lvlData);
@@ -72,9 +66,9 @@ public class Spider extends Enemy{
                     if(aniIndex==0)
                         attackChecked = false;
 
-                    if(aniIndex==3&&!attackChecked) {
+                    if(aniIndex==3&&!attackChecked) 
                         checkEnmyHit(attackBox,player);
-                    }
+                    
                     break;
                 case HIT:
                     break;
@@ -84,12 +78,6 @@ public class Spider extends Enemy{
 
     }
 
-
-	public void drawAttackBox(Graphics g,int xLvlOffset){
-        g.setColor(Color.red);
-        g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
-
-    }
     public int flipX(){
         if(walkDir==RIGHT)
             return width  + 90;

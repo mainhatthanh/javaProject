@@ -16,9 +16,6 @@ import java.awt.geom.Rectangle2D;
 import main.Game;
 
 public class Boss5 extends Enemy {
-	
-	
-	private boolean check ;
 
 	public Boss5(float x, float y) {
 		 super(x, y, BOSS5_WIDTH, BOSS5_HEIGHT, BOSS5);
@@ -32,7 +29,7 @@ public class Boss5 extends Enemy {
 	}
 	 private void initAttackBox(){
 	        attackBox=new Rectangle2D.Float(x,y,(int)(40*Game.SCALE),(int)(25*Game.SCALE));
-	        attackBoxOffsetX = (int)(Game.SCALE*40);
+	        this.attackBoxOffsetX = (int)(Game.SCALE*40);
 	    }
 
 	    public void update(int[][] lvlData,Player player){
