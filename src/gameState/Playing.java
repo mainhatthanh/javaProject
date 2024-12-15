@@ -29,12 +29,12 @@ import static utilz.Constants.EnemyConstants.GetMessageEnemy;
 import static utilz.Constants.EnemyConstants.GetNumberMessageBoss;;
 
 public class Playing extends State implements Statemethods {
-	
-	private int exp ;
-	private int textIndex = 0;
-	
-	private UI ui ;
-	
+
+    private int exp ;
+    private int textIndex = 0;
+
+    private UI ui ;
+
     private Player player;
     private Enemy enemy;
     private LevelManager levelManager;
@@ -70,18 +70,18 @@ public class Playing extends State implements Statemethods {
 
     //kiểm tra xem nhân vật đã đủ gần với boss chưa để hiện dialogue
     private int count  =0;
-    
+
     private int intro = 0;
 
-	private boolean playerDying;
+    private boolean playerDying;
     int[][] lvlData;
 
 
     //Tutorial paper
 
-   private Tutorial tutorial;
+    private Tutorial tutorial;
 
-   //Plot
+    //Plot
     private Plot plot;
 
 
@@ -105,7 +105,7 @@ public class Playing extends State implements Statemethods {
     public void loadNextLevel() {
         resetAll();
         levelManager.loadNextLevel();
-        	
+
         if ((levelManager.getLevelIndex() ) == 1) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_1_BACKGROUND);
         }
@@ -137,8 +137,8 @@ public class Playing extends State implements Statemethods {
     }
 
     private void initClasses() {
-    	
-    	
+
+
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
         objectManager = new ObjectManager(this);
@@ -147,10 +147,10 @@ public class Playing extends State implements Statemethods {
         player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this);
         player.loadLvlData(levelManager.getCurrentLevel().getLvlData());
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
-        
-        
+
+
         ui = new UI(this);
-        pauseOverlay = new PauseOverlay(this); 
+        pauseOverlay = new PauseOverlay(this);
         gameOverOverlay = new GameOverOverlay(this);
         levelCompletedOverlay = new LevelCompletedOverlay(this);
         tutorial = new Tutorial();
@@ -166,7 +166,7 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void update() {
-    	
+
 
         // Nếu nhân vật chạm đáy màn hình, nhân vật DEAD
         if ((int) (player.getHitBox().y + player.getHitBox().height + 2) >= Game.GAME_HEIGHT) {
@@ -178,27 +178,27 @@ public class Playing extends State implements Statemethods {
             pauseOverlay.update();
 
         }else if(intro <7) {
-//        	ui.update(intro);
+       	//ui.u(intro);
         } else if(fly1) {
-        	player.update();
-        	objectManager.updateFlyWukong(player);
-        	if(objectManager.getFly()) {
-        		game.getAudioPlayer().lvlCompleted();
-        		fly2 = true;
-        		fly1 = false;
-        	}
+            player.update();
+            objectManager.updateFlyWukong(player);
+            if(objectManager.getFly()) {
+                game.getAudioPlayer().lvlCompleted();
+                fly2 = true;
+                fly1 = false;
+            }
         }else if(fly2) {
-        	objectManager.updateFlyWukong(player);
-        	if(objectManager.getXPos() >= Game.GAME_WIDTH+ 20) {
-        		lvlCompleted = true;
-        		levelCompletedOverlay.update();
+            objectManager.updateFlyWukong(player);
+            if(objectManager.getXPos() >= Game.GAME_WIDTH+ 20) {
+                lvlCompleted = true;
+                levelCompletedOverlay.update();
 
                 expThatChange = 0;
                 levelUpTime = 0;
-        	}
+            }
         }
         else if (lvlCompleted) {
-        	levelCompletedOverlay.update();
+            levelCompletedOverlay.update();
             expThatChange = 0;
             levelUpTime = 0;
         }
@@ -208,9 +208,9 @@ public class Playing extends State implements Statemethods {
 
         }
         else if(check() && count ==0) {
-        	player.updateIDLE();
-        	enemyManager.updateIDLE();
-        	ui.setText(GetMessageEnemy(enemyManager.getEnemyCheck()), enemyManager.getEnemyCheck());
+            player.updateIDLE();
+            enemyManager.updateIDLE();
+            ui.setText(GetMessageEnemy(enemyManager.getEnemyCheck()), enemyManager.getEnemyCheck());
         }
         else if (playerDying) {
             player.update();
@@ -221,16 +221,16 @@ public class Playing extends State implements Statemethods {
         else if(plot.isShowPlot()){
             pauseOverlay.update();
         }
-             else {
+        else {
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLvlData(), player);
             check();
             exp = enemyManager.getExpUp();
             if(exp != 0) {
-            	String a ="+"+ exp;
-            	ui.showMessage(a);
-            	enemyManager.setExpUp(0);
+                String a ="+"+ exp;
+                ui.showMessage(a);
+                enemyManager.setExpUp(0);
             }
             objectManager.update(levelManager.getCurrentLevel().getLvlData(), player);
 
@@ -244,10 +244,10 @@ public class Playing extends State implements Statemethods {
 
 
     public LevelCompletedOverlay getLevelCompletedOverlay() {
-		return levelCompletedOverlay;
-	}
+        return levelCompletedOverlay;
+    }
 
-	private void checkCloseToBorder() {
+    private void checkCloseToBorder() {
         int playerX = (int) player.getHitBox().x;
         int diff = playerX - xLvlOffset;
 
@@ -269,12 +269,12 @@ public class Playing extends State implements Statemethods {
 
         Graphics2D g2 = (Graphics2D) g;
         ui.draw(g2);
-        
+
         levelManager.draw(g, xLvlOffset);
 
         //bulletManager.draw(g,xLvlOffset);
 
-       //draw lvlUp khi len cap
+        //draw lvlUp khi len cap
         if(player.getIsShowLvlUp()){
             player.drawLvlUp(g,xLvlOffset);
         }
@@ -291,35 +291,35 @@ public class Playing extends State implements Statemethods {
 //            enemyManager.draw(g, xLvlOffset);
 //            objectManager.draw(g, xLvlOffset);
         }else if(intro <7) {
-        	ui.drawIntro(g2, intro);
+            ui.drawIntro(g2, intro);
         }else if (gameOver) {
-			player.stopStepSound();
+            player.stopStepSound();
             gameOverOverlay.draw(g);
         }
         else if(check() && count == 0) {
-        		if(textIndex >= 0 ) {
-        			ui.drawDialogueScreen(g2, textIndex,enemyManager.getEnemyCheck());
-            		player.renderIDLE(g, xLvlOffset);
-            		enemyManager.drawIDLE(g, xLvlOffset);
-        		}
+            if(textIndex >= 0 ) {
+                ui.drawDialogueScreen(g2, textIndex,enemyManager.getEnemyCheck());
+                player.renderIDLE(g, xLvlOffset);
+                enemyManager.drawIDLE(g, xLvlOffset);
+            }
         }
         else if(fly1) {
-        	player.render(g, xLvlOffset);
+            player.render(g, xLvlOffset);
             player.drawSticks(g,xLvlOffset);
-        	objectManager.drawFlyWukong(g, xLvlOffset);
+            objectManager.drawFlyWukong(g, xLvlOffset);
 
         }
         else if(fly2) {
-        	objectManager.drawFlyWukong(g, xLvlOffset);
-        	if(objectManager.getXPos() >= Game.GAME_WIDTH+ 20 + xLvlOffset) {
-        		levelCompletedOverlay.draw(g);
+            objectManager.drawFlyWukong(g, xLvlOffset);
+            if(objectManager.getXPos() >= Game.GAME_WIDTH+ 20 + xLvlOffset) {
+                levelCompletedOverlay.draw(g);
 //        		expThatChange = 0;
-        		player.stopStepSound();
-        	}
+                player.stopStepSound();
+            }
 
         }
         else if (lvlCompleted){
-        	player.stopStepSound();
+            player.stopStepSound();
             levelCompletedOverlay.draw(g);
             expThatChange = 0;
             levelUpTime = 0;
@@ -345,7 +345,7 @@ public class Playing extends State implements Statemethods {
 //>>>>>>> 0eef73b5a3ef415fe1f14ff5c396ef6284a5a68e
 
         else {
-        	player.render(g, xLvlOffset);
+            player.render(g, xLvlOffset);
             enemyManager.draw(g, xLvlOffset);
             objectManager.draw(g, xLvlOffset);
             player.drawSticks(g,xLvlOffset);
@@ -381,41 +381,40 @@ public class Playing extends State implements Statemethods {
 
         count = 0;
         textIndex =0;
-       // bulletManager.resetBullets();
+        // bulletManager.resetBullets();
 
-        objectManager.resetAllObjects();
          /*if(player.isCurving())
             curveManager.resetCurve(player);*/
 
     }
 
     public void checkObjectHit(Rectangle2D.Float attackBox) {
-		objectManager.checkObjectHit(attackBox);
-	}
+        objectManager.checkObjectHit(attackBox);
+    }
 
 
-	public void checkObjectTouched(Rectangle2D.Float hitbox) {
-		objectManager.checkObjectTouched(hitbox);
-	}
+    public void checkObjectTouched(Rectangle2D.Float hitbox) {
+        objectManager.checkObjectTouched(hitbox);
+    }
 
-	public void checkTrapTouched(Player p) {
-		objectManager.checkTrapTouched(p);
-	}
+    public void checkTrapTouched(Player p) {
+        objectManager.checkTrapTouched(p);
+    }
 
-	public void checkChestsOpen(Rectangle2D.Float hitbox) {
-		objectManager.checkChestsOpen(hitbox);
-	}
+    public void checkChestsOpen(Rectangle2D.Float hitbox) {
+        objectManager.checkChestsOpen(hitbox);
+    }
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
 
     public void checkEnemyHit(Rectangle2D.Float attackBox) {
-            enemyManager.checkEnemyHit(attackBox , player);
+        enemyManager.checkEnemyHit(attackBox , player);
     }
 
     public boolean isStickHitEnemy(Rectangle2D.Float curveHitBox){
-      return  enemyManager.isStickHitEnemy(curveHitBox,player);
+        return  enemyManager.isStickHitEnemy(curveHitBox,player);
 
     }
 
@@ -436,7 +435,7 @@ public class Playing extends State implements Statemethods {
             else if (e.getButton() == MouseEvent.BUTTON3) {
                     player.powerAttack();
                 }
-                else{ 
+                else{
                     System.out.println("Khong du mana");
                 }
             }*/
@@ -456,7 +455,7 @@ public class Playing extends State implements Statemethods {
                     player.setRight(true);
                     break;
                 case KeyEvent.VK_W:
-                        player.shootStick();
+                    player.shootStick();
                     break;
                 case KeyEvent.VK_LEFT:
                     player.setLeft(true);
@@ -465,42 +464,42 @@ public class Playing extends State implements Statemethods {
                     player.setRight(true);
                     break;
                 case KeyEvent.VK_ENTER:
-                	textIndex += 1;
-                	this. getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
-                	
-                	if(textIndex < GetNumberMessageBoss(enemyManager.getEnemyCheck())) {
-                		ui.setCheckChat(!ui.getCheckChat());
-                	}
-                	
-                	break;
+                    textIndex += 1;
+                    this. getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
+
+                    if(textIndex < GetNumberMessageBoss(enemyManager.getEnemyCheck())) {
+                        ui.setCheckChat(!ui.getCheckChat());
+                    }
+
+                    break;
                 case KeyEvent.VK_F:
-                	intro+=1;
-                	break;
+                    intro+=1;
+                    break;
                 case KeyEvent.VK_Q:
-                	this. getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
-                	if(textIndex >= GetNumberMessageBoss(enemyManager.getEnemyCheck())-1)
-                		count = 1;
-                	break;
+                    this. getGame().getAudioPlayer().playEffect(AudioPlayer.CLICK);
+                    if(textIndex >= GetNumberMessageBoss(enemyManager.getEnemyCheck())-1)
+                        count = 1;
+                    break;
                 case KeyEvent.VK_L:
                     player.powerAttack();
                     break;
                 case KeyEvent.VK_R:
-                   tutorial.setTutorial(!tutorial.isShowTutorial());
-                   break;
+                    tutorial.setTutorial(!tutorial.isShowTutorial());
+                    break;
 
                 case KeyEvent.VK_B:
                     plot.setPlot(false);
                     this.getGame().getAudioPlayer().playEffect(AudioPlayer.PAPER);
                     break;
                 case KeyEvent.VK_E:
-                	objectManager.checkChestsOpen(player.getHitBox());
+                    objectManager.checkChestsOpen(player.getHitBox());
                     break;
                 case KeyEvent.VK_SPACE:
                     if(player.getCurrentStamina() >= GetStamina(JUMP)){
                         player.setJump(true);
                         player.changeStamina(-GetStamina(JUMP));
                     }
-                    else{ 
+                    else{
                         System.out.println("Khong du mana");
                     }
                     break;
@@ -515,10 +514,10 @@ public class Playing extends State implements Statemethods {
                             player.setPlayerDamage(GetPlayerDamage(ATTACK));
                             player.setUltiSkill(false);
                             player.changeStamina(-GetStamina(ATTACK));
-                        }else{ 
+                        }else{
                             System.out.println("Khong du mana");
                         }
-                        break;
+                    break;
                 case KeyEvent.VK_K:
                     if(e.getKeyCode()!=KeyEvent.VK_F)
                         if(player.getCurrentStamina() >= GetStamina(ULTI)){
@@ -526,10 +525,10 @@ public class Playing extends State implements Statemethods {
                             player.setPlayerDamage(GetPlayerDamage(ULTI));
                             player.setAttacking(false);
                             player.changeStamina(-GetStamina(ULTI));
-                        }else{ 
+                        }else{
                             System.out.println("Khong du mana");
                         }
-                        break;
+                    break;
             }
             // player.changeStamina(-GetStamina(GetAniFromKey(e)));
         }
@@ -603,22 +602,22 @@ public class Playing extends State implements Statemethods {
     }
 
     public boolean check() {
-    	if(player.getHitbox().x >= levelManager.getCurrentLevel().getPlayerMeet().x)
-    		return true;
-    	else
-    		return false;
+        if(player.getHitbox().x >= levelManager.getCurrentLevel().getPlayerMeet().x)
+            return true;
+        else
+            return false;
     }
 
-	public void setFlyWukong(boolean flyWukong) {
-		this.fly1 = flyWukong;
+    public void setFlyWukong(boolean flyWukong) {
+        this.fly1 = flyWukong;
 
-	}
+    }
 
 
     public void setLevelCompleted(boolean levelCompleted) {
         this.lvlCompleted = levelCompleted;
         if (levelCompleted)
-           game.getAudioPlayer().lvlCompleted();
+            game.getAudioPlayer().lvlCompleted();
     }
 
     public boolean getLevelCompleted(){
@@ -644,9 +643,9 @@ public class Playing extends State implements Statemethods {
     public EnemyManager getEnemyManager() {
         return enemyManager;
     }
-    
+
     public UI getUi() {
-    	return ui;
+        return ui;
     }
 
     public LevelManager getLevelManager() {
@@ -661,17 +660,17 @@ public class Playing extends State implements Statemethods {
         this.playerDying = playerDying;
     }
     public void setCountRev(int countRev) {
-    	this.countRev = countRev;
+        this.countRev = countRev;
     }
     public void setTouchFlag(boolean touchFlag) {
-    	this.touchFlag = touchFlag;
+        this.touchFlag = touchFlag;
     }
-    
+
     public int CountRev() {
-    	return countRev;
+        return countRev;
     }
     public boolean TouchFlag() {
-    	return touchFlag;
+        return touchFlag;
     }
 
     /*public BulletManager getBulletManager(){
@@ -682,7 +681,7 @@ public class Playing extends State implements Statemethods {
     public boolean enoughStamina(int player_action){
         if(player.getCurrentStamina() >= GetStamina(player_action))
             return true;
-        else   
+        else
             return false;
     }
 
@@ -691,24 +690,20 @@ public class Playing extends State implements Statemethods {
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }
-     public void setSpawn() {
-    	 player.setSpawn(levelManager.getCurrentLevel().getFlag1());
-     }
-     public void resetSpawn(){
-        player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
-     }
+    public void setSpawn() {
+        player.setSpawn(levelManager.getCurrentLevel().getFlag1());
+    }
 
+    public void setIntro(int intro) {
+        this.intro = intro;
+    }
 
-     public void setIntro(int intro) {
-    	 this.intro = intro;
-     }
-     
-     public Tutorial getTutorial(){
+    public Tutorial getTutorial(){
         return tutorial;
-     }
-     public Plot getPlot(){
+    }
+    public Plot getPlot(){
         return plot;
-     }
+    }
 
 
 
