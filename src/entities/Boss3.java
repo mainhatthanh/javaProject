@@ -130,11 +130,6 @@ public class Boss3 extends Enemy {
 	    		return -2;
 	    }
 
-	    public void drawAttackBox(Graphics g,int xLvlOffset){
-	        g.setColor(Color.red);
-	        g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
-
-	    }
 	    public int flipX(){
 	        if(walkDir==RIGHT)
 	            return -30;

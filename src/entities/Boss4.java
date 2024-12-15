@@ -41,7 +41,7 @@ public class Boss4 extends Enemy {
 	}
 	 private void initAttackBox(){
 	        attackBox=new Rectangle2D.Float(x,y,(int)(120*Game.SCALE),(int)(80*Game.SCALE));
-	        attackBoxOffsetX = (int)(Game.SCALE*120);
+	        this.attackBoxOffsetX = (int)(Game.SCALE*120);
 	    }
 
 	    public void update(int[][] lvlData,Player player){
@@ -211,11 +211,7 @@ public class Boss4 extends Enemy {
 	    		return -20;
 	    }
 		
-	    public void drawAttackBox(Graphics g,int xLvlOffset){
-	        g.setColor(Color.red);
-	        g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
 
-	    }
 	    public int flipX(){
 	        if(walkDir==RIGHT)
 	            return width + 10;

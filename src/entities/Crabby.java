@@ -11,34 +11,22 @@ import static utilz.Constants.EnemyConstants.*;
 
 public class Crabby extends Enemy{
 
-
-    private int attackBoxOffsetX;
     private boolean isAttacking;
 
     public Crabby(float x, float y) {
-
         super(x, y, CRABBY_WIDTH, CRABBY_HEIGHT, CRABBY);
         initHitbox(22,19);
         initAttackBox();
     }
     private void initAttackBox(){
         attackBox=new Rectangle2D.Float(x,y,(int)(82*Game.SCALE),(int)(19*Game.SCALE));
-        attackBoxOffsetX = (int)(Game.SCALE*30);
+        this.attackBoxOffsetX = (int)(Game.SCALE*30);
     }
 
-
-
-    
     public void update(int[][] lvlData,Player player){
         updateBehaviour(lvlData,player);
         updateAnimationTick();
         updateAttackBox();
-
-    }
-
-    protected void updateAttackBox() {
-        attackBox.x= hitbox.x-attackBoxOffsetX;
-        attackBox.y=hitbox.y;
     }
 
     private void updateBehaviour(int[][] lvlData,Player player) {
@@ -63,20 +51,15 @@ public class Crabby extends Enemy{
                     move(lvlData);
                     break;
                 case ATTACK:
-                    if(aniIndex==0) {
-                        
+                    if(aniIndex==0) 
                         attackChecked = false;
-                        
-                    }
-
-                    if(aniIndex==3&&!attackChecked) {
-                        
-                        
+                    
+                    if(aniIndex==3&&!attackChecked) 
                         checkEnmyHit(attackBox,player);
-                    }
-                    if(aniIndex == 5) {
+                    
+                    if(aniIndex == 5) 
                         setAttacking(false);
-                    }
+                    
                     break;
                 case HIT:
                     break;
@@ -86,13 +69,6 @@ public class Crabby extends Enemy{
 
     }
 
-
-
-    public void drawAttackBox(Graphics g,int xLvlOffset){
-        g.setColor(Color.red);
-        g.drawRect((int)(attackBox.x-xLvlOffset),(int)(attackBox.y),(int)attackBox.width,(int)attackBox.height);
-
-    }
     public int flipX(){
         if(walkDir==RIGHT)
             return width;
