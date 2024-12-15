@@ -16,9 +16,6 @@ import static utilz.Constants.EnemyConstants.GetNumberMessageBoss;
 import static utilz.Constants.EnemyConstants.*;
 import static utilz.Constants.getIntroText;
 
-	
-	
-
 
 public class UI {
 	
