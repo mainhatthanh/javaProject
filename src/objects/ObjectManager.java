@@ -15,6 +15,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import entities.Entity;
+import entities.Minotaur;
 import entities.Player;
 
 import entities.Player;
@@ -23,6 +24,12 @@ import static utilz.Constants.ObjectsConstants.*;
 import static utilz.HelpMethods.*;
 import static utilz.Constants.Projectiles.*;
 import static utilz.Constants.Arrows.*;
+import static utilz.Constants.EnemyConstants.MINOTAUR_DRAWOFFSET_X;
+import static utilz.Constants.EnemyConstants.MINOTAUR_DRAWOFFSET_Y;
+import static utilz.Constants.EnemyConstants.MINOTAUR_HEIGHT;
+import static utilz.Constants.EnemyConstants.MINOTAUR_HEIGHT_DEFAULT;
+import static utilz.Constants.EnemyConstants.MINOTAUR_WIDTH;
+import static utilz.Constants.EnemyConstants.MINOTAUR_WIDTH_DEFAULT;
 
 public class ObjectManager {
 	
@@ -30,9 +37,9 @@ public class ObjectManager {
 
     Playing playing;
     
-    private BufferedImage trap1Img, scrollImg, swordImg, cannonBallImg, arrowImg, peachImg, bananaImg;
+    private BufferedImage trap1Img, scrollImg, swordImg, cannonBallImg, arrowImg, peachImg, bananaImg,arrow2Img;
     private BufferedImage[] chestImgs, cannonImgs, arrowTrapImgs, trap2Imgs, flagImgs, exploImgs;
-    private BufferedImage[][] potionImgs, containerImgs, flyImgs;
+    private BufferedImage[][] potionImgs, containerImgs, flyImgs, minotaurArr;
 
     
     private ArrayList<Potion> potions;
@@ -48,6 +55,7 @@ public class ObjectManager {
     private ArrayList<Cannon> cannons;
     private ArrayList<ArrowTrap> arrowTraps;
     private ArrayList<Trap2> trap2;
+    private ArrayList<Minotaur> minotaurs = new ArrayList<>();;
 
     private ArrayList<Projectile> projectiles = new ArrayList<>();
     private ArrayList<Arrow> arrows = new ArrayList<>();
@@ -59,9 +67,33 @@ public class ObjectManager {
     public ObjectManager(Playing playing) {
         this.playing = playing;
         loadImgs();
+        loadEnemyImgsMinotaur();
     }
     
-    public void checkTrapTouched(Player p) {
+    private void loadEnemyImgsMinotaur() {
+        minotaurArr = new BufferedImage[5][23];
+        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.MINOTAUR_ATLAS);
+        for (int j = 0; j < minotaurArr.length; j++)
+            for (int i = 0; i < minotaurArr[j].length; i++)
+                minotaurArr[j][i] = temp.getSubimage(i * MINOTAUR_WIDTH_DEFAULT, j * MINOTAUR_HEIGHT_DEFAULT,
+                        MINOTAUR_WIDTH_DEFAULT, MINOTAUR_HEIGHT_DEFAULT);
+    }
+    
+    private void drawMinotaurs(Graphics g, int xLvloffset) {
+        for (Minotaur mino : minotaurs) 
+            if (mino.isActive()) {
+                g.drawImage(minotaurArr[mino.getState()][mino.getAniIndex()],
+                        (int) mino.getHitBox().x - xLvloffset - MINOTAUR_DRAWOFFSET_X + mino.flipX(),
+                        (int) (mino.getHitBox().y - MINOTAUR_DRAWOFFSET_Y - 10),(int)(MINOTAUR_WIDTH * mino.flipY() * 1.2),
+                        (int)(MINOTAUR_HEIGHT * 1.2), null);
+//                mino.drawHitbox(g, xLvloffset);
+//                mino.drawAttackBox(g, xLvloffset);
+                mino.drawHealthBar(g, xLvloffset);
+                
+            }
+    }
+
+	public void checkTrapTouched(Player p) {
     	for(Trap1 t1 : trap1)
     		if(t1.getHitbox().intersects(p.getHitBox()))
     			p.kill(TRAP1_VALUE);
@@ -168,10 +200,6 @@ public class ObjectManager {
 			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HEAL_MANA);
 		}
 
-		if (go.getObjType() == EXPLOSION) {
-			playing.getPlayer().kill(EXPLOSION_VALUE);
-			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.SWORD);
-		}
 		if (go.getObjType() == PEACH)
 			playing.getPlayer().changeExp(PEACH_VALUE);
 			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.HEAL_MANA);
@@ -202,13 +230,18 @@ public class ObjectManager {
 			if (c.isActive()){
 				if (hitbox.intersects(c.getHitbox())) {
 					c.setAnimation(true);
-					int type = (int) (Math.random() * 20);
-					if (type <= 5)
+					int type = 21;
+					if (type <= 5) {
 						explos.add(new Explosion((int) (c.getHitbox().x - 12*Game.SCALE ), (int) (c.getHitbox().y - 16*Game.SCALE  ), 15));
+						playing.getPlayer().kill(EXPLOSION_VALUE);
+						playing.getGame().getAudioPlayer().playEffect(AudioPlayer.SWORD);
+					}
 					if ((type > 5) && (type <=13))
 						peaches.add(new Peach((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 13));
-					if (type > 13)
+					if ((type > 13) && (type <=20))
 						swords.add(new Sword((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 7));
+					if (type == 21)
+						minotaurs.add(new Minotaur((int) (c.getHitbox().x ), (int) (c.getHitbox().y  )) );
 			}
 		}
 	}
@@ -294,6 +327,7 @@ public class ObjectManager {
 
 		cannonBallImg = LoadSave.GetSpriteAtlas(LoadSave.CANNON_BALL);
 		arrowImg = LoadSave.GetSpriteAtlas(LoadSave.ARROW_ATLAS);
+		arrow2Img = LoadSave.GetSpriteAtlas(LoadSave.ARROW2_ATLAS);
         
         
         
@@ -325,6 +359,12 @@ public class ObjectManager {
                 p.update();
             }
         }
+        
+        for (Minotaur mino : minotaurs) 
+            if (mino.isActive()) {
+                mino.updateHealthBar();
+                mino.update(lvlData, player);
+            }
         
         for (Explosion e : explos) {
         	if (e.active) {
@@ -415,8 +455,9 @@ public class ObjectManager {
 
 	private void shootArrow2(Trap2 t2) {
 		int dir = 1;
-		if (t2.getObjType() == TRAP2_LEFT)
+		if (t2.getObjType() == TRAP2_LEFT) 
 			dir = -1;
+			
 
 		arrows.add(new Arrow((int) t2.getHitbox().x, (int) t2.getHitbox().y, dir));
 		
@@ -539,6 +580,7 @@ public class ObjectManager {
 		drawBanana(g, xLvlOffset);
 		drawExplo(g, xLvlOffset);
         drawProjectiles(g, xLvlOffset);
+        drawMinotaurs(g, xLvlOffset);
     }
 
 	private void drawBanana(Graphics g, int xLvlOffset) {
@@ -596,7 +638,10 @@ public class ObjectManager {
 	private void drawArrow(Graphics g, int xLvlOffset) {
     	for (Arrow a : arrows)
 			if (a.isActive())
-				g.drawImage(arrowImg, (int) (a.getHitbox().x - xLvlOffset), (int) (a.getHitbox().y), ARROW_WIDTH, ARROW_HEIGHT, null);
+				if (a.getDir() == 1)
+					g.drawImage(arrowImg, (int) (a.getHitbox().x - xLvlOffset), (int) (a.getHitbox().y), ARROW_WIDTH, ARROW_HEIGHT, null);
+				else g.drawImage(arrow2Img, (int) (a.getHitbox().x - xLvlOffset), (int) (a.getHitbox().y), ARROW_WIDTH, ARROW_HEIGHT, null);
+    	
 
 		
 	}

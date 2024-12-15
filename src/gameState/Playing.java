@@ -105,6 +105,7 @@ public class Playing extends State implements Statemethods {
     public void loadNextLevel() {
         resetAll();
         levelManager.loadNextLevel();
+        objectManager.resetAllObjects();
         	
         if ((levelManager.getLevelIndex() ) == 1) {
             backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_1_BACKGROUND);
@@ -125,6 +126,7 @@ public class Playing extends State implements Statemethods {
     private void loadStartLevel() {
         enemyManager.loadEnemies(levelManager.getCurrentLevel());
         objectManager.loadObjects(levelManager.getCurrentLevel());
+        objectManager.resetAllObjects();
 
     }
 
@@ -204,7 +206,6 @@ public class Playing extends State implements Statemethods {
         }
         else if (gameOver) {
             gameOverOverlay.update();
-            player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
         	
         }
         else if(check() && count ==0) {
@@ -364,6 +365,7 @@ public class Playing extends State implements Statemethods {
             expThatChange = 0;
             levelUpTime = 0;
         }
+        player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
 
         touchFlag = false;
         countRev = 0;
@@ -686,7 +688,7 @@ public class Playing extends State implements Statemethods {
     }
 
     public void restoreStaminaDefault(){
-        player.changeStamina(5);
+        player.changeStamina(100);
         // if(player.getCurrentStamina()<player.getMaxStamina())
         //     player.setCurrentStamina( 3 + player.getCurrentStamina() );
     }

@@ -42,5 +42,9 @@ public class Arrow {
 	public boolean isActive() {
 		return active;
 	}
+	
+	public int getDir() {
+		return dir;
+	}
 
 }
