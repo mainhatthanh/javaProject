@@ -142,7 +142,7 @@ public class Player extends Entity {
         loadAnimations();
         loadImgs();
         initHitbox(15, 27);
-        setGiantUp(10);
+        //setGiantUp(10);
         initAttackBox();
         expThatChange = 0;
     }

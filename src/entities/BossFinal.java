@@ -31,7 +31,7 @@ public class BossFinal extends Enemy {
 	    }
 	    private void initAttackBox(){
 	        attackBox=new Rectangle2D.Float(x,y,(int)(25*Game.SCALE),(int)(20*Game.SCALE));
-	        attackBoxOffsetX = (int)(Game.SCALE*25);
+	        this.attackBoxOffsetX = (int)(Game.SCALE*25);
 	    }
 
 	    public void update(int[][] lvlData,Player player){
