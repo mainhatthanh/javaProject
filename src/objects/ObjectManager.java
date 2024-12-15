@@ -207,6 +207,8 @@ public class ObjectManager {
 			playing.getGame().getAudioPlayer().playEffect(AudioPlayer.SWORD);
 			playing.getPlayer().setPlayerDamage(playing.getPlayer().getPlayerDamage() + SWORD_VALUE);
 		}
+		if (go.getObjType() == BANANA)
+			playing.getPlayer().setGiantUp(BANANA_VALUE);
 
 	}
 
@@ -230,18 +232,20 @@ public class ObjectManager {
 			if (c.isActive()){
 				if (hitbox.intersects(c.getHitbox())) {
 					c.setAnimation(true);
-					int type = 21;
-					if (type <= 5) {
+					int type = (int) (Math.random() * 100);
+					if (type <= 20) {
 						explos.add(new Explosion((int) (c.getHitbox().x - 12*Game.SCALE ), (int) (c.getHitbox().y - 16*Game.SCALE  ), 15));
 						playing.getPlayer().kill(EXPLOSION_VALUE);
 						playing.getGame().getAudioPlayer().playEffect(AudioPlayer.SWORD);
 					}
-					if ((type > 5) && (type <=13))
+					if ((type > 20) && (type <=40))
 						peaches.add(new Peach((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 13));
-					if ((type > 13) && (type <=20))
+					if ((type > 40) && (type <=60))
 						swords.add(new Sword((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 7));
-					if (type == 21)
+					if ((type > 60) && (type <= 80)) 
 						minotaurs.add(new Minotaur((int) (c.getHitbox().x ), (int) (c.getHitbox().y  )) );
+					if (type > 80)
+						bananas.add(new Banana((int) (c.getHitbox().x + 10*Game.SCALE ), (int) (c.getHitbox().y  ), 16));
 			}
 		}
 	}
@@ -638,9 +642,7 @@ public class ObjectManager {
 	private void drawArrow(Graphics g, int xLvlOffset) {
     	for (Arrow a : arrows)
 			if (a.isActive())
-				if (a.getDir() == 1)
 					g.drawImage(arrowImg, (int) (a.getHitbox().x - xLvlOffset), (int) (a.getHitbox().y), ARROW_WIDTH, ARROW_HEIGHT, null);
-				else g.drawImage(arrow2Img, (int) (a.getHitbox().x - xLvlOffset), (int) (a.getHitbox().y), ARROW_WIDTH, ARROW_HEIGHT, null);
 
 
 		

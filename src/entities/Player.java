@@ -195,6 +195,7 @@ public class Player extends Entity {
 
     public void setGiantUp(double x){
         giantUp+=x;
+        if (giantUp > 10) giantUp = 10;
     }
 
     public double getGiantUp(){

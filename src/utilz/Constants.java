@@ -111,6 +111,7 @@ public class Constants {
         public static final int SWORD_VALUE = 20;
         public static final int PEACH_VALUE = 100;
         public static final int EXPLOSION_VALUE = 30;
+        public static final int BANANA_VALUE = 2;
         
         public static final int EXPLOSION_WIDTH_DEFAULT = 64;
         public static final int EXPLOSION_HEIGHT_DEFAULT = 64;
